@@ -21,8 +21,8 @@ namespace dotNet5781_00_4307_0719
             Console.WriteLine("{0}, welcome to my first console application", userName);
         }
 
-        private static void Welcome0719()
-        { 
-        }
+        static partial void Welcome0719();
+       
+       
     }
 }
