@@ -8,6 +8,6 @@ namespace dotNet5781_01_4307_0719
 {
     public enum CHOICE
     {
-        ADD, FIND, REFUELORCHECKUP,SHOW, EXIT = -1
+        ADD, DRIVE, REFUELORCHECKUP,SHOW, EXIT = -1
     }
 }

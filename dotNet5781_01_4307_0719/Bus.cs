@@ -64,6 +64,30 @@ namespace dotNet5781_01_4307_0719
             KmofTreatment = TotalKm;
         }
 
+        public string ShowDetails()
+        {
+            string prefix, middle, suffix;
+            string result;
+            if (licence.Length == 7)
+            {
+                prefix = licence.Substring(0, 2);
+                middle = licence.Substring(2, 3);
+                suffix = licence.Substring(4, 2);
+                result = string.Format("{0}-{1}-{2}", prefix, middle, suffix);
+            }
+            else
+            {
+                prefix = licence.Substring(0, 3);
+                middle = licence.Substring(3, 2);
+                suffix = licence.Substring(5, 3);
+
+                result = string.Format("{0}-{1}-{2}", prefix, middle, suffix);
+            }
+
+            return string.Format("license number:{0,-25}  km:  (TotalKm - KmofTreatment))
+
+        }
+
     }
 }
 
