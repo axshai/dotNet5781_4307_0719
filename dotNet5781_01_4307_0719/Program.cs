@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace dotNet5781_01_4307_0719
@@ -16,7 +17,6 @@ namespace dotNet5781_01_4307_0719
 
             CHOICE choice;
             bool success;
-
             do
             {
                 do
@@ -30,8 +30,9 @@ namespace dotNet5781_01_4307_0719
                     }
                 }
                 while (success == false);
-                
-                switch (choice)
+           
+             
+             switch (choice)
                 {
                     case CHOICE.ADD:
                         string licenseNumber;
@@ -56,10 +57,57 @@ namespace dotNet5781_01_4307_0719
                         }
                         break;
                     case CHOICE.FIND:
+                        Console.WriteLine("please enter license number:");
+                        licenseNumber = Console.ReadLine();
+                        foreach (Bus bus in buses)
+                        {
+                            if(bus.License== licenseNumber)///*
+                            {
+                                Random r = new Random(DateTime.Now.Millisecond);
+                                int kmToDrive=r.Next(5000);
+                                try
+                                {
+                                    bus.drive(kmToDrive);
+                                    break;
+                                }
+                                catch (Exception exception)
+                                {
+                                    Console.WriteLine(exception.Message);
+                                }
+                            }
+                        }
+                        Console.WriteLine("The bus is not found");
                         break;
-                    case CHOICE.REFUEL:
+
+                    case CHOICE.REFUELORCHECKUP:
+                        Console.WriteLine("please enter license number:");
+                        licenseNumber = Console.ReadLine();
+                        foreach (Bus bus in buses)
+                        {
+                            if (bus.License == licenseNumber)///*
+                            {
+                                Console.WriteLine("Enter 1 for refueling and 2 for handling");
+                                int choose;
+                                int.TryParse(Console.ReadLine(), out choose);
+                                if (choose == 1)
+                                {
+                                    bus.doRefuel();
+                                    break;
+                                else if (choose == 2)
+                                    {
+                                        bus.doHandle();
+                                    }
+
+
+
+
+
+
+
+                                }
+                        }
                         break;
-                    case CHOICE.CHECKUP:
+                    case CHOICE.SHOW:
                         break;
                     case CHOICE.EXIT:
                         break;

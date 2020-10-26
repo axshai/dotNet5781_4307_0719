@@ -8,10 +8,14 @@ namespace dotNet5781_01_4307_0719
 {
     public class Bus
     {
-        
-        public DateTime DateOfAbsorption { get; set; }
 
         private String licence;
+        private DateTime dateOfAbsorption { get; set; }//*
+        public DateTime LastTreatment { get; set; }
+        public int Fuel { get; set; }
+        public int TotalKm { get; set; }
+        public int KmofTreatment { get; set; }
+        
 
         public String License
         {
@@ -40,11 +44,11 @@ namespace dotNet5781_01_4307_0719
 
             set
             {
-                if (DateOfAbsorption.Year >= 2018 && value.Length == 8)
+                if (dateOfAbsorption.Year >= 2018 && value.Length == 8)
                 {
                     licence = value;
                 }
-                else if (DateOfAbsorption.Year < 2018 && value.Length == 7)
+                else if (dateOfAbsorption.Year < 2018 && value.Length == 7)
                 {
                     licence = value;
                 }
@@ -54,12 +58,21 @@ namespace dotNet5781_01_4307_0719
                 }
             }
         }
-        public Bus(DateTime date, string license)
+       
+        public Bus(DateTime date, string license)//
         {
-            DateOfAbsorption = date;
+            dateOfAbsorption = date;
             License = license;
         }
         
+        public void drive(int kmToDrive)
+        {
+
+           if ((kmToDrive> Fuel)|| ((DateTime.Now- LastTreatment)>1)|| TotalKm- KmofTreatment>20000)//*
+                throw new Exception("It is not possible to make the trip");
+            Fuel -=kmToDrive;
+            TotalKm += kmToDrive;
+        }
 
     }
 }
