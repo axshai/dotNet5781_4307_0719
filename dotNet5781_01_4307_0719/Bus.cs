@@ -52,6 +52,11 @@ namespace dotNet5781_01_4307_0719
             Fuel -=kmToDrive;
             TotalKm += kmToDrive;
         }
+       public void doRefuel()
+        {
+            Fuel = 1200;
+
+        }
 
     }
 }
