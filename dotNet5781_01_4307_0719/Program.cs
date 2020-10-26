@@ -79,7 +79,8 @@ namespace dotNet5781_01_4307_0719
                         Console.WriteLine("The bus is not found");
                         break;
 
-                    case CHOICE.REFUELORCHECKUP:
+                        case CHOICE.REFUELORCHECKUP:
+                        
                         Console.WriteLine("please enter license number:");
                         licenseNumber = Console.ReadLine();
                         foreach (Bus bus in buses)

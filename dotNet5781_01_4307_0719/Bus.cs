@@ -68,10 +68,15 @@ namespace dotNet5781_01_4307_0719
         public void drive(int kmToDrive)
         {
 
-           if ((kmToDrive> Fuel)|| ((DateTime.Now- LastTreatment)>1)|| TotalKm- KmofTreatment>20000)//*
+           if ((kmToDrive> Fuel)|| ((DateTime.Now- LastTreatment).TotalDays>365)|| TotalKm- KmofTreatment>20000)//*
                 throw new Exception("It is not possible to make the trip");
             Fuel -=kmToDrive;
             TotalKm += kmToDrive;
+        }
+       public void doRefuel()
+        {
+            Fuel = 1200;
+
         }
 
     }
