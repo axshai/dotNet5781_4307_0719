@@ -84,7 +84,7 @@ namespace dotNet5781_01_4307_0719
 
                 result = string.Format("{0}-{1}-{2}", prefix, middle, suffix);
             }
-            Console.WriteLine("licence: {0,-19} KM: {1,-5}",result,(TotalKm- KmofTreatment));
+            Console.WriteLine("licence: {0,-19} KM: {1}",result,(TotalKm- KmofTreatment));
               
         }
     }
