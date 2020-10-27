@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,7 +45,7 @@ namespace dotNet5781_01_4307_0719
             License = license;
         }
 
-        public void drive(int kmToDrive)
+        public void Drive(int kmToDrive)
         {
 
             if ((kmToDrive > Fuel) || ((DateTime.Now - LastTreatment).TotalDays > 365) || TotalKm - KmofTreatment > 20000)//*
@@ -63,9 +64,9 @@ namespace dotNet5781_01_4307_0719
             LastTreatment = DateTime.Now;
             KmofTreatment = TotalKm;
         }
-
-        public string ShowDetails()
+        public void Show()
         {
+
             string prefix, middle, suffix;
             string result;
             if (licence.Length == 7)
@@ -83,11 +84,9 @@ namespace dotNet5781_01_4307_0719
 
                 result = string.Format("{0}-{1}-{2}", prefix, middle, suffix);
             }
-
-            return string.Format("license number:{0,-25}  km:  (TotalKm - KmofTreatment))
-
+            Console.WriteLine("licence: {0,-19} KM: {1,-5}",result,(TotalKm- KmofTreatment));
+              
         }
-
     }
 }
 
