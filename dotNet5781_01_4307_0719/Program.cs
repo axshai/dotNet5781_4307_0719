@@ -21,7 +21,7 @@ namespace dotNet5781_01_4307_0719
             {
                 do              // to check the input
                 {
-                    Console.WriteLine("pick your choice: ADD=0 ,DRIVE=1 ,REFUELORCHECKUP=2 ,SHOW=3 ,EXIT = -1");
+                    Console.WriteLine("pick your choice: ADD=0 ,DRIVE=1 ,REFUEL OR CHECKUP=2 ,SHOW=3 ,EXIT = -1");
                     string input = Console.ReadLine();          //The user chooses
                     success = Enum.TryParse(input, out choice);
                     if (!success)                                //If the selection is incorrect
@@ -63,65 +63,51 @@ namespace dotNet5781_01_4307_0719
                     case CHOICE.DRIVE:   //Choosing a bus for travel
                         Console.WriteLine("please enter license number:");
                         licenseNumber = Console.ReadLine();        //Licensing number
-                        bool flage = false;                        //Check if the bus exists      
-                        foreach (Bus bus in buses)                 //using "foreach" to Check if the bus is on the list
+                        Bus toDrive = buses.Find(b => b.License == licenseNumber);//Check and find if the bus is on the list
+                        if (toDrive == null)//The bus is not on the list
+                            Console.WriteLine("The bus is not found");
+                        else  //The bus exists
                         {
-                            if (bus.License == licenseNumber)       //If the bus exists
+                            Random r = new Random(DateTime.Now.Millisecond);
+                            int kmtoDrive = r.Next(1500);
+                            try
                             {
-                                flage = true;
-                                Random r = new Random(DateTime.Now.Millisecond);
-                                int kmToDrive = r.Next(1500);
-                                try
-                                {
-                                    bus.Drive(kmToDrive);
-                                }
-                                catch (Exception exception) //If travel is not possible
-                                {
-                                    Console.WriteLine(exception.Message);//print "It is not possible to make the trip"
-                                }
+                                toDrive.Drive(kmtoDrive);
+                            }
+                            catch (Exception exception) //If travel is not possible
+                            {
+                                Console.WriteLine(exception.Message);//print "It is not possible to make the trip"
                             }
                         }
-                        if (!flage)           //The bus is not on the list
-                            Console.WriteLine("The bus is not found");
 
                         break;
 
                     case CHOICE.REFUELORCHECKUP:        //Refuel or take care of the bus
-
                         Console.WriteLine("please enter license number:");
                         licenseNumber = Console.ReadLine();
-                        flage = false;                 //Check if the bus is on the list
-                        foreach (Bus bus in buses)      ////using "foreach" to Check if the bus is on the list
-                        {
-                            if (bus.License == licenseNumber) //The bus exists
-                            {
-                                flage = true;
-                                Console.WriteLine("Enter 1 for refueling and 2 for handling");
-                                int choose = 0;
-                                do  //Input and check the validity of the input
-                                {
-                                    int.TryParse(Console.ReadLine(), out choose);
-                                    if (choose != 1 && choose != 2)
-                                        Console.WriteLine("Only 1 or 2 can be entered");
-                                }
-                                while (choose != 1 && choose != 2);
-                                
-                                if (choose == 1)    //To fuel
-                                {
-                                    bus.doRefuel();
-
-                                }
-                                else if (choose == 2) //handle
-                                {
-
-                                    bus.doHandle();
-                                }
-                            }
-
-                        }
-                        if (!flage) //In case the bus is not found
-                        {
+                        Bus toCare = buses.Find(b => b.License == licenseNumber);//Check and find if the bus is on the list
+                        if (toCare == null)//The bus is not on the list
                             Console.WriteLine("The bus is not found");
+                        else  //The bus exists
+                        {
+                            Console.WriteLine("Enter 1 for refueling and 2 for handling");
+                            int choose = 0;
+                            do  //Input and check the validity of the input
+                            {
+                                int.TryParse(Console.ReadLine(), out choose);
+                                if (choose != 1 && choose != 2)
+                                    Console.WriteLine("Only 1 or 2 can be entered");
+                            }
+                            while (choose != 1 && choose != 2);
+
+                            if (choose == 1)    //To fuel
+                            {
+                                toCare.DoRefuel();
+                            }
+                            else if (choose == 2) //handle
+                            {
+                                toCare.DoHandle();
+                            }
                         }
 
                         break;
@@ -129,7 +115,7 @@ namespace dotNet5781_01_4307_0719
                     case CHOICE.SHOW:     //Print mileage since treatment
                         foreach (Bus bus in buses)  //using "foreach" to print for all the buses
                         {
-                            bus.Show();
+                            Console.WriteLine(bus);
                         }
 
                         break;
