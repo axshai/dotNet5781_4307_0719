@@ -11,7 +11,7 @@ namespace dotNet5781_01_4307_0719
     {
 
         private String licence;//licence NUMBER
-        public DateTime DateOfAbsorption { get; set; }//The year of the ascent to the road
+        private DateTime dateOfAbsorption;//The year of the ascent to the road
         public DateTime LastTreatment { get; set; }//The date of the last treatment
         public int Fuel { get; set; }//Fuel condition
         public int TotalKm { get; set; }//Total mileage
@@ -29,6 +29,10 @@ namespace dotNet5781_01_4307_0719
 
             set//set-Checking the validity of a license number
             {
+                bool valid;
+                int toNum;
+                if (!(valid = int.TryParse(value,out toNum)))//Check that the license number includes only digits
+                    throw new Exception("A license number can contain digits only");
                 if (DateOfAbsorption.Year >= 2018 && value.Length == 8)
                 {
                     licence = value;
@@ -41,6 +45,18 @@ namespace dotNet5781_01_4307_0719
                 {
                     throw new Exception("The license number is invalid");
                 }
+            }
+        }
+
+        public DateTime DateOfAbsorption//dateOfAbsorption property
+        {
+            get { return dateOfAbsorption; }
+
+            set
+            {
+                if (value > DateTime.Now)//chek if The date arrived
+                    throw new Exception("The date has not yet arrived");
+                dateOfAbsorption = value;
             }
         }
 
@@ -72,7 +88,7 @@ namespace dotNet5781_01_4307_0719
             {
                 prefix = licence.Substring(0, 2);
                 middle = licence.Substring(2, 3);
-                suffix = licence.Substring(4, 2);
+                suffix = licence.Substring(5, 2);
                 result = string.Format("{0}-{1}-{2}", prefix, middle, suffix);
             }
             else//If a 8-digit license number
