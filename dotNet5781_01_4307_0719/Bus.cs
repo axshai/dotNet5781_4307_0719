@@ -9,7 +9,8 @@ namespace dotNet5781_01_4307_0719
 {
     public class Bus //bus
     {
-
+        private const int MAX_FUEL = 1200;//
+        private const int MAX_KM = 20000;//
         private String licence;//licence NUMBER
         private DateTime dateOfAbsorption;//The year of the ascent to the road
         public DateTime LastTreatment { get; set; }//The date of the last treatment
@@ -19,7 +20,8 @@ namespace dotNet5781_01_4307_0719
 
         public Bus(DateTime date, string license)//ctor
         {
-            DateOfAbsorption = LastTreatment = date;
+            DateOfAbsorption = date;
+            LastTreatment = date;
             License = license;
         }
 
@@ -30,9 +32,9 @@ namespace dotNet5781_01_4307_0719
             set//set-Checking the validity of a license number
             {
                 bool valid;
-                int toNum;
-                if (!(valid = int.TryParse(value,out toNum)))//Check that the license number includes only digits
-                    throw new Exception("A license number can contain digits only");
+                uint toNum;
+                if (!(valid = uint.TryParse(value,out toNum)))//Check that the license number includes only digits
+                    throw new FormatException("A license number can contain digits only");
                 if (DateOfAbsorption.Year >= 2018 && value.Length == 8)
                 {
                     licence = value;
@@ -43,7 +45,7 @@ namespace dotNet5781_01_4307_0719
                 }
                 else
                 {
-                    throw new Exception("The license number is invalid");
+                    throw new ArgumentException("The license number is invalid");
                 }
             }
         }
@@ -63,15 +65,18 @@ namespace dotNet5781_01_4307_0719
         public void Drive(int kmToDrive)//Make a trip
         {
             //Check that the bus is not dangerous and that there is enough fuel:
-            if ((kmToDrive > Fuel) || ((DateTime.Now - LastTreatment).TotalDays > 365) || TotalKm - KmofTreatment > 20000)
-                throw new Exception("It is not possible to make the trip");
-            Fuel -= kmToDrive;//Fuel reduction
-            TotalKm += kmToDrive;//Add to mileage
+            if ((kmToDrive > Fuel) || ((DateTime.Now - LastTreatment).TotalDays > 365) || TotalKm - KmofTreatment > MAX_KM)
+                Console.WriteLine("It is not possible to make the trip");
+            else
+            {
+                Fuel -= kmToDrive;//Fuel reduction
+                TotalKm += kmToDrive;//Add to mileage
+            }
         }
 
         public void DoRefuel()//Make a refueling
         {
-            Fuel = 1200;
+            Fuel = MAX_FUEL;
         }
 
         public void DoHandle()//make a treatment

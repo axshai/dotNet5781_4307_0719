@@ -53,7 +53,11 @@ namespace dotNet5781_01_4307_0719
                             buses.Add(bus);                             //We'll add the "bus" to the list
 
                         }
-                        catch (Exception exception)//In case the license number is incorrect
+                        catch (FormatException exception)//In case the license number is incorrect-not only digits
+                        {
+                            Console.WriteLine(exception.Message);//print "A license number can contain digits only"
+                        }
+                        catch (ArgumentException exception)//In case the The length of license number is incorrect 
                         {
                             Console.WriteLine(exception.Message);//print "The license number is invalid"
                         }
@@ -70,14 +74,7 @@ namespace dotNet5781_01_4307_0719
                         {
                             Random r = new Random(DateTime.Now.Millisecond);
                             int kmtoDrive = r.Next(1500);
-                            try
-                            {
-                                toDrive.Drive(kmtoDrive);
-                            }
-                            catch (Exception exception) //If travel is not possible
-                            {
-                                Console.WriteLine(exception.Message);//print "It is not possible to make the trip"
-                            }
+                            toDrive.Drive(kmtoDrive);
                         }
 
                         break;
