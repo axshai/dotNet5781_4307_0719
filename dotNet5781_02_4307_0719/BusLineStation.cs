@@ -12,18 +12,18 @@ namespace dotNet5781_02_4307_0719
 
           public BusLineStation(string code, double latit, double longit , string address = "" ,double previousLatit=-200, double previousLongit=-200, double time=0) :base ( code, latit,  longit,address)
         {
-            Updatdistance(previousLatit, previousLongit);
+            Distance=DistanceCalculate(previousLatit, previousLongit);
             TimeTravel = time;
         }
 
-        public void Updatdistance(double previousLatit=-200, double previousLongit = -200)
+        public double DistanceCalculate(double previousLatit=-200, double previousLongit = -200)
         {
             if (previousLatit != -200)
             {
-                Distance = Math.Sqrt(Math.Pow((Latitude - previousLatit), 2) + Math.Pow((Longitude - previousLongit), 2));
+                return Math.Sqrt(Math.Pow((Latitude - previousLatit), 2) + Math.Pow((Longitude - previousLongit), 2));
             }
             else 
-                Distance = 0;
+               return 0;
         }
 
 
