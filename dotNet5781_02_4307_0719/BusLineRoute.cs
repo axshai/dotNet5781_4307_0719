@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-    class BusLineRoute
+    class BusLineRoute: IComparable
     {
         private List<BusLineStation> stations = new List<BusLineStation>();
 
+        
         public int BusLine { get; set; }
         public List<BusLineStation> Stations
         {
@@ -61,6 +62,39 @@ namespace dotNet5781_02_4307_0719
             for (int i = FirstIndex + 1; i <= LastIndex; i++)
                 sum += stations[i].TimeTravel;
             return sum;
+        } 
+        public BusLineRoute subLine(BusLineStation station1, BusLineStation station2)
+        {
+            
+            int index1 = this.stations.IndexOf(station1);
+            int index2 = this.stations.IndexOf(station2);
+            if (index1 == -1 || index2 == -1)
+                throw new Exception("one or more of the stations isnt in the line");
+            int FirstIndex = index1 > index2 ? index1 : index2;
+            int LastIndex = index1 < index2 ? index1 : index2;
+            BusLineRoute newLine = new BusLineRoute();
+           for (int i= FirstIndex; i <= LastIndex; i++)
+            {
+                newLine.stations.Add(this.Stations[i]);
+                newLine.stations[0].Distance = newLine.stations[0].TimeTravel = 0;
+            }
+            return newLine;
+
+        }
+        public double TotalTime()
+        {
+            double sum = 0;
+            foreach (BusLineStation station in stations)
+            {
+                sum += station.TimeTravel;
+
+            }
+            return sum;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return this.TotalTime().CompareTo(((BusLineRoute)obj).TotalTime());
         }
     }
 }
