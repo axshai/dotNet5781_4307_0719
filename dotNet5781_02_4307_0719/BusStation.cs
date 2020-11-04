@@ -13,17 +13,21 @@ namespace dotNet5781_02_4307_0719
         private const int MIN_LON = -180;
         private const int MAX_LON = 180;
 
-        private int busStationKey;
+        private string busStationKey;
 
-        public int BusStationKey
+        public string BusStationKey
         {
             get { return busStationKey; }
             set
             {
-                if (value > 0 && value < 1000000)
+                uint check1;
+                bool check;
+                check = uint.TryParse(value, out check1);
+                if (value.Length<1|| value.Length >6||!check)
                 {
-                    busStationKey = value;
+                    throw new Exception ("enter only digits");
                 }
+                BusStationKey = value;
             }
         }
         private double latitude;
@@ -38,8 +42,7 @@ namespace dotNet5781_02_4307_0719
                 }
                 else
                 {
-                    throw new ArgumentException(
-                            String.Format("The number must be <{0},{1}>", MIN_LAT, MAX_LAT));
+                    throw new ArgumentException( String.Format("The number must be <{0},{1}>", MIN_LAT, MAX_LAT));
                 }
             }
         }
@@ -50,7 +53,7 @@ namespace dotNet5781_02_4307_0719
             get { return longitude; }
             set
             {
-                if (value >= -180 && value <= 180)
+                if (value >= MIN_LON && value <= MAX_LON)
                 {
                     longitude = value;
                 }
