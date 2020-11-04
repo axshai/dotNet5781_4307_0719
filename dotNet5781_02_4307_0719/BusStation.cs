@@ -14,6 +14,14 @@ namespace dotNet5781_02_4307_0719
         private const int MAX_LON = 180;
 
         private string busStationKey;
+        public BusStation(string code, double latit, double longit, string address="" )
+        {
+            BusStationKey = code;
+            Latitude = latit;
+            Longitude = longit;
+            Address = address;
+        }
+
 
         public string BusStationKey
         {
@@ -69,7 +77,7 @@ namespace dotNet5781_02_4307_0719
         public override string ToString()
         {
             String result = String.Format(
-                "------Bus Station {0} ------ \n" +
+                 "Bus Station Code:  " +
                 "Longitude: {1} N" +
                 "Latitude: {2} E ", BusStationKey, Longitude, Latitude);
 
