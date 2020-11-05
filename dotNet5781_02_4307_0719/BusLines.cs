@@ -25,6 +25,7 @@ namespace dotNet5781_02_4307_0719
                 }
 
             }
+
             else if (choice == 1)
             {
                 List<BusLineRoute> lines1 = lines.FindAll(line => line.BusLine == NumberOfLine);
@@ -35,16 +36,21 @@ namespace dotNet5781_02_4307_0719
                 else
                 {
                     Console.WriteLine("Enter an area");
-                    string area=Console.ReadLine();
-                    if (lines1.Count() == 1)
+                    string area = Console.ReadLine();
+                    if (lines1.Count() < 1 || area == lines1[0].Region.ToString())
                     {
-                        if(area!=)
-
-
-
-
-              }
+                        BusLineRoute NewLine = new BusLineRoute(NumberOfLine, area);
+                        NewLine.AddOrRemove(1, lines1[0].LastStation);
+                        NewLine.AddOrRemove(1, lines1[0].FirstStation, lines1[0].LastStation);
+                    }
+                    else
+                    {
+                        Console.WriteLine("The area contradicts the line in the opposite path");
+                    }
                 }
             }
         }
     }
+}
+
+
