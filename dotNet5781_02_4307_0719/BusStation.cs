@@ -13,8 +13,7 @@ namespace dotNet5781_02_4307_0719
         private const int MIN_LON = -180;
         private const int MAX_LON = 180;
 
-        private string busStationKey;
-        public BusStation(string code, double latit, double longit, string address="" )
+        public BusStation(string code, double latit, double longit, string address = "")
         {
             BusStationKey = code;
             Latitude = latit;
@@ -22,15 +21,16 @@ namespace dotNet5781_02_4307_0719
             Address = address;
         }
 
-
+        private string busStationKey;
+        
         public string BusStationKey
         {
             get { return busStationKey; }
             set
             {
-                uint check1;
+                uint keyAsInt;
                 bool check;
-                check = uint.TryParse(value, out check1);
+                check = uint.TryParse(value, out keyAsInt);
                 if (value.Length<1|| value.Length >6||!check)
                 {
                     throw new Exception ("enter only digits");
@@ -50,7 +50,7 @@ namespace dotNet5781_02_4307_0719
                 }
                 else
                 {
-                    throw new ArgumentException( String.Format("The number must be <{0},{1}>", MIN_LAT, MAX_LAT));
+                    throw new ArgumentException( String.Format("The number must be between <{0},{1}>", MIN_LAT, MAX_LAT));
                 }
             }
         }
@@ -68,10 +68,11 @@ namespace dotNet5781_02_4307_0719
                 else
                 {
                     throw new ArgumentException(
-                            String.Format("The number must be <{0},{1}>", MIN_LON, MAX_LON));
+                            String.Format("The number must be between <{0},{1}>", MIN_LON, MAX_LON));
                 }
             }
         }
+
         public String Address { get; set; }
 
         public override string ToString()

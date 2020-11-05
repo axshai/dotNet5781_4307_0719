@@ -8,75 +8,84 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-    class BusLineRoute: IComparable
+    class BusLineRoute : IComparable
     {
-        private List<BusLineStation> stations = new List<BusLineStation>();
-
-        
-        public int BusLine { get; set; }
-        public List<BusLineStation> Stations
+        public BusLineRoute(string lineNumber, string area)
         {
-            get;
-            set;
+            Area a1;
+            BusLine = lineNumber;
+            Stations = new List<BusLineStation>();
+            bool check = Enum.TryParse(area.Trim().ToUpper(), out a1);//*
+            if (!check)
+                throw new FormatException("There is no such area in the system");
+            else
+                Region = a1;
+
         }
+
+        public List<BusLineStation> Stations { get; set; }
+
+        private string busLine;
+        public string BusLine
+        { get; set; }
+
+        private BusLineStation firstStation;
         public BusLineStation FirstStation
         {
-            get => stations[0];
+            set { firstStation = Stations[0]; }
+            get => Stations[0];
         }
+
+        private BusLineStation lastStation;
         public BusLineStation LastStation
         {
-            get => stations[stations.Count - 1];
+            set { lastStation = Stations[0]; }
+            get => Stations[Stations.Count - 1];
         }
 
-        public Area Region { get; set; }
 
-        public BusLineStation this[int index] => stations[index];
+        public Area Region { set; get; }
 
-        public override string ToString()
-        {
-            string result = "line number: " + BusLine + " Area: " + Region+"\nstations:";
-            foreach(BusLineStation station in stations)
-            {
-                result += " " + station;
-            }
-            return result;
-        }
+
         public bool CheckStation(BusLineStation station)
         {
-            return stations.Contains(station);
+            return Stations.Contains(station);
         }
 
         public double DistanceCalculate(BusLineStation station1, BusLineStation station2)//
         {
             return station1.DistanceCalculate(station2.Latitude, station2.Longitude);
         }
+
         public double TimeCalculate(BusLineStation station1, BusLineStation station2)//
         {
-            double sum =0;
-            int index1 = this.stations.IndexOf(station1);
-            int index2 = this.stations.IndexOf(station2);
+            double sum = 0;
+            int index1 = this.Stations.IndexOf(station1);
+            int index2 = this.Stations.IndexOf(station2);
             if (index1 == -1 || index2 == -1)
-                throw new Exception("one or more of the stations isnt in the line");
-           int FirstIndex = index1 > index2 ? index1 : index2;
-            int LastIndex= index1 < index2 ? index1 : index2;
-            for (int i = FirstIndex + 1; i <= LastIndex; i++)
-                sum += stations[i].TimeTravel;
-            return sum;
-        } 
-        public BusLineRoute subLine(BusLineStation station1, BusLineStation station2)
-        {
-            
-            int index1 = this.stations.IndexOf(station1);
-            int index2 = this.stations.IndexOf(station2);
-            if (index1 == -1 || index2 == -1)
-                throw new Exception("one or more of the stations isnt in the line");
+                throw new Exception("one or more of the Stations isnt in the line");
             int FirstIndex = index1 > index2 ? index1 : index2;
             int LastIndex = index1 < index2 ? index1 : index2;
-            BusLineRoute newLine = new BusLineRoute();
-           for (int i= FirstIndex; i <= LastIndex; i++)
+            for (int i = FirstIndex + 1; i <= LastIndex; i++)
+                sum += Stations[i].TimeTravel;
+            return sum;
+        }
+
+        public BusLineRoute subLine(BusLineStation station1, BusLineStation station2)
+        {
+
+            int index1 = this.Stations.IndexOf(station1);
+            int index2 = this.Stations.IndexOf(station2);
+            if (index1 == -1 || index2 == -1)
+                throw new Exception("one or more of the Stations isnt in the line");
+            int FirstIndex = index1 > index2 ? index1 : index2;
+            int LastIndex = index1 < index2 ? index1 : index2;
+            //לשאול את המשתמש
+            BusLineRoute newLine = new BusLineRoute(BusLine + 0, Region.ToString());
+            for (int i = FirstIndex; i <= LastIndex; i++)
             {
-                newLine.stations.Add(this.Stations[i]);
-                newLine.stations[0].Distance = newLine.stations[0].TimeTravel = 0;
+                newLine.Stations.Add(this.Stations[i]);
+                newLine.Stations[0].Distance = newLine.Stations[0].TimeTravel = 0;
             }
             return newLine;
 
@@ -84,12 +93,55 @@ namespace dotNet5781_02_4307_0719
         public double TotalTime()
         {
             double sum = 0;
-            foreach (BusLineStation station in stations)
+            foreach (BusLineStation station in Stations)
             {
                 sum += station.TimeTravel;
-
             }
             return sum;
+        }
+
+        public void AddOrRemove(int choice, BusLineStation toremoveoradd, BusLineStation privuse = null)
+        {
+            if (choice == 0)
+            {
+                if (!Stations.Contains(toremoveoradd))
+                    Console.WriteLine("this Station not exist");
+                else
+                {
+                    Stations.Remove(toremoveoradd);
+
+                }
+            }
+            else if (choice == 1)
+            {
+                
+                if (privuse != null&&!Stations.Contains(privuse))
+                    Console.WriteLine("the privuse Station not exist");
+                else if(privuse != null)
+                {
+                    int index=Stations.IndexOf(privuse);
+                    Stations.Insert(index + 1, privuse);
+                }
+                else
+                {
+                    Stations.Insert(0, privuse);
+                }
+            }
+            else
+            {
+                Console.WriteLine("only 0 or 1");
+            }
+
+        }
+
+        public override string ToString()
+        {
+            string result = "line number: " + BusLine + " Area: " + Region + "\nStations:";
+            foreach (BusLineStation station in Stations)
+            {
+                result += " " + station;
+            }
+            return result;
         }
 
         public int CompareTo(object obj)

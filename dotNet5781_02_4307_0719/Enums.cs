@@ -10,7 +10,9 @@ namespace dotNet5781_02_4307_0719
     {
         ADD, DELETE, FIND, PRINT, EXIT = -1
     }
+
     public enum Area
     {
-        GENERAL, NORTH, SOUTH, CENTER, JERUSALE, SHFELA, WESTBAMK
+        GENERAL, NORTH, SOUTH, CENTER, JERUSALE, SHFELA, WESTBANK
     }
+}
