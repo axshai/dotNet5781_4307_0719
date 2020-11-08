@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace dotNet5781_02_4307_0719
 {
-    class BusLines
+    class BusLines:IEnumerable
     {
         public BusLines()
         {
@@ -60,6 +62,11 @@ namespace dotNet5781_02_4307_0719
             BusLines newList=new BusLines();
             newList.Lines.Sort();
             return newList;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return Lines.GetEnumerator();
         }
 
         public BusLineRoute this[string index, string firstStation]
