@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-
-    class BusLines : IEnumerable
+    class BusLines
     {
-        private List<BusLineRoute> lines = new List<BusLineRoute>();
         public BusLines()
         {
             Lines = new List<BusLineRoute>();
@@ -23,29 +20,19 @@ namespace dotNet5781_02_4307_0719
 
             if (choice == 0)
             {
-                if (lines.Exists(line => line.BusLine == NumberOfLine))
-                {
-                    lines.Remove(lines.Find(line => line.BusLine == NumberOfLine));
-                }
-                else
-                {
-                    Console.WriteLine("The Line is not exist");
-                }
-
                 Lines.Remove(this[NumberOfLine, firstStatCode]);
             }
+
             else if (choice == 1)
             {
-                List<BusLineRoute> lines1 = lines.FindAll(line => line.BusLine == NumberOfLine);
-                if (lines1.Count() > 1)
+                List<BusLineRoute> Lines1 = Lines.FindAll(line => line.BusLine == NumberOfLine);
+                if (Lines1.Count() > 1)
                 {
-                    Console.WriteLine("There are identical lines");
+                    Console.WriteLine("There are identical Lines");
                 }
                 else
                 {
                     Console.WriteLine("Enter an area");
-                    string area=Console.ReadLine();
-                    if (lines1.Count() == 1)
                     string area = Console.ReadLine();
                     if (Lines1.Count() < 1 || area == Lines1[0].Region.ToString())
                     {
@@ -54,16 +41,11 @@ namespace dotNet5781_02_4307_0719
                     }
                     else
                     {
-                        if(area!=)
-
-
-
-
-              }
+                        Console.WriteLine("The area contradicts the line in the opposite path");
+                    }
                 }
             }
         }
-
 
         public List<BusLineRoute> BusInStation(string stationNumber)
         {
@@ -73,13 +55,13 @@ namespace dotNet5781_02_4307_0719
             return buses;
         }
 
-        public IEnumerator GetEnumerator()
+        public List<BusLineRoute> SortedList(string stationNumber)
         {
-            return lines.GetEnumerator();
+            List<BusLineRoute> newList = Lines;
+            newList.Sort();
+            return newList;
         }
 
-
-        //
         public BusLineRoute this[string index, string firstStation]
         {
             set
@@ -97,3 +79,5 @@ namespace dotNet5781_02_4307_0719
         }
 
     }
+}
+
