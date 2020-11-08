@@ -10,8 +10,8 @@ namespace dotNet5781_02_4307_0719
     {
         static void Main(string[] args)
         {
-            BusLines busLines = new BusLines();
-            BusLineRoute bus =new  BusLineRoute(123456,179);
+            BusLines lines1 = new BusLines();
+            
         }
     }
 }
