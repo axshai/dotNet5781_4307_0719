@@ -120,8 +120,8 @@ namespace dotNet5781_02_4307_0719
                 newLine.Stations[0].Distance = newLine.Stations[0].TimeTravel = 0;
             }
             return newLine;
-
         }
+       
         public double TotalTime()
         {
             double sum = 0;
