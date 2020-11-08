@@ -55,10 +55,10 @@ namespace dotNet5781_02_4307_0719
             return buses;
         }
 
-        public List<BusLineRoute> SortedList(string stationNumber)
-        {
-            List<BusLineRoute> newList = Lines;
-            newList.Sort();
+        public BusLines SortedList()
+        {            
+            BusLines newList=new BusLines();
+            newList.Lines.Sort();
             return newList;
         }
 
