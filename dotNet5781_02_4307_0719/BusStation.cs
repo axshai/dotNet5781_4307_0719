@@ -22,7 +22,7 @@ namespace dotNet5781_02_4307_0719
         }
 
         private string busStationKey;
-        
+
         public string BusStationKey
         {
             get { return busStationKey; }
@@ -35,9 +35,9 @@ namespace dotNet5781_02_4307_0719
                 {
                     throw new ArgumentException("Station number must be between 1 and 6 digits!");
                 }
-                 if (!check)
+                if (!check)
                 {
-                    throw new FormatException ("A station number can contain only digits!");
+                    throw new FormatException("A station number can contain only digits!");
                 }
                 BusStationKey = value;
             }
@@ -54,7 +54,7 @@ namespace dotNet5781_02_4307_0719
                 }
                 else
                 {
-                    throw new ArgumentException( String.Format("The number must be between <{0},{1}>", MIN_LAT, MAX_LAT));
+                    throw new ArgumentException(String.Format("The number must be between <{0},{1}>", MIN_LAT, MAX_LAT));
                 }
             }
         }
@@ -80,13 +80,12 @@ namespace dotNet5781_02_4307_0719
 
         public override string ToString()
         {
-            String result = String.Format("Bus Station Code: {0}, {1}°N  {2}°E", BusStationKey,Latitude, Longitude);
+            String result = String.Format("Bus Station Code: {0}, {1}°N  {2}°E", BusStationKey, Latitude, Longitude);
 
             return result;
         }
     }
 
-    
+
 
 }
-
