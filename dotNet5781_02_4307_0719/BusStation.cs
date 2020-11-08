@@ -31,9 +31,13 @@ namespace dotNet5781_02_4307_0719
                 uint keyAsInt;
                 bool check;
                 check = uint.TryParse(value, out keyAsInt);
-                if (value.Length<1|| value.Length >6||!check)
+                if (value.Length < 1 || value.Length > 6)
                 {
-                    throw new Exception ("enter only digits");
+                    throw new ArgumentException("Station number must be between 1 and 6 digits!");
+                }
+                 if (!check)
+                {
+                    throw new FormatException ("A station number can contain only digits!");
                 }
                 BusStationKey = value;
             }
@@ -67,8 +71,7 @@ namespace dotNet5781_02_4307_0719
                 }
                 else
                 {
-                    throw new ArgumentException(
-                            String.Format("The number must be between <{0},{1}>", MIN_LON, MAX_LON));
+                    throw new ArgumentException(String.Format("The number must be between <{0},{1}>", MIN_LON, MAX_LON));
                 }
             }
         }

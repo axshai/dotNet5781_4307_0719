@@ -8,18 +8,36 @@ namespace dotNet5781_02_4307_0719
 {
     class BusLineStation : BusStation
     {
+        private const int FIRST_TIME = 0;
+        private const int TIME_CALCULATION = 1;
+
         public BusLineStation(string code, double latit, double longit, string address = "", double previousLatit = -200, double previousLongit = -200) : base(code, latit, longit, address)
         {
             Distance = DistanceCalculate(previousLatit, previousLongit);
-            Random r = new Random(DateTime.Now.Millisecond);
             if (previousLatit != -200)
-                TimeTravel = r.NextDouble() * 20;
+                TimeTravel = TIME_CALCULATION;
             else
-                TimeTravel = 0;
+                TimeTravel = FIRST_TIME;
         }
 
         public double Distance { get; set; }
-        public double TimeTravel { get; set; }
+
+        private double timeTravel;
+        public double TimeTravel
+        {
+            set
+            {
+                if (value == FIRST_TIME)
+                    timeTravel = value;
+                else
+                {
+                    Random r = new Random(DateTime.Now.Millisecond);
+                    TimeTravel = r.NextDouble() * 20;
+                }
+            }
+
+            get { return timeTravel; }
+        }
 
         public double DistanceCalculate(double previousLatit = -200, double previousLongit = -200)
         {

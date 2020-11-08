@@ -10,12 +10,13 @@ namespace dotNet5781_02_4307_0719
 {
     class BusLineRoute : IComparable
     {
+
         public BusLineRoute(string lineNumber, string area)
         {
             Area a1;
-           bool check = Enum.TryParse(area.Trim().ToUpper(), out a1);//*
+            bool check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);//*
             if (!check)
-                throw new FormatException("There is no such area in the system");
+                throw new ArgumentException("There is no such area in the system");
             BusLine = lineNumber;
             Stations = new List<BusLineStation>();
             Region = a1;
@@ -26,20 +27,48 @@ namespace dotNet5781_02_4307_0719
 
         private string busLine;
         public string BusLine
-        { get; set; }
+        {
+            set
+            {
+                uint numberAsInt;
+                bool check;
+                check = uint.TryParse(value, out numberAsInt);
+
+                if (!check)
+                {
+                    throw new FormatException("A line number can contain only digits!");
+                }
+                busLine = value;
+            }
+            get
+            {
+                return busLine;
+            }
+        }
 
         private BusLineStation firstStation;
         public BusLineStation FirstStation
         {
-            set { firstStation = Stations[0]; }
-            get => Stations[0];
+            set
+            {
+                if (Stations.Count() > 0)
+                {
+                    Stations.Insert(0, value);
+                    Stations[1].Distance = Stations[1].DistanceCalculate(value.Latitude, value.Longitude);
+                    Stations[1].TimeTravel = 1;
+                }
+                else
+                    Stations.Add(value);
+
+            }
+            get => Stations.Count() == 0 ? null : Stations[0];
         }
 
         private BusLineStation lastStation;
         public BusLineStation LastStation
         {
-            set { lastStation = Stations[0]; }
-            get => Stations[Stations.Count - 1];
+            set { Stations.Add(value); }
+            get => Stations.Count() == 0 ? null : Stations[Stations.Count() - 1];
         }
 
 
@@ -99,38 +128,69 @@ namespace dotNet5781_02_4307_0719
             return sum;
         }
 
-        public void AddOrRemove(int choice, BusLineStation toremoveoradd, BusLineStation privuse = null)
+        public void AddOrRemove(int choice, List<BusLines> l1)//לשנות את הפונקציה ככה שתקבל קוד תחנה
         {
             if (choice == 0)
             {
-                if (!Stations.Contains(toremoveoradd))
+                Console.WriteLine("enter station number");
+                string keyOfCurrent = Console.ReadLine();
+                if (!Stations.Exists(station => station.BusStationKey == keyOfCurrent))
                     Console.WriteLine("this Station not exist");
                 else
                 {
-                    Stations.Remove(toremoveoradd);
-
+                    int indexofnext = Stations.FindIndex(station => station.BusStationKey == keyOfCurrent);
+                    Stations.Remove(Stations.Find(station => station.BusStationKey == keyOfCurrent));
+                    if (indexofnext != (Stations.Count() - 1))
+                    {
+                        Stations[indexofnext].TimeTravel = indexofnext;
+                        if (indexofnext != 0)
+                            Stations[indexofnext].Distance = Stations[indexofnext].DistanceCalculate(Stations[indexofnext - 1].Latitude, Stations[indexofnext - 1].Longitude);
+                        else
+                            Stations[indexofnext].Distance = 0;
+                    }
                 }
             }
             else if (choice == 1)
             {
-                
-                if (privuse != null&&!Stations.Contains(privuse))
-                    Console.WriteLine("the privuse Station not exist");
-                else if(privuse != null)
-                {
-                    int index=Stations.IndexOf(privuse);
-                    Stations.Insert(index + 1, privuse);
-                }
+                Console.WriteLine("Enter number from previous station-or enter -1 to add first station");
+                string previous = Console.ReadLine();
+                if (previous != "-1" && !Stations.Exists(station => station.BusStationKey == previous))
+                    Console.WriteLine("There is no such station");
                 else
                 {
-                    Stations.Insert(0, privuse);
+                    Console.WriteLine("Enter details about the station: key, latitude, longitude");
+                    string key = Console.ReadLine();
+                    double latit = Console.Read();
+                    double longit = Console.Read();
+                    //לבדוק שהמספר+מיקום ייחודי-לעבור על כל הקווים כל התחנות
+
+                    if (previous == "-1")
+                    {
+                        BusLineStation newStation = new BusLineStation(key, latit, longit);
+                        FirstStation = newStation;
+                    }
+                    else
+                    {
+                        BusLineStation preStation = Stations.Find(station => station.BusStationKey == previous);
+                        BusLineStation newStation = new BusLineStation(key, latit, longit, "", preStation.Latitude, preStation.Longitude);
+                        if (Stations.IndexOf(preStation) < Stations.Count() - 1)
+                        {
+                            Stations.Insert(Stations.IndexOf(preStation) + 1, newStation);
+                            Stations[Stations.IndexOf(newStation) + 1].Distance = Stations[Stations.IndexOf(newStation) + 1].DistanceCalculate(latit, longit);
+                            Stations[Stations.IndexOf(newStation) + 1].TimeTravel = 1;
+                        }
+                        else
+                        {
+                            LastStation = newStation;
+                        }
+
+                    }
                 }
             }
             else
             {
                 Console.WriteLine("only 0 or 1");
             }
-
         }
 
         public override string ToString()
