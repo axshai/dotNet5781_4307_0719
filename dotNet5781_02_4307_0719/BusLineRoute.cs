@@ -75,23 +75,23 @@ namespace dotNet5781_02_4307_0719
         public Area Region { set; get; }
 
 
-        public bool CheckStation(BusLineStation station)
+        public bool CheckStation(string stationNumber)
         {
-            return Stations.Contains(station);
+            return Stations.Exists(station=>station.BusStationKey==stationNumber);
         }
 
-        public double DistanceCalculate(BusLineStation station1, BusLineStation station2)//
+        public double DistanceCalculate(BusLineStation station1, BusLineStation station2)///
         {
             return station1.DistanceCalculate(station2.Latitude, station2.Longitude);
         }
 
-        public double TimeCalculate(BusLineStation station1, BusLineStation station2)//
+        public double TimeCalculate(string station1, string station2)////
         {
             double sum = 0;
-            int index1 = this.Stations.IndexOf(station1);
-            int index2 = this.Stations.IndexOf(station2);
+            int index1 = this.Stations.FindIndex(station=>station.BusStationKey==station1);
+            int index2 = this.Stations.FindIndex(station => station.BusStationKey == station1);
             if (index1 == -1 || index2 == -1)
-                throw new Exception("one or more of the Stations isnt in the line");
+                throw new ArgumentException("one or more of the Stations isnt in the line");
             int FirstIndex = index1 > index2 ? index1 : index2;
             int LastIndex = index1 < index2 ? index1 : index2;
             for (int i = FirstIndex + 1; i <= LastIndex; i++)
@@ -99,16 +99,15 @@ namespace dotNet5781_02_4307_0719
             return sum;
         }
 
-        public BusLineRoute subLine(BusLineStation station1, BusLineStation station2)
+        public BusLineRoute subLine(string station1, string station2)
         {
 
-            int index1 = this.Stations.IndexOf(station1);
-            int index2 = this.Stations.IndexOf(station2);
+            int index1 = this.Stations.FindIndex(station => station.BusStationKey == station1);
+            int index2 = this.Stations.FindIndex(station => station.BusStationKey == station1);
             if (index1 == -1 || index2 == -1)
-                throw new Exception("one or more of the Stations isnt in the line");
+                throw new ArgumentException("one or more of the Stations isnt in the line");
             int FirstIndex = index1 > index2 ? index1 : index2;
             int LastIndex = index1 < index2 ? index1 : index2;
-            //לשאול את המשתמש
             BusLineRoute newLine = new BusLineRoute(BusLine + 0, Region.ToString());
             for (int i = FirstIndex; i <= LastIndex; i++)
             {
@@ -120,10 +119,10 @@ namespace dotNet5781_02_4307_0719
 
         public double TotalTime()
         {
-            return TimeCalculate(FirstStation, LastStation);
+            return TimeCalculate(FirstStation.BusStationKey, LastStation.BusStationKey);
         }
 
-        public void AddOrRemove(int choice, BusLines l1)//לשנות את הפונקציה ככה שתקבל קוד תחנה
+        public void AddOrRemove(int choice, BusLines l1)
         {
             if (choice == 0)
             {
@@ -135,7 +134,7 @@ namespace dotNet5781_02_4307_0719
                 {
                     int indexofnext = Stations.FindIndex(station => station.BusStationKey == keyOfCurrent);
                     Stations.Remove(Stations.Find(station => station.BusStationKey == keyOfCurrent));
-                    if (indexofnext != (Stations.Count() - 1))
+                    if (indexofnext != (Stations.Count()))
                     {
                         Stations[indexofnext].TimeTravel = indexofnext;
                         if (indexofnext != 0)
@@ -157,7 +156,23 @@ namespace dotNet5781_02_4307_0719
                     string key = Console.ReadLine();
                     double latit = Console.Read();
                     double longit = Console.Read();
-                    //לבדוק שהמספר+מיקום ייחודי-לעבור על כל הקווים כל התחנות
+                    foreach (BusLineRoute line in l1)
+                    {
+                        foreach (BusLineStation station1 in Stations)
+                        {
+                            if (station1.BusStationKey == key && (station1.Latitude != latit || station1.Longitude != longit))
+                            {
+                                throw new ArgumentException("There is such a station number");
+                            }
+                        }
+                    }
+                    if (Stations.Exists(station1 => station1.BusStationKey == key && station1.Latitude == latit && station1.Longitude == longit))
+                    {
+
+                        throw new ArgumentException("There is the same station");
+                    }
+
+
 
                     if (previous == "-1")
                     {

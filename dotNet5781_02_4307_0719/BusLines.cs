@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
 
 namespace dotNet5781_02_4307_0719
 {
-    class BusLines:IEnumerable
+    class BusLines : IEnumerable
     {
         public BusLines()
         {
@@ -17,15 +18,15 @@ namespace dotNet5781_02_4307_0719
 
         public List<BusLineRoute> Lines { get; set; }
 
-        public void AddOrRemove(string NumberOfLine,string firstStatCode="-1")
+        public void AddOrRemove(string NumberOfLine, string firstStatCode = "-1")
         {
 
-            if (firstStatCode !="-1")
+            if (firstStatCode != "-1")
             {
                 Lines.Remove(this[NumberOfLine, firstStatCode]);
             }
 
-            else 
+            else
             {
                 List<BusLineRoute> Lines1 = Lines.FindAll(line => line.BusLine == NumberOfLine);
                 if (Lines1.Count() > 1)
@@ -58,8 +59,8 @@ namespace dotNet5781_02_4307_0719
         }
 
         public BusLines SortedList()
-        {            
-            BusLines newList=new BusLines();
+        {
+            BusLines newList = new BusLines();
             newList.Lines.Sort();
             return newList;
         }
@@ -84,7 +85,17 @@ namespace dotNet5781_02_4307_0719
                 return Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)];
             }
         }
+        public override string ToString()
+        {
+            string result = "";
+            foreach (BusLineRoute line in Lines)
+            {
+                result += line + "\n";
 
+            }
+            return result;
+        }
+        
     }
+   
 }
-
