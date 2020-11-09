@@ -17,15 +17,15 @@ namespace dotNet5781_02_4307_0719
 
         public List<BusLineRoute> Lines { get; set; }
 
-        public void AddOrRemove(string NumberOfLine, string firstStatCode, int choice)
+        public void AddOrRemove(string NumberOfLine,string firstStatCode="-1")
         {
 
-            if (choice == 0)
+            if (firstStatCode !="-1")
             {
                 Lines.Remove(this[NumberOfLine, firstStatCode]);
             }
 
-            else if (choice == 1)
+            else 
             {
                 List<BusLineRoute> Lines1 = Lines.FindAll(line => line.BusLine == NumberOfLine);
                 if (Lines1.Count() > 1)
@@ -74,13 +74,13 @@ namespace dotNet5781_02_4307_0719
             set
             {
                 if (!Lines.Exists(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation))
-                    throw new Exception("The line does not exist");
+                    throw new ArgumentOutOfRangeException("The line does not exist");
                 Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)] = value;
             }
             get
             {
                 if (!Lines.Exists(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation))
-                    throw new Exception("The line does not exist");
+                    throw new ArgumentOutOfRangeException("The line does not exist");
                 return Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)];
             }
         }

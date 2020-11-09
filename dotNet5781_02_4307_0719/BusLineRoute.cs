@@ -120,15 +120,10 @@ namespace dotNet5781_02_4307_0719
 
         public double TotalTime()
         {
-            double sum = 0;
-            foreach (BusLineStation station in Stations)
-            {
-                sum += station.TimeTravel;
-            }
-            return sum;
+            return TimeCalculate(FirstStation, LastStation);
         }
 
-        public void AddOrRemove(int choice, List<BusLines> l1)//לשנות את הפונקציה ככה שתקבל קוד תחנה
+        public void AddOrRemove(int choice, BusLines l1)//לשנות את הפונקציה ככה שתקבל קוד תחנה
         {
             if (choice == 0)
             {
@@ -158,7 +153,7 @@ namespace dotNet5781_02_4307_0719
                     Console.WriteLine("There is no such station");
                 else
                 {
-                    Console.WriteLine("Enter details about the station: key, latitude, longitude");
+                    Console.WriteLine("Enter details about the station: number of station, latitude, longitude");
                     string key = Console.ReadLine();
                     double latit = Console.Read();
                     double longit = Console.Read();
