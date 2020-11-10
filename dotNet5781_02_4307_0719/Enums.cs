@@ -6,13 +6,18 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-    public enum CHOICE
+    public enum OPERATION
     {
         ADD, DELETE, FIND, PRINT, EXIT = -1
     }
 
     public enum Area
     {
-        GENERAL, NORTH, SOUTH, CENTER, JERUSALE, SHFELA, WESTBANK
+        GENERAL, NORTH, SOUTH, CENTER, JERUSALEM, SHFELA, WESTBANK
+    }
+
+    public enum CHOICE
+    {
+        ZERO, ONE
     }
 }

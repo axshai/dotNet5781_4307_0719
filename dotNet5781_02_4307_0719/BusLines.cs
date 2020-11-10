@@ -18,10 +18,10 @@ namespace dotNet5781_02_4307_0719
 
         public List<BusLineRoute> Lines { get; set; }
 
-        public void AddOrRemove(string NumberOfLine, string firstStatCode = "-1")
+        public void AddOrRemove(string NumberOfLine, string firstStatCode = "-2")
         {
 
-            if (firstStatCode != "-1")
+            if (firstStatCode != "-2")
             {
                 Lines.Remove(this[NumberOfLine, firstStatCode]);
             }
@@ -74,15 +74,33 @@ namespace dotNet5781_02_4307_0719
         {
             set
             {
-                if (!Lines.Exists(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation))
-                    throw new ArgumentOutOfRangeException("The line does not exist");
-                Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)] = value;
+                if (firstStation != "-1")
+                {
+                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation!=null&&line.FirstStation.BusStationKey == firstStation))
+                        throw new ArgumentOutOfRangeException("The line does not exist");
+                    Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)] = value;
+                }
+                else 
+                {
+                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
+                        throw new ArgumentOutOfRangeException("The line does not exist");
+                    Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation == null)] = value;
+                }
             }
             get
             {
-                if (!Lines.Exists(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation))
-                    throw new ArgumentOutOfRangeException("The line does not exist");
-                return Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)];
+                if (firstStation != "-1")
+                {
+                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
+                        throw new ArgumentOutOfRangeException("The line does not exist");
+                    return Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)];
+                }
+                else
+                {
+                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation == null))
+                        throw new ArgumentOutOfRangeException("The line does not exist");
+                    return Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation == null)];
+                }
             }
         }
         public override string ToString()
@@ -90,12 +108,11 @@ namespace dotNet5781_02_4307_0719
             string result = "";
             foreach (BusLineRoute line in Lines)
             {
-                result += line + "\n";
-
+                result += line+"\n";
+               
             }
             return result;
         }
         
-    }
-   
+    }   
 }
