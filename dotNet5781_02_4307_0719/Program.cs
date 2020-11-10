@@ -47,26 +47,6 @@ namespace dotNet5781_02_4307_0719
             CHOICE choice;
             bool success;
             string input;
-           
-            List<BusLineRoute> ROTES = new List<BusLineRoute>();
-            for (int i=1;i<3;i++)
-            {
-                ROTES.Add(new BusLineRoute(i.ToString(), i.ToString()));
-                List<BusLineStation> stations = new List<BusLineStation>();
-                stations.Add(new BusLineStation((i*100).ToString(),i,i));
-                double privus1 = i;
-                double privus2 = i;
-                for (int j = 1; j < 3; j++)
-                {
-                    stations.Add(new BusLineStation((j * i*101).ToString(), (3*j+2*i)/2, (4 * j + 2 * i) / 2, "", privus1, privus2));
-                    privus1 = (3 * j + 2 * i) / 2;
-                    privus2 = (4 * j + 2 * i) / 2;
-                }
-                ROTES[i-1].Stations = stations;
-            }
-            listOfLines.Lines = ROTES;
-
-
 
             do
             {
@@ -208,7 +188,7 @@ namespace dotNet5781_02_4307_0719
                                         allStations.Add(station);
                                         Console.WriteLine();
                                     }
-                                    
+
                                 }
                             }
                         }
