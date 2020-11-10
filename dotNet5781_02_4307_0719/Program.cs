@@ -10,11 +10,11 @@ namespace dotNet5781_02_4307_0719
 {
     class Program
     {
-        static void Add(BusLines listOfLines, CHOICE lineOrStation, string lineNumber, string first)
+        static void Add(BusLines listOfLines, CHOICE lineOrStation, string lineNumber, string first ,Area a=Area.EMPTY)
         {
             if (lineOrStation == CHOICE.ZERO)
             {
-                listOfLines.AddOrRemove(lineNumber);
+                listOfLines.AddOrRemove(lineNumber,a);
             }
             else if (lineOrStation == CHOICE.ONE)
             {
@@ -42,11 +42,20 @@ namespace dotNet5781_02_4307_0719
 
         static void Main(string[] args)
         {
+            Area a = new Area();
+            a = Area.GENERAL;
+            string first = "";
             BusLines listOfLines = new BusLines();
+            for (int i = 0; i < 40; i++)
+            {
+                a = Area.GENERAL + (i % 7);
+                Add(listOfLines,CHOICE.ZERO,"1"+i," ",a);
+            }
             OPERATION oper;
             CHOICE choice;
             bool success;
             string input;
+
 
             do
             {
@@ -69,7 +78,6 @@ namespace dotNet5781_02_4307_0719
                         zeroOrOne(out choice);
                         Console.WriteLine("enter the number of the line");
                         string lineNumber = Console.ReadLine();
-                        string first = "";
                         if (choice == CHOICE.ONE)
                         {
                             Console.WriteLine("enter the number of the fisrt station,-1 If there are no stations yet");
@@ -105,7 +113,7 @@ namespace dotNet5781_02_4307_0719
                         {
                             if (choice == CHOICE.ZERO)
                             {
-                                listOfLines.AddOrRemove(lineNumber, first);
+                                listOfLines.AddOrRemove(lineNumber, Area.EMPTY,first);
                             }
                             else if (choice == CHOICE.ONE)
                             {
