@@ -163,7 +163,7 @@ namespace dotNet5781_02_4307_0719
                     double longit = double.Parse(Console.ReadLine());
                     foreach (BusLineRoute line in l1)
                     {
-                        foreach (BusLineStation station1 in Stations)
+                        foreach (BusLineStation station1 in line.Stations)
                         {
                             if (station1.BusStationKey == key && (station1.Latitude != latit || station1.Longitude != longit))
                             {

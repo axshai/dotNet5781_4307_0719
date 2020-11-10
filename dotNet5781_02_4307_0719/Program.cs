@@ -185,7 +185,7 @@ namespace dotNet5781_02_4307_0719
                                 {
                                     if (!allStations.Exists(station1 => station1.BusStationKey == station.BusStationKey))
                                     {
-                                        Console.Write("station number:{0,-6} lines numbers: ");
+                                        Console.Write("station number:{0,-6} lines numbers: ", station.BusStationKey);
                                         foreach (BusLineRoute line1 in listOfLines)
                                         {
                                             if (line1.CheckStation(station.BusStationKey))
@@ -194,8 +194,9 @@ namespace dotNet5781_02_4307_0719
                                             }
                                         }
                                         allStations.Add(station);
+                                        Console.WriteLine();
                                     }
-                                    Console.WriteLine();
+
                                 }
                             }
                         }
