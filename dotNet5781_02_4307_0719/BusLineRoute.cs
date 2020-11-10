@@ -154,8 +154,8 @@ namespace dotNet5781_02_4307_0719
                 {
                     Console.WriteLine("Enter details about the station: number of station, latitude, longitude");
                     string key = Console.ReadLine();
-                    double latit = Console.Read();
-                    double longit = Console.Read();
+                    double latit = double.Parse(Console.ReadLine());
+                    double longit = double.Parse(Console.ReadLine());
                     foreach (BusLineRoute line in l1)
                     {
                         foreach (BusLineStation station1 in Stations)
@@ -208,7 +208,7 @@ namespace dotNet5781_02_4307_0719
             string result = "line number: " + BusLine + " Area: " + Region + "\nStations:";
             foreach (BusLineStation station in Stations)
             {
-                result += " " + station;
+                result +="\n"+ station;
             }
             return result;
         }

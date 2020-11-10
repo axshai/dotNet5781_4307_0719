@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,7 +33,7 @@ namespace dotNet5781_02_4307_0719
                 else
                 {
                     Random r = new Random(DateTime.Now.Millisecond);
-                    TimeTravel = r.NextDouble() * 20;
+                    timeTravel = r.NextDouble() * 20;
                 }
             }
 
@@ -52,9 +53,10 @@ namespace dotNet5781_02_4307_0719
         public override string ToString()
         {
             String result = base.ToString();
-            result += "\nlast distance :" + Distance;
+            if (Distance != 0)
+                result += " last distance: " +Distance+" km";
             if (TimeTravel != 0)
-                result += "  Travel time from previous station : " + TimeTravel;
+                result += "  Travel time from previous station : " + TimeTravel+ " minutes";
             return result;
         }
     }

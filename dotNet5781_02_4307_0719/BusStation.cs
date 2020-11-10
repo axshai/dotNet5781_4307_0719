@@ -39,7 +39,7 @@ namespace dotNet5781_02_4307_0719
                 {
                     throw new FormatException("A station number can contain only digits!");
                 }
-                BusStationKey = value;
+                busStationKey = value;
             }
         }
         private double latitude;
