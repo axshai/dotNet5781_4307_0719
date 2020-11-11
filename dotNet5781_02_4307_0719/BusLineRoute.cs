@@ -108,7 +108,7 @@ namespace dotNet5781_02_4307_0719
                 throw new ArgumentException("one or more of the Stations isnt in the line");
             int FirstIndex = index1 < index2 ? index1 : index2;
             int LastIndex = index1 > index2 ? index1 : index2;
-            BusLineRoute newLine = new BusLineRoute(BusLine + 0, Region.ToString());
+            BusLineRoute newLine = new BusLineRoute(BusLine, Region.ToString());
             for (int i = FirstIndex; i <= LastIndex; i++)
             {
                 newLine.Stations.Add(this.Stations[i]);
@@ -119,7 +119,7 @@ namespace dotNet5781_02_4307_0719
 
         public double TotalTime()
         {
-            return TimeCalculate(FirstStation.BusStationKey, LastStation.BusStationKey);
+            return FirstStation==null?0:TimeCalculate(FirstStation.BusStationKey, LastStation.BusStationKey);
         }
 
         public void AddOrRemove(int choice, BusLines l1, BusStation station2 = null)

@@ -173,7 +173,7 @@ namespace dotNet5781_02_4307_0719
                         }
                         else if (choice == CHOICE.ONE)
                         {
-                            Console.WriteLine("Enter the station numbers");
+                            Console.WriteLine("Enter the stations numbers");
                             string station1 = Console.ReadLine();
                             string station2 = Console.ReadLine();
                             List<BusLineRoute> subLines = new List<BusLineRoute>();
@@ -181,8 +181,7 @@ namespace dotNet5781_02_4307_0719
                             {
                                 try
                                 {
-                                    line.subLine(station1, station2);
-                                    subLines.Add(line);
+                                    subLines.Add(line.subLine(station1, station2));
                                 }
                                 catch (ArgumentException)
                                 {
@@ -191,7 +190,7 @@ namespace dotNet5781_02_4307_0719
                             }
                             BusLines sublinesSort = new BusLines();
                             sublinesSort.Lines = subLines;
-                            sublinesSort.SortedList();
+                            sublinesSort = sublinesSort.SortedList();
                             foreach (BusLineRoute line in sublinesSort)
                             {
                                 Console.WriteLine("line:{0,-2} Travel time:{1}", line.BusLine, line.subLine(station1, station2).TotalTime());//הקווים שעוברים בתחנות והזמן בין התחנות!
@@ -234,7 +233,6 @@ namespace dotNet5781_02_4307_0719
                     case OPERATION.EXIT:
                         break;
                     default:
-                        Console.WriteLine("try again");
                         break;
                 }
 
