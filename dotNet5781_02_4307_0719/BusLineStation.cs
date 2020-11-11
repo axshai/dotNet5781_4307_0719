@@ -16,7 +16,7 @@ namespace dotNet5781_02_4307_0719
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         
-        public BusLineStation(BusStation station ,string address = "", double previousLatit = -200, double previousLongit = -200) 
+        public BusLineStation(BusStation station , double previousLatit = -200, double previousLongit = -200) 
         {
             BusStationKey = station.BusStationKey;
             Latitude = station.Latitude;

@@ -11,17 +11,12 @@ namespace dotNet5781_02_4307_0719
     class BusLineRoute : IComparable
     {
 
-        public BusLineRoute(string lineNumber, string area, Area a = Area.EMPTY)
+        public BusLineRoute(string lineNumber, string area)
         {
             Area a1;
-            if (a == Area.EMPTY)
-            {
-                bool check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);//*
-                if (!check)
-                    throw new ArgumentException("There is no such area in the system");
-            } 
-            else
-            { a1 = a; }
+            bool check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);//*
+            if (!check)
+                throw new ArgumentException("There is no such area in the system");
             BusLine = lineNumber;
             Stations = new List<BusLineStation>();
             Region = a1;

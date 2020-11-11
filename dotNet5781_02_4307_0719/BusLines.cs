@@ -18,7 +18,7 @@ namespace dotNet5781_02_4307_0719
 
         public List<BusLineRoute> Lines { get; set; }
 
-        public void AddOrRemove(string NumberOfLine, string firstStatCode = "-2",String area="")
+        public void AddOrRemove(string NumberOfLine, string firstStatCode = "-2", String area = "")
         {
 
             if (firstStatCode != "-2")
@@ -79,11 +79,11 @@ namespace dotNet5781_02_4307_0719
             {
                 if (firstStation != "-1")
                 {
-                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation!=null&&line.FirstStation.BusStationKey == firstStation))
+                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
                         throw new ArgumentOutOfRangeException("The line does not exist");
                     Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)] = value;
                 }
-                else 
+                else
                 {
                     if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
                         throw new ArgumentOutOfRangeException("The line does not exist");
@@ -111,11 +111,11 @@ namespace dotNet5781_02_4307_0719
             string result = "";
             foreach (BusLineRoute line in Lines)
             {
-                result += line+"\n";
-               
+                result += line + "\n";
+
             }
             return result;
         }
-        
-    }   
+
+    }
 }

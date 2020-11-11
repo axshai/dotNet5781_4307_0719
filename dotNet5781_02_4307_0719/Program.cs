@@ -38,17 +38,17 @@ namespace dotNet5781_02_4307_0719
             while (success == false);
         }
 
-
+       
 
         static void Main(string[] args)
         {
-            BusLines listOfLines = new BusLines();
+            BusLines listOfLines = new BusLines();//*
             OPERATION oper;
             CHOICE choice;
             bool success;
             string input;
-            
-           
+
+
             do
             {
                 do              // to check the input
