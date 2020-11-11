@@ -18,7 +18,7 @@ namespace dotNet5781_02_4307_0719
 
         public List<BusLineRoute> Lines { get; set; }
 
-        public void AddOrRemove(string NumberOfLine,Area a, string firstStatCode = "-2")
+        public void AddOrRemove(string NumberOfLine, string firstStatCode = "-2",String area="")
         {
 
             if (firstStatCode != "-2")
@@ -35,26 +35,19 @@ namespace dotNet5781_02_4307_0719
                 }
                 else
                 {
-                    if (a != Area.EMPTY)
+                    if (area == "")
                     {
-                        BusLineRoute NewLine = new BusLineRoute(NumberOfLine, "",a);
+                        Console.WriteLine("Enter an area");
+                        area = Console.ReadLine();
+                    }
+                    if (Lines1.Count() < 1 || area == Lines1[0].Region.ToString())
+                    {
+                        BusLineRoute NewLine = new BusLineRoute(NumberOfLine, area);
                         Lines.Add(NewLine);
                     }
                     else
                     {
-                        string area = "";
-                        Console.WriteLine("Enter an area");
-                        area = Console.ReadLine();
-
-                        if (Lines1.Count() < 1 || area == Lines1[0].Region.ToString())
-                        {
-                            BusLineRoute NewLine = new BusLineRoute(NumberOfLine, area);
-                            Lines.Add(NewLine);
-                        }
-                        else
-                        {
-                            Console.WriteLine("The area contradicts the line in the opposite path");
-                        }
+                        Console.WriteLine("The area contradicts the line in the opposite path");
                     }
                 }
             }

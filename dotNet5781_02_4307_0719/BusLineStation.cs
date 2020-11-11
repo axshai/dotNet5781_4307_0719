@@ -7,13 +7,20 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-    class BusLineStation : BusStation
+    class BusLineStation 
     {
         private const int FIRST_TIME = 0;
         private const int TIME_CALCULATION = 1;
 
-        public BusLineStation(string code, double latit, double longit, string address = "", double previousLatit = -200, double previousLongit = -200) : base(code, latit, longit, address)
+        public string BusStationKey { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        
+        public BusLineStation(BusStation station ,string address = "", double previousLatit = -200, double previousLongit = -200) 
         {
+            BusStationKey = station.BusStationKey;
+            Latitude = station.Latitude;
+            Longitude = station.Longitude;
             Distance = DistanceCalculate(previousLatit, previousLongit);
             if (previousLatit != -200)
                 TimeTravel = TIME_CALCULATION;
@@ -33,7 +40,7 @@ namespace dotNet5781_02_4307_0719
                 else
                 {
                     Random r = new Random(DateTime.Now.Millisecond);
-                    timeTravel = r.NextDouble() * 20;
+                    timeTravel = double.Parse((r.NextDouble() * 20).ToString().Substring(0,4));
                 }
             }
 
@@ -44,7 +51,7 @@ namespace dotNet5781_02_4307_0719
         {
             if (previousLatit != -200)
             {
-                return Math.Sqrt(Math.Pow((Latitude - previousLatit), 2) + Math.Pow((Longitude - previousLongit), 2));
+                return double.Parse(Math.Sqrt(Math.Pow((Latitude - previousLatit), 2) + Math.Pow((Longitude - previousLongit), 2)).ToString().Substring(0,4));
             }
             else
                 return 0;
@@ -52,7 +59,7 @@ namespace dotNet5781_02_4307_0719
 
         public override string ToString()
         {
-            String result = base.ToString();
+            String result = new BusStation(BusStationKey,Latitude,Longitude).ToString();
             if (Distance != 0)
                 result += " last distance: " +Distance+" km";
             if (TimeTravel != 0)
