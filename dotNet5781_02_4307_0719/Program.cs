@@ -47,7 +47,8 @@ namespace dotNet5781_02_4307_0719
             CHOICE choice;
             bool success;
             string input;
-
+            
+           
             do
             {
                 do              // to check the input
@@ -120,8 +121,8 @@ namespace dotNet5781_02_4307_0719
                         break;
 
                     case OPERATION.FIND:
-                        Console.WriteLine(@"Enter 0 to Look for a line passing through a specific station    
-                        or 1 to Printing the options for travel between 2 stations");
+                        Console.WriteLine("Enter 0 to Look for a line passing through a specific station");
+                        Console.WriteLine("or 1 to Printing the options for travel between 2 stations");
                         zeroOrOne(out choice);
                         if (choice == CHOICE.ZERO)
                         {
@@ -145,7 +146,7 @@ namespace dotNet5781_02_4307_0719
                             {
                                 try
                                 {
-                                    subLines.Add(line.subLine(station1, station2));
+                                    line.subLine(station1, station2);
                                     subLines.Add(line);
                                 }
                                 catch (ArgumentException)
@@ -155,9 +156,10 @@ namespace dotNet5781_02_4307_0719
                             }
                             BusLines sublinesSort = new BusLines();
                             sublinesSort.Lines = subLines;
-                            foreach (BusLineRoute line in listOfLines)
+                            sublinesSort.SortedList();
+                            foreach (BusLineRoute line in sublinesSort)
                             {
-                                Console.WriteLine("line:{0,-2} Travel time:{}", line.BusLine, line.subLine(station1, station2).TotalTime());//הקווים שעוברים בתחנות והזמן בין התחנות!
+                                Console.WriteLine("line:{0,-2} Travel time:{1}", line.BusLine, line.subLine(station1, station2).TotalTime());//הקווים שעוברים בתחנות והזמן בין התחנות!
                             }
                         }
                         break;

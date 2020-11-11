@@ -77,7 +77,7 @@ namespace dotNet5781_02_4307_0719
 
         public bool CheckStation(string stationNumber)
         {
-            return Stations.Exists(station=>station.BusStationKey==stationNumber);
+            return Stations.Exists(station => station.BusStationKey == stationNumber);
         }
 
         public double DistanceCalculate(BusLineStation station1, BusLineStation station2)///
@@ -88,12 +88,12 @@ namespace dotNet5781_02_4307_0719
         public double TimeCalculate(string station1, string station2)////
         {
             double sum = 0;
-            int index1 = this.Stations.FindIndex(station=>station.BusStationKey==station1);
-            int index2 = this.Stations.FindIndex(station => station.BusStationKey == station1);
+            int index1 = this.Stations.FindIndex(station => station.BusStationKey == station1);
+            int index2 = this.Stations.FindIndex(station => station.BusStationKey == station2);
             if (index1 == -1 || index2 == -1)
                 throw new ArgumentException("one or more of the Stations isnt in the line");
-            int FirstIndex = index1 > index2 ? index1 : index2;
-            int LastIndex = index1 < index2 ? index1 : index2;
+            int FirstIndex = index1 < index2 ? index1 : index2;
+            int LastIndex = index1 > index2 ? index1 : index2;
             for (int i = FirstIndex + 1; i <= LastIndex; i++)
                 sum += Stations[i].TimeTravel;
             return sum;
@@ -103,11 +103,11 @@ namespace dotNet5781_02_4307_0719
         {
 
             int index1 = this.Stations.FindIndex(station => station.BusStationKey == station1);
-            int index2 = this.Stations.FindIndex(station => station.BusStationKey == station1);
+            int index2 = this.Stations.FindIndex(station => station.BusStationKey == station2);
             if (index1 == -1 || index2 == -1)
                 throw new ArgumentException("one or more of the Stations isnt in the line");
-            int FirstIndex = index1 > index2 ? index1 : index2;
-            int LastIndex = index1 < index2 ? index1 : index2;
+            int FirstIndex = index1 < index2 ? index1 : index2;
+            int LastIndex = index1 > index2 ? index1 : index2;
             BusLineRoute newLine = new BusLineRoute(BusLine + 0, Region.ToString());
             for (int i = FirstIndex; i <= LastIndex; i++)
             {
@@ -176,22 +176,24 @@ namespace dotNet5781_02_4307_0719
 
                     if (previous == "-1")
                     {
-                        BusLineStation newStation = new BusLineStation(key, latit, longit);
-                        FirstStation = newStation;
+                        BusStation newStation = new BusStation(key, latit, longit);
+                        BusLineStation newStation1 = new BusLineStation(newStation);
+                        FirstStation = newStation1;
                     }
                     else
                     {
                         BusLineStation preStation = Stations.Find(station => station.BusStationKey == previous);
-                        BusLineStation newStation = new BusLineStation(key, latit, longit, "", preStation.Latitude, preStation.Longitude);
+                        BusStation newStation = new BusStation(key, latit, longit);
+                        BusLineStation newStation1 = new BusLineStation(newStation, "", preStation.Latitude, preStation.Longitude);
                         if (Stations.IndexOf(preStation) < Stations.Count() - 1)
                         {
-                            Stations.Insert(Stations.IndexOf(preStation) + 1, newStation);
-                            Stations[Stations.IndexOf(newStation) + 1].Distance = Stations[Stations.IndexOf(newStation) + 1].DistanceCalculate(latit, longit);
-                            Stations[Stations.IndexOf(newStation) + 1].TimeTravel = 1;
+                            Stations.Insert(Stations.IndexOf(preStation) + 1, newStation1);
+                            Stations[Stations.IndexOf(newStation1) + 1].Distance = Stations[Stations.IndexOf(newStation1) + 1].DistanceCalculate(latit, longit);
+                            Stations[Stations.IndexOf(newStation1) + 1].TimeTravel = 1;
                         }
                         else
                         {
-                            LastStation = newStation;
+                            LastStation = newStation1;
                         }
 
                     }
@@ -208,7 +210,7 @@ namespace dotNet5781_02_4307_0719
             string result = "line number: " + BusLine + " Area: " + Region + "\nStations:";
             foreach (BusLineStation station in Stations)
             {
-                result +="\n"+ station;
+                result += "\n" + station;
             }
             return result;
         }
