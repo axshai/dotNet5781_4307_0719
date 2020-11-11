@@ -13,12 +13,12 @@ namespace dotNet5781_02_4307_0719
         private const int MIN_LON = -180;
         private const int MAX_LON = 180;
 
-        public BusStation(string code, double latit, double longit, string address = "")
+        public BusStation(string code, double latit, double longit)
         {
             BusStationKey = code;
             Latitude = latit;
             Longitude = longit;
-            Address = address;
+           
         }
 
         private string busStationKey;
@@ -76,7 +76,7 @@ namespace dotNet5781_02_4307_0719
             }
         }
 
-        public String Address { get; set; }
+       
 
         public override string ToString()
         {

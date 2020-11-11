@@ -14,16 +14,12 @@ namespace dotNet5781_02_4307_0719
         public BusLineRoute(string lineNumber, string area)
         {
             Area a1;
-            
-                bool check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);//*
+            bool check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);//*
             if (!check)
                 throw new ArgumentException("There is no such area in the system");
-            else
-            {
-                BusLine = lineNumber;
-                Stations = new List<BusLineStation>();
-                Region = a1;
-            }
+            BusLine = lineNumber;
+            Stations = new List<BusLineStation>();
+            Region = a1;
 
         }
 

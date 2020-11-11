@@ -13,7 +13,7 @@ namespace dotNet5781_02_4307_0719
 
     public enum Area
     {
-        GENERAL, NORTH, SOUTH, CENTER, JERUSALEM, SHFELA, WESTBANK, EMPTY
+        GENERAL, NORTH, SOUTH, CENTER, JERUSALEM, SHFELA, WESTBANK
     }
 
     public enum CHOICE
