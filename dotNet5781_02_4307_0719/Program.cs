@@ -22,8 +22,12 @@ namespace dotNet5781_02_4307_0719
             }
 
         }
+
         static void zeroOrOne(out CHOICE choice)
         {
+
+
+
             string input;
             bool success;
             do              // to check the input
@@ -42,15 +46,18 @@ namespace dotNet5781_02_4307_0719
 
         static void Main(string[] args)
         {
-            Area a = new Area();
+
+            Area a = new Area(); 
             a = Area.GENERAL;
             string first = "";
             BusLines listOfLines = new BusLines();
-            for (int i = 0; i < 40; i++)
+            for (int i = 0; i < 10; i++)
             {
                 a = Area.GENERAL + (i % 7);
-                Add(listOfLines,CHOICE.ZERO,"1"+i," ",a);
+                Add(listOfLines, CHOICE.ZERO, "1" + i, " ", a);
             }
+            Add(listOfLines, CHOICE.ONE, "10", "-1");
+
             OPERATION oper;
             CHOICE choice;
             bool success;
