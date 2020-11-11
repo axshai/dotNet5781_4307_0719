@@ -61,9 +61,9 @@ namespace dotNet5781_02_4307_0719
         {
             String result = new BusStation(BusStationKey,Latitude,Longitude).ToString();
             if (Distance != 0)
-                result += " last distance: " +Distance+" km";
+                result +=string.Format(" last distance: {0,-4} km.",Distance);
             if (TimeTravel != 0)
-                result += "  Travel time from previous station : " + TimeTravel+ " minutes";
+                result +=string.Format(" Travel time from previous station: {0,-4} minutes",TimeTravel);
             return result;
         }
     }

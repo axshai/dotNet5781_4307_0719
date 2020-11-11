@@ -122,7 +122,7 @@ namespace dotNet5781_02_4307_0719
             return TimeCalculate(FirstStation.BusStationKey, LastStation.BusStationKey);
         }
 
-        public void AddOrRemove(int choice, BusLines l1)
+        public void AddOrRemove(int choice, BusLines l1, BusStation station2 = null)
         {
             if (choice == 0)
             {
@@ -146,64 +146,81 @@ namespace dotNet5781_02_4307_0719
             }
             else if (choice == 1)
             {
-                Console.WriteLine("Enter number from previous station-or enter -1 to add first station");
-                string previous = Console.ReadLine();
-                if (previous != "-1" && !Stations.Exists(station => station.BusStationKey == previous))
-                    Console.WriteLine("There is no such station");
+                string key = "";
+                string previous = "";
+                double latit = 0;
+                double longit = 0;
+                if (station2 == null)
+                {
+                    Console.WriteLine("Enter number from previous station-or enter -1 to add first station");
+                    previous = Console.ReadLine();
+                    if (previous != "-1" && !Stations.Exists(station => station.BusStationKey == previous))
+                        Console.WriteLine("There is no such station");
+                    else
+                    {
+                        Console.WriteLine("Enter details about the station: number of station, latitude, longitude");
+                        key = Console.ReadLine();
+                        latit = double.Parse(Console.ReadLine());
+                        longit = double.Parse(Console.ReadLine());
+
+                    }
+                }
                 else
                 {
-                    Console.WriteLine("Enter details about the station: number of station, latitude, longitude");
-                    string key = Console.ReadLine();
-                    double latit = double.Parse(Console.ReadLine());
-                    double longit = double.Parse(Console.ReadLine());
-                    foreach (BusLineRoute line in l1)
+                    key = station2.BusStationKey;
+                    latit = station2.Latitude;
+                    longit = station2.Longitude;
+                    previous = "-1";
+                }
+                foreach (BusLineRoute line in l1)
+                {
+                    foreach (BusLineStation station1 in line.Stations)
                     {
-                        foreach (BusLineStation station1 in line.Stations)
+                        if (station1.BusStationKey == key && (station1.Latitude != latit || station1.Longitude != longit))
                         {
-                            if (station1.BusStationKey == key && (station1.Latitude != latit || station1.Longitude != longit))
-                            {
-                                throw new ArgumentException("There is such a station number");
-                            }
+                            throw new ArgumentException("There is such a station number");
                         }
                     }
-                    if (Stations.Exists(station1 => station1.BusStationKey == key && station1.Latitude == latit && station1.Longitude == longit))
+                }
+                if (Stations.Exists(station1 => station1.BusStationKey == key && station1.Latitude == latit && station1.Longitude == longit))
+                {
+
+                    throw new ArgumentException("There is the same station");
+                }
+
+
+
+                if (previous == "-1")
+                {
+                    BusStation newStation = new BusStation(key, latit, longit);
+                    BusLineStation newStation1 = new BusLineStation(newStation);
+                    FirstStation = newStation1;
+                }
+                else
+                {
+                    BusLineStation preStation = Stations.Find(station => station.BusStationKey == previous);
+                    BusStation newStation = new BusStation(key, latit, longit);
+                    BusLineStation newStation1 = new BusLineStation(newStation, preStation.Latitude, preStation.Longitude);
+                    if (Stations.IndexOf(preStation) < Stations.Count() - 1)
                     {
-
-                        throw new ArgumentException("There is the same station");
-                    }
-
-
-
-                    if (previous == "-1")
-                    {
-                        BusStation newStation = new BusStation(key, latit, longit);
-                        BusLineStation newStation1 = new BusLineStation(newStation);
-                        FirstStation = newStation1;
+                        Stations.Insert(Stations.IndexOf(preStation) + 1, newStation1);
+                        Stations[Stations.IndexOf(newStation1) + 1].Distance = Stations[Stations.IndexOf(newStation1) + 1].DistanceCalculate(latit, longit);
+                        Stations[Stations.IndexOf(newStation1) + 1].TimeTravel = 1;
                     }
                     else
                     {
-                        BusLineStation preStation = Stations.Find(station => station.BusStationKey == previous);
-                        BusStation newStation = new BusStation(key, latit, longit);
-                        BusLineStation newStation1 = new BusLineStation(newStation, "", preStation.Latitude, preStation.Longitude);
-                        if (Stations.IndexOf(preStation) < Stations.Count() - 1)
-                        {
-                            Stations.Insert(Stations.IndexOf(preStation) + 1, newStation1);
-                            Stations[Stations.IndexOf(newStation1) + 1].Distance = Stations[Stations.IndexOf(newStation1) + 1].DistanceCalculate(latit, longit);
-                            Stations[Stations.IndexOf(newStation1) + 1].TimeTravel = 1;
-                        }
-                        else
-                        {
-                            LastStation = newStation1;
-                        }
-
+                        LastStation = newStation1;
                     }
+
                 }
             }
             else
             {
-                Console.WriteLine("only 0 or 1");
+                Console.WriteLine("only 0 or 1!");
             }
-        }
+        }    
+           
+        
 
         public override string ToString()
         {

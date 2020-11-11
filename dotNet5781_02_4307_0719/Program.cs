@@ -38,11 +38,46 @@ namespace dotNet5781_02_4307_0719
             while (success == false);
         }
 
-       
+        static BusLines initialization()
+        {
+
+            Random r = new Random(DateTime.Now.Millisecond);
+            BusLines listOfLines = new BusLines();
+            for (int i = 0; i < 10; i++)
+            {
+                listOfLines.AddOrRemove((i + 1).ToString(), area: r.Next(7).ToString());
+                List<BusLineStation> stations = new List<BusLineStation>();
+                double platit = -200;
+                double plongit = -200;
+                for (int j = 0; j < 4; j++)
+                {
+                    double latit = 33.3 - r.NextDouble() * 2.3;
+                    double longit = 35.5 - r.NextDouble() * 1.2;
+                    BusLineStation stat = new BusLineStation(new BusStation((i + 1).ToString() + (j + 1).ToString(), latit, longit), platit, plongit);
+                    stations.Add(stat);
+                    platit = latit;
+                    plongit = longit;
+                }
+                listOfLines[(i + 1).ToString(), "-1"].Stations = stations;
+            }
+            BusLineStation next1;
+            BusStation next;
+            for (int i = 0; i < 9; i++)
+            {
+                next1 = listOfLines[(i + 2).ToString(), (i + 2).ToString() + "1"].Stations[0];
+                next = new BusStation(next1.BusStationKey, next1.Latitude, next1.Longitude);
+                listOfLines[(i + 1).ToString(), (i + 1).ToString() + "1"].AddOrRemove(1, listOfLines, next);
+            }
+            next1 = listOfLines["1", "21"].Stations[1];
+            next = new BusStation(next1.BusStationKey, next1.Latitude, next1.Longitude);
+            listOfLines["10", "101"].AddOrRemove(1, listOfLines, next);
+
+            return listOfLines;
+        }
 
         static void Main(string[] args)
         {
-            BusLines listOfLines = new BusLines();//*
+            BusLines listOfLines = initialization();
             OPERATION oper;
             CHOICE choice;
             bool success;
