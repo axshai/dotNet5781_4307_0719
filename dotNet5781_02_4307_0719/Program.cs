@@ -10,19 +10,20 @@ namespace dotNet5781_02_4307_0719
 {
     class Program
     {
+        //Add a line or station
         static void Add(BusLines listOfLines, CHOICE lineOrStation, string lineNumber, string first)
         {
-            if (lineOrStation == CHOICE.ZERO)
+            if (lineOrStation == CHOICE.ZERO)//Add line
             {
-                listOfLines.AddOrRemove(lineNumber);
+                listOfLines.AddOrRemove(lineNumber);//"AddOrRemove" Add the line
             }
-            else if (lineOrStation == CHOICE.ONE)
+            else if (lineOrStation == CHOICE.ONE)//Add station
             {
                 listOfLines[lineNumber, first].AddOrRemove(1, listOfLines);
             }
 
         }
-        static void zeroOrOne(out CHOICE choice)
+        static void zeroOrOne(out CHOICE choice)//Input integrity check (0 or 1)
         {
             string input;
             bool success;
@@ -30,35 +31,35 @@ namespace dotNet5781_02_4307_0719
             {
                 input = Console.ReadLine();          //The user chooses
                 success = Enum.TryParse(input, out choice) && (choice == CHOICE.ZERO || choice == CHOICE.ONE);
-                if (!success)
+                if (!success)//The choice is neither 0 nor 1
                 {
                     Console.WriteLine("only 0 or 1! try again.");
                 }
             }
-            while (success == false);
+            while (success == false);//As long as the selection is neither 0 nor 1
         }
 
-        static BusLines initialization()
+        static BusLines initialization()//We will initialize a list of lines and stations for each line
         {
 
-            Random r = new Random(DateTime.Now.Millisecond);
-            BusLines listOfLines = new BusLines();
-            for (int i = 0; i < 10; i++)
+            Random r = new Random(DateTime.Now.Millisecond);//Random number for station longitude and latitude lines (and area for lines)
+            BusLines listOfLines = new BusLines();//The list we will initialize and return
+            for (int i = 0; i < 10; i++)//First loop to boot 10 lines
             {
-                listOfLines.AddOrRemove((i + 1).ToString(), area: r.Next(7).ToString());
-                List<BusLineStation> stations = new List<BusLineStation>();
-                double platit = -200;
+                listOfLines.AddOrRemove((i + 1).ToString(), area: r.Next(7).ToString());//Initialize the line by a number of lines and an area
+                List<BusLineStation> stations = new List<BusLineStation>();//List of stations to add to the line
+                double platit = -200; //Longitude and latitude to the first station
                 double plongit = -200;
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 4; j++)//Second loop to boot every line at 4 stations (a total of 40 stations used on all lines)
                 {
-                    double latit = 33.3 - r.NextDouble() * 2.3;
+                    double latit = 33.3 - r.NextDouble() * 2.3;//Longitude and latitude for each station
                     double longit = 35.5 - r.NextDouble() * 1.2;
-                    BusLineStation stat = new BusLineStation(new BusStation((i + 1).ToString() + (j + 1).ToString(), latit, longit), platit, plongit);
+                    BusLineStation stat = new BusLineStation(new BusStation((i + 1).ToString() + (j + 1).ToString(), latit, longit), platit, plongit);//Creating a bus line station
                     stations.Add(stat);
-                    platit = latit;
+                    platit = latit;//Previous latitude and longitude
                     plongit = longit;
                 }
-                listOfLines[(i + 1).ToString(), "-1"].Stations = stations;
+                listOfLines[(i + 1).ToString(), "-1"].Stations = stations;//We will add the list of stations
             }
             BusLineStation next1;
             BusStation next;
