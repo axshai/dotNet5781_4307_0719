@@ -52,7 +52,7 @@ namespace dotNet5781_02_4307_0719
                     Area a1;
                     if (area == "")//If no area is received - receive it from the user
                     {
-                        Console.WriteLine("Enter an area");
+                        Console.WriteLine("Enter an area:GENERAL, NORTH, SOUTH, CENTER, JERUSALEM, SHFELA, WESTBANK");
                         area = Console.ReadLine();
                     }
                     check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);
@@ -99,12 +99,18 @@ namespace dotNet5781_02_4307_0719
         {
             return Lines.GetEnumerator();
         }
-
+        /// <summary>
+        /// indexer-Returns an instance of a line according to line number and first station(*)
+        /// </summary>
+        /// <param name="index">line number</param>
+        /// <param name="firstStation">number of lines first station</param>
+        /// <returns>an instance of a line(BusLineRoute)</returns>
+        //*The line number is not enough because there can be 2 lines with the same number
         public BusLineRoute this[string index, string firstStation]
         {
             set
             {
-                if (firstStation != "-1")
+                if (firstStation != "-1")//If a number of stations has been entered - the line has at least one station
                 {
                     if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
                         throw new ArgumentOutOfRangeException("The line does not exist");
@@ -112,14 +118,14 @@ namespace dotNet5781_02_4307_0719
                 }
                 else
                 {
-                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
+                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation == null))
                         throw new ArgumentOutOfRangeException("The line does not exist");
                     Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation == null)] = value;
                 }
             }
             get
             {
-                if (firstStation != "-1")
+                if (firstStation != "-1")//If a number of stations has been entered - the line has at least one station
                 {
                     if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
                         throw new ArgumentOutOfRangeException("The line does not exist");
@@ -133,7 +139,10 @@ namespace dotNet5781_02_4307_0719
                 }
             }
         }
-        
+        /// <summary>
+        /// BusLines-toString:Prints the details of all the lines in the collection
+        /// </summary>
+        /// <returns> BusLines as string</returns>
         public override string ToString()
         {
             string result = "";

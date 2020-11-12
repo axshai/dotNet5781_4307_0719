@@ -164,13 +164,17 @@ namespace dotNet5781_02_4307_0719
                         {
                             Console.WriteLine("Enter the number of station");
                             input = Console.ReadLine();
+                            int i = 0;
                             foreach (BusLineRoute line in listOfLines)
                             {
                                 if (line.CheckStation(input))
                                 {
                                     Console.WriteLine(line);
+                                    i++;
                                 }
                             }
+                            if(i==0)
+                                Console.WriteLine("There are no lines passing through this station");
                         }
                         else if (choice == CHOICE.ONE)
                         {
@@ -234,6 +238,7 @@ namespace dotNet5781_02_4307_0719
                     case OPERATION.EXIT:
                         break;
                     default:
+                        Console.WriteLine("try again");
                         break;
                 }
 
