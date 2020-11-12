@@ -165,17 +165,21 @@ namespace dotNet5781_02_4307_0719
                          {
                             Console.WriteLine("Enter the number of station");
                             input = Console.ReadLine();
+                            int i = 0;
                             foreach (BusLineRoute line in listOfLines)
                             {
                                 if (line.CheckStation(input))//We will print all the stations whose number is the input number
                                 {
                                     Console.WriteLine(line);
+                                    i++;
                                 }
                             }
+                            if(i==0)
+                                Console.WriteLine("There are no lines passing through this station");
                         }
                         else if (choice == CHOICE.ONE)//Printing the options for travel between 2 stations
                         {
-                            Console.WriteLine("Enter the station numbers");
+                            Console.WriteLine("Enter the stations numbers");
                             string station1 = Console.ReadLine();
                             string station2 = Console.ReadLine();
                             List<BusLineRoute> subLines = new List<BusLineRoute>();//We will create the list of printable stations
@@ -183,8 +187,7 @@ namespace dotNet5781_02_4307_0719
                             {
                                 try
                                 {
-                                    line.subLine(station1, station2);
-                                    subLines.Add(line);
+                                    subLines.Add(line.subLine(station1, station2));
                                 }
                                 catch (ArgumentException ex)
                                 {
@@ -193,7 +196,7 @@ namespace dotNet5781_02_4307_0719
                             }
                             BusLines sublinesSort = new BusLines();
                             sublinesSort.Lines = subLines;
-                            sublinesSort.SortedList();
+                            sublinesSort = sublinesSort.SortedList();
                             foreach (BusLineRoute line in sublinesSort)
                             {
                                 Console.WriteLine("line:{0,-2} Travel time:{1}", line.BusLine, line.subLine(station1, station2).TotalTime());//הקווים שעוברים בתחנות והזמן בין התחנות!
