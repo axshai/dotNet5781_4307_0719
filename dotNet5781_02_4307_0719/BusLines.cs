@@ -18,7 +18,7 @@ namespace dotNet5781_02_4307_0719
         {
             Lines = new List<BusLineRoute>();
         }
-       
+
         private List<BusLineRoute> lines;//List for the lines
         public List<BusLineRoute> Lines//List for the lines-property
         {
@@ -31,7 +31,7 @@ namespace dotNet5781_02_4307_0719
         /// <param name="NumberOfLine">the number of the kine to add/remove</param>
         /// <param name="firstStatCode">number of the first station in the line(To differentiate between it and the opposite line)-Default value if we want to add line</param>
         /// <param name="area">area of the new line-Default value if we want to Get it from the user or if we remove a line now</param>
-        public void AddOrRemove(string NumberOfLine, string firstStatCode = "-2", String area = "")
+        public void AddOrRemove(string NumberOfLine, string firstStatCode = "-2", String area = "",BusStation fstation=null, BusStation lstation = null)
         {
 
             if (firstStatCode != "-2")//If a station number is received - so you want to remove a line
@@ -50,15 +50,33 @@ namespace dotNet5781_02_4307_0719
                 {
                     bool check = true;
                     Area a1;
+                    string key = "";
+                    double latit;
+                    double longit;
                     if (area == "")//If no area is received - receive it from the user
                     {
                         Console.WriteLine("Enter an area:GENERAL, NORTH, SOUTH, CENTER, JERUSALEM, SHFELA, WESTBANK");
                         area = Console.ReadLine();
+                        Console.WriteLine("Enter details about the first station (station number, latitude and longitude)");
+                        key = Console.ReadLine();
+                        latit = double.Parse(Console.ReadLine());
+                        longit = double.Parse(Console.ReadLine());
+                        fstation = new BusStation(key, latit, longit);
+                        if (SameStation(fstation))
+                            throw new ArgumentException("There is such a station number");
+                        Console.WriteLine("Enter details about the last station (station number, latitude and longitude)");
+                        key = Console.ReadLine();
+                        latit = double.Parse(Console.ReadLine());
+                        longit = double.Parse(Console.ReadLine());
+                        lstation = new BusStation(key, latit, longit);
+                        if (SameStation(lstation))
+                            throw new ArgumentException("There is such a station number");
                     }
                     check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);
                     if (Lines1.Count() < 1 || (check && a1 == Lines1[0].Region))//If there is no such line at all or there is one and the areas match
                     {
-                        BusLineRoute NewLine = new BusLineRoute(NumberOfLine, area);
+                       
+                        BusLineRoute NewLine = new BusLineRoute(NumberOfLine, area, fstation, lstation);
                         Lines.Add(NewLine);
                     }
                     else
@@ -110,35 +128,36 @@ namespace dotNet5781_02_4307_0719
         {
             set
             {
-                if (firstStation != "-1")//If a number of stations has been entered - the line has at least one station
-                {
-                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
-                        throw new ArgumentOutOfRangeException("The line does not exist");
-                    Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)] = value;
-                }
-                else
-                {
-                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation == null))
-                        throw new ArgumentOutOfRangeException("The line does not exist");
-                    Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation == null)] = value;
-                }
+                if (!Lines.Exists(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation))
+                    throw new ArgumentOutOfRangeException("The line does not exist");
+                Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)] = value;
+
             }
             get
             {
-                if (firstStation != "-1")//If a number of stations has been entered - the line has at least one station
-                {
-                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation != null && line.FirstStation.BusStationKey == firstStation))
-                        throw new ArgumentOutOfRangeException("The line does not exist");
-                    return Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)];
-                }
-                else
-                {
-                    if (!Lines.Exists(line => line.BusLine == index && line.FirstStation == null))
-                        throw new ArgumentOutOfRangeException("The line does not exist");
-                    return Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation == null)];
-                }
+
+                if (!Lines.Exists(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation))
+                    throw new ArgumentOutOfRangeException("The line does not exist");
+                return Lines[Lines.FindIndex(line => line.BusLine == index && line.FirstStation.BusStationKey == firstStation)];
+
+
             }
         }
+        public bool SameStation(BusStation st)
+        {
+            foreach (BusLineRoute line in this)//Check that there is no such station number in a different location
+            {
+                foreach (BusLineStation station1 in line.Stations)
+                {
+                    if (station1.BusStationKey == st.BusStationKey && (station1.Latitude != st.Latitude || station1.Longitude != st.Longitude))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// BusLines-toString:Prints the details of all the lines in the collection
         /// </summary>

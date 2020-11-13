@@ -16,7 +16,7 @@ namespace dotNet5781_02_4307_0719
         /// </summary>
         /// <param name="lineNumber">the line number</param>
         /// <param name="area">The area of ​​activity of the line</param>
-        public BusLineRoute(string lineNumber, string area)
+        public BusLineRoute(string lineNumber, string area,BusStation first, BusStation last)
         {
             Area a1;
             bool check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);
@@ -25,7 +25,8 @@ namespace dotNet5781_02_4307_0719
             BusLine = lineNumber;
             Stations = new List<BusLineStation>();
             Region = a1;
-
+            FirstStation = new BusLineStation(first);
+            LastStation = new BusLineStation(last, first.Latitude, first.Longitude);
         }
 
         private List<BusLineStation> stations;//List for The stations of the line
@@ -59,23 +60,20 @@ namespace dotNet5781_02_4307_0719
         {
             set
             {
-                if (Stations.Count() > 0)//If there are stations to the line(We assume that there may be a line in the system that has not yet entered stations)
+               Stations.Insert(0, value);
+                if (Stations.Count() > 1)
                 {
-                    Stations.Insert(0, value);//enter the new station to the begiging of the list
                     Stations[1].Distance = Stations[1].DistanceCalculate(value.Latitude, value.Longitude);//Make the station that was first become second (calculate distance and time from it to new)
                     Stations[1].TimeTravel = 1;//Causes time lottery - see BusLineStation class
                 }
-                else
-                    Stations.Add(value);
-
             }
-            get => Stations.Count() == 0 ? null : Stations[0];
+            get => Stations[0];
         }
 
         public BusLineStation LastStation//the last station of the line (The property here is a kind of doll with behind it you approach the list)
         {
             set { Stations.Add(value); }
-            get => Stations.Count() == 0 ? null : Stations[Stations.Count() - 1];
+            get => Stations[Stations.Count() - 1];
         }
 
         public Area Region { set; get; }//the area of the line-property
@@ -133,12 +131,15 @@ namespace dotNet5781_02_4307_0719
                 throw new ArgumentException("one or more of the Stations isnt in the line");
             int FirstIndex = index1 < index2 ? index1 : index2;
             int LastIndex = index1 > index2 ? index1 : index2;
-            BusLineRoute newLine = new BusLineRoute(BusLine, Region.ToString());//Creating the new bus line-We assume that the number of the sub-line is equal to the large one
-            for (int i = FirstIndex; i <= LastIndex; i++)
+            BusStation first = new BusStation(Stations[FirstIndex].BusStationKey, Stations[FirstIndex].Latitude, Stations[FirstIndex].Longitude);
+            BusStation last = new BusStation(Stations[LastIndex].BusStationKey, Stations[LastIndex].Latitude, Stations[LastIndex].Longitude);
+            BusLineRoute newLine = new BusLineRoute(BusLine, Region.ToString(),new BusStation(first.BusStationKey,first.Latitude,first.Longitude), new BusStation(last.BusStationKey, last.Latitude, last.Longitude));//Creating the new bus line-We assume that the number of the sub-line is equal to the large one
+            for (int i = FirstIndex+1,j=1; i <= LastIndex; i++,j++)
             {
-                newLine.Stations.Add(this.Stations[i]);
-                newLine.Stations[0].Distance = newLine.Stations[0].TimeTravel = 0;
+                newLine.Stations.Insert(j, Stations[i]);
+               
             }
+            newLine.Stations.RemoveAt(newLine.Stations.Count() - 1);
             return newLine;
         }
         /// <summary>
@@ -166,14 +167,22 @@ namespace dotNet5781_02_4307_0719
                 else
                 {
                     int indexofnext = Stations.FindIndex(station => station.BusStationKey == keyOfCurrent);
-                    Stations.Remove(Stations.Find(station => station.BusStationKey == keyOfCurrent));
-                    if (indexofnext != (Stations.Count()))//If we did not delete the last station
+                    if (Stations.Count() > 2)
                     {
-                        Stations[indexofnext].TimeTravel = indexofnext;//Calculate the travel time between the two stations that are now adjacent(or Place at the station which is now the first the time 0)-see BusLineStation class
-                        if (indexofnext != 0)//If we did not delete the first one
-                            Stations[indexofnext].Distance = Stations[indexofnext].DistanceCalculate(Stations[indexofnext - 1].Latitude, Stations[indexofnext - 1].Longitude);//Calculate the distance between the two stations that are now adjacent
-                        else//If we delete the first one-
-                            Stations[indexofnext].Distance = 0;//Place at the station which is now the first the distance 0
+
+                        Stations.Remove(Stations.Find(station => station.BusStationKey == keyOfCurrent));
+                        if (indexofnext != (Stations.Count()))//If we did not delete the last station
+                        {
+                            Stations[indexofnext].TimeTravel = indexofnext;//Calculate the travel time between the two stations that are now adjacent(or Place at the station which is now the first the time 0)-see BusLineStation class
+                            if (indexofnext != 0)//If we did not delete the first one
+                                Stations[indexofnext].Distance = Stations[indexofnext].DistanceCalculate(Stations[indexofnext - 1].Latitude, Stations[indexofnext - 1].Longitude);//Calculate the distance between the two stations that are now adjacent
+                            else//If we delete the first one-
+                                Stations[indexofnext].Distance = 0;//Place at the station which is now the first the distance 0
+                        }
+                    }
+                    else 
+                    {
+                        Console.WriteLine("A line must contain at least 2 stations");
                     }
                 }
             }
@@ -244,7 +253,7 @@ namespace dotNet5781_02_4307_0719
                         Stations[Stations.IndexOf(newStation1) + 1].Distance = Stations[Stations.IndexOf(newStation1) + 1].DistanceCalculate(latit, longit);
                         Stations[Stations.IndexOf(newStation1) + 1].TimeTravel = 1;
                     }
-                    else//If he did not add a last station
+                    else//If he add a last station
                     {
                         LastStation = newStation1;
                     }

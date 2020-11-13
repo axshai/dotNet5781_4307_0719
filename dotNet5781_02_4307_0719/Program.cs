@@ -40,46 +40,36 @@ namespace dotNet5781_02_4307_0719
         }
 
         static BusLines initialization()//We will initialize a list of lines and stations for each line
-        {
+       {
 
-            Random r = new Random(DateTime.Now.Millisecond);//Random number for station longitude and latitude lines (and area for lines)
-            BusLines listOfLines = new BusLines();//The list we will initialize and return
-            for (int i = 0; i < 10; i++)//First loop to boot 10 lines
+           Random r = new Random(DateTime.Now.Millisecond);//Random number for station longitude and latitude lines (and area for lines)
+            BusLines listOfLines= new BusLines();
+            for (int i=1;i<=10;i++)
             {
-                listOfLines.AddOrRemove((i + 1).ToString(), area: r.Next(7).ToString());//Initialize the line by a number of lines and an area
-                List<BusLineStation> stations = new List<BusLineStation>();//List of stations to add to the line
-                double platit = -200; //Longitude and latitude to the first station
-                double plongit = -200;
-                for (int j = 0; j < 4; j++)//Second loop to boot every line at 4 stations (a total of 40 stations used on all lines)
+                BusStation first = new BusStation(i.ToString()+3, 33.3 - r.NextDouble() * 2.3, 35.5 - r.NextDouble() * 1.2);
+                BusStation last=new BusStation(i.ToString() + 4, 33.3 - r.NextDouble() * 2.3, 35.5 - r.NextDouble() * 1.2);
+                listOfLines.AddOrRemove(i.ToString(), area: r.Next(7).ToString(), fstation: first, lstation: last);
+                string x = i.ToString()+3;
+                for(int j=2;j>=1;j--)
                 {
-                    double latit = 33.3 - r.NextDouble() * 2.3;//Longitude and latitude for each station
-                    double longit = 35.5 - r.NextDouble() * 1.2;
-                    BusLineStation stat = new BusLineStation(new BusStation((i + 1).ToString() + (j + 1).ToString(), latit, longit), platit, plongit);//Creating a bus line station
-                    stations.Add(stat);
-                    platit = latit;//Previous latitude and longitude
-                    plongit = longit;
+                    listOfLines[i.ToString(), x].FirstStation= new  BusLineStation(new BusStation(i.ToString() + j, 33.3 - r.NextDouble() * 2.3, 35.5 - r.NextDouble() * 1.2));
+                   
+                    x = i.ToString() + j.ToString();
                 }
-                listOfLines[(i + 1).ToString(), "-1"].Stations = stations;//We will add the list of stations
+                
+               
             }
-            BusLineStation next1; 
-            BusStation next;
-            for (int i = 0; i < 9; i++)//There will be 9 stations that will cross at least 2 lines((Add 9 existing stations to the lines))
+            for (int i = 1; i <= 9; i++)
             {
-                next1 = listOfLines[(i + 2).ToString(), (i + 2).ToString() + "1"].Stations[0];//Existing bus stop
-                next = new BusStation(next1.BusStationKey, next1.Latitude, next1.Longitude);
-                listOfLines[(i + 1).ToString(), (i + 1).ToString() + "1"].AddOrRemove(1, listOfLines, next);//We'll add it to another line
+                listOfLines[i.ToString(), i.ToString() + 1].FirstStation = listOfLines[(i + 1).ToString(), (i + 1).ToString() + 1].FirstStation;
             }
-            //There will be another station (tenth) that will cross at least 2 lines
-            next1 = listOfLines["1", "21"].Stations[1]; 
-            next = new BusStation(next1.BusStationKey, next1.Latitude, next1.Longitude);
-            listOfLines["10", "101"].AddOrRemove(1, listOfLines, next);
-
-            return listOfLines;//We will return the list of initialized lines
+            listOfLines["10", "101"].FirstStation = listOfLines["1", "21"].Stations[1];
+                return listOfLines;//We will return the list of initialized lines
         }
 
         static void Main(string[] args)
         {
-            BusLines listOfLines = initialization();//We will initialize 10 lines and 40 stations
+            BusLines listOfLines = initialization();
             OPERATION oper; //to Menu selection
             CHOICE choice; //To select: station or line
             bool success;//Input integrity check
@@ -110,7 +100,7 @@ namespace dotNet5781_02_4307_0719
                         string first = "";
                         if (choice == CHOICE.ONE)//add new station
                         {
-                            Console.WriteLine("enter the number of the fisrt station,-1 If there are no stations yet");
+                            Console.WriteLine("enter the number of the fisrt station");
                             first = Console.ReadLine();
                         }
                         try 
@@ -118,7 +108,7 @@ namespace dotNet5781_02_4307_0719
                             Add(listOfLines, choice, lineNumber, first);
                         }
 
-                        catch (FormatException ex) //
+                        catch (FormatException ex) 
                         {
                             Console.WriteLine(ex.Message);
                         }
@@ -137,7 +127,7 @@ namespace dotNet5781_02_4307_0719
                         zeroOrOne(out choice);//Input check
                         Console.WriteLine("enter the number of the line");
                         lineNumber = Console.ReadLine();
-                        Console.WriteLine("enter the number of the fisrt station,-1 If there are no stations yet");
+                        Console.WriteLine("enter the number of the fisrt station");
                         first = Console.ReadLine();
                         try
                         {
