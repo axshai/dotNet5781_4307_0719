@@ -189,9 +189,9 @@ namespace dotNet5781_02_4307_0719
                                 {
                                     subLines.Add(line.subLine(station1, station2));
                                 }
-                                catch (ArgumentException ex)
+                                catch (ArgumentException)
                                 {
-                                    Console.WriteLine(ex.Message);
+                                    
                                 }
                             }
                             BusLines sublinesSort = new BusLines();
