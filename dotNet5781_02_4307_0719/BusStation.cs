@@ -8,12 +8,12 @@ namespace dotNet5781_02_4307_0719
 {
     class BusStation
     {
-        private const int MIN_LAT = -90;
+        private const int MIN_LAT = -90;  //For longitude and latitude ranges
         private const int MAX_LAT = 90;
         private const int MIN_LON = -180;
         private const int MAX_LON = 180;
 
-        public BusStation(string code, double latit, double longit)
+        public BusStation(string code, double latit, double longit)//constructor
         {
             BusStationKey = code;
             Latitude = latit;
@@ -21,38 +21,40 @@ namespace dotNet5781_02_4307_0719
            
         }
 
-        private string busStationKey;
+        private string busStationKey; //Station number
 
-        public string BusStationKey
+        public string BusStationKey //"set" and "get" for Station number
+
         {
-            get { return busStationKey; }
+            get { return busStationKey; } //return the station number
             set
             {
-                uint keyAsInt;
-                bool check;
-                check = uint.TryParse(value, out keyAsInt);
-                if (value.Length < 1 || value.Length > 6)
+                uint keyAsInt; // for Input test
+                bool check;//for Input test
+                check = uint.TryParse(value, out keyAsInt);//Input test
+                if (value.Length < 1 || value.Length > 6)//The number of station must be 6 digits
                 {
                     throw new ArgumentException("Station number must be between 1 and 6 digits!");
+                    // if The number of station is not  6 digits
                 }
-                if (!check)
+                if (!check)//If the number is incorrect (Conversion to positive integer failed)
                 {
                     throw new FormatException("A station number can contain only digits!");
                 }
-                busStationKey = value;
+                busStationKey = value; //The station number is correct - we have been updated
             }
         }
         private double latitude;
-        public double Latitude
+        public double Latitude//"set" and "get" for latitude
         {
-            get { return latitude; }
+            get { return latitude; }////return the latitude
             set
             {
-                if (value >= MIN_LAT && value <= MAX_LAT)
+                if (value >= MIN_LAT && value <= MAX_LAT)//If the latitude is correct
                 {
                     latitude = value;
                 }
-                else
+                else//If the latitude is incorrect
                 {
                     throw new ArgumentException(String.Format("The number must be between <{0},{1}>", MIN_LAT, MAX_LAT));
                 }
@@ -60,16 +62,16 @@ namespace dotNet5781_02_4307_0719
         }
 
         private double longitude;
-        public double Longitude
+        public double Longitude //"set" and "get" for longitude
         {
-            get { return longitude; }
+            get { return longitude; }//return the longitude
             set
             {
-                if (value >= MIN_LON && value <= MAX_LON)
+                if (value >= MIN_LON && value <= MAX_LON)//If the longitude is correct
                 {
                     longitude = value;
                 }
-                else
+                else//If the longitude is incorrect
                 {
                     throw new ArgumentException(String.Format("The number must be between <{0},{1}>", MIN_LON, MAX_LON));
                 }
@@ -78,14 +80,13 @@ namespace dotNet5781_02_4307_0719
 
        
 
-        public override string ToString()
+        public override string ToString()//Override of ToString 
         {
-            String result = String.Format("Bus Station Code: {0,-3}, {1,-16}°N  {2,-16}°E", BusStationKey, Latitude, Longitude);
+            String result = String.Format("Bus Station Code: {0,-3}, {1,-16}°N  {2,-16}°E", BusStationKey, Latitude, Longitude); //Will contain the longitude and latitude lines in the requested format
 
-            return result;
+            return result; 
         }
     }
-
 
 
 }
