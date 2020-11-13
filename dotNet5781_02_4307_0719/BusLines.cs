@@ -31,6 +31,8 @@ namespace dotNet5781_02_4307_0719
         /// <param name="NumberOfLine">the number of the kine to add/remove</param>
         /// <param name="firstStatCode">number of the first station in the line(To differentiate between it and the opposite line)-Default value if we want to add line</param>
         /// <param name="area">area of the new line-Default value if we want to Get it from the user or if we remove a line now</param>
+        /// <param name="fstation">The first station of the line-Default value if we want to Get it from the user or if we remove a line now</param>
+        /// <param name="lstation">The last station of the line-Default value if we want to Get it from the user or if we remove a line now</param>
         public void AddOrRemove(string NumberOfLine, string firstStatCode = "-2", String area = "",BusStation fstation=null, BusStation lstation = null)
         {
 
@@ -53,7 +55,7 @@ namespace dotNet5781_02_4307_0719
                     string key = "";
                     double latit;
                     double longit;
-                    if (area == "")//If no area is received - receive it from the user
+                    if (area == "")//If no area is received(we We did not receive a ready line) - receive it and details of first and last stations from the user
                     {
                         Console.WriteLine("Enter an area:GENERAL, NORTH, SOUTH, CENTER, JERUSALEM, SHFELA, WESTBANK");
                         area = Console.ReadLine();
@@ -62,14 +64,14 @@ namespace dotNet5781_02_4307_0719
                         latit = double.Parse(Console.ReadLine());
                         longit = double.Parse(Console.ReadLine());
                         fstation = new BusStation(key, latit, longit);
-                        if (SameStation(fstation))
+                        if (SameStation(fstation)) //Find out if such a station already exists
                             throw new ArgumentException("There is such a station number");
                         Console.WriteLine("Enter details about the last station (station number, latitude and longitude)");
                         key = Console.ReadLine();
                         latit = double.Parse(Console.ReadLine());
                         longit = double.Parse(Console.ReadLine());
                         lstation = new BusStation(key, latit, longit);
-                        if (SameStation(lstation))
+                        if (SameStation(lstation))////Find out if such a station already exists
                             throw new ArgumentException("There is such a station number");
                     }
                     check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);
@@ -143,6 +145,11 @@ namespace dotNet5781_02_4307_0719
 
             }
         }
+        /// <summary>
+        /// The function receives a station and checks if there is already a station with the same number in another location
+        /// </summary>
+        /// <param name="st">The station for inspection</param>
+        /// <returns>bool-Is there already such a station</returns>
         public bool SameStation(BusStation st)
         {
             foreach (BusLineRoute line in this)//Check that there is no such station number in a different location

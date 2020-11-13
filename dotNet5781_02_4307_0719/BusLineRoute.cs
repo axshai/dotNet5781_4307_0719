@@ -14,8 +14,10 @@ namespace dotNet5781_02_4307_0719
         /// <summary>
         /// BusLineRoute ctor-creat list of his stations
         /// </summary>
-        /// <param name="lineNumber">the line number</param>
-        /// <param name="area">The area of ​​activity of the line</param>
+        /// <param name="lineNumber">number of the line</param>
+        /// <param name="area">Area of ​​activity</param>
+        /// <param name="first">his first station</param>
+        /// <param name="last">his lirst station</param>
         public BusLineRoute(string lineNumber, string area,BusStation first, BusStation last)
         {
             Area a1;
@@ -180,7 +182,7 @@ namespace dotNet5781_02_4307_0719
                                 Stations[indexofnext].Distance = 0;//Place at the station which is now the first the distance 0
                         }
                     }
-                    else 
+                    else //if If less than two stations remain
                     {
                         Console.WriteLine("A line must contain at least 2 stations");
                     }
