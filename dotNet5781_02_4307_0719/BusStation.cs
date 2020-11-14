@@ -18,7 +18,6 @@ namespace dotNet5781_02_4307_0719
             BusStationKey = code;
             Latitude = latit;
             Longitude = longit;
-           
         }
 
         private string busStationKey; //Station number
@@ -82,7 +81,7 @@ namespace dotNet5781_02_4307_0719
 
         public override string ToString()//Override of ToString 
         {
-            String result = String.Format("Bus Station Code: {0,-3}, {1,-16}°N  {2,-16}°E", BusStationKey, Latitude, Longitude); //Will contain the longitude and latitude lines in the requested format
+            String result = String.Format("Bus Station Code: {0,-6}, {1,-16}°N  {2,-16}°E", BusStationKey, Latitude, Longitude); //Will contain the longitude and latitude lines in the requested format
 
             return result; 
         }
