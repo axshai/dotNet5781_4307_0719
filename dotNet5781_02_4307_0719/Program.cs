@@ -43,27 +43,31 @@ namespace dotNet5781_02_4307_0719
        {
 
            Random r = new Random(DateTime.Now.Millisecond);//Random number for station longitude and latitude lines (and area for lines)
-            BusLines listOfLines= new BusLines();
-            for (int i=1;i<=10;i++)
+            BusLines listOfLines= new BusLines();// We will create a new collection of lines
+            for (int i=1;i<=10;i++)//First loop to boot 10 lines
             {
+                //Creating two new stations for the current line, we will initialize random longitude and latitude lines depending on the range
                 BusStation first = new BusStation(i.ToString()+3, 33.3 - r.NextDouble() * 2.3, 35.5 - r.NextDouble() * 1.2);
                 BusStation last=new BusStation(i.ToString() + 4, 33.3 - r.NextDouble() * 2.3, 35.5 - r.NextDouble() * 1.2);
+                //We will add the line to our list of lines (Currently, each line has 2 stations)
                 listOfLines.AddOrRemove(i.ToString(), area: r.Next(7).ToString(), fstation: first, lstation: last);
-                string x = i.ToString()+3;
-                for(int j=2;j>=1;j--)
+                string x = i.ToString()+3; //We will save the station number for the current line
+                for (int j=2;j>=1;j--)//We will add two more stations for the current line
                 {
                     listOfLines[i.ToString(), x].FirstStation= new  BusLineStation(new BusStation(i.ToString() + j, 33.3 - r.NextDouble() * 2.3, 35.5 - r.NextDouble() * 1.2));
                    
-                    x = i.ToString() + j.ToString();
+                    x = i.ToString() + j.ToString(); //We will save the station code to the first new station
                 }
-                
-               
+                //Currently, there are 10 lines and each line has 4 stations
+
             }
-            for (int i = 1; i <= 9; i++)
+            for (int i = 1; i <= 9; i++)//A loop that will take care of adding to each line a station that already exists (and so there will be 9 stations that will go through at least 2 lines)
             {
                 listOfLines[i.ToString(), i.ToString() + 1].FirstStation = listOfLines[(i + 1).ToString(), (i + 1).ToString() + 1].FirstStation;
             }
+            //Adding an existing station where at least 2 lines will pass
             listOfLines["10", "101"].FirstStation = listOfLines["1", "21"].Stations[1];
+
                 return listOfLines;//We will return the list of initialized lines
         }
 
@@ -106,13 +110,14 @@ namespace dotNet5781_02_4307_0719
                         try 
                         {
                             Add(listOfLines, choice, lineNumber, first);
+                            // we use "Add" to add a new station ot line
                         }
 
                         catch (FormatException ex) 
                         {
                             Console.WriteLine(ex.Message);
                         }
-                        catch (ArgumentOutOfRangeException ex)// form indexer
+                        catch (ArgumentOutOfRangeException ex)// form indexer - We used this exception because a bus line is not in the area of ​​the lines
                         {
                             Console.WriteLine(ex.Message);
                         }
@@ -141,7 +146,7 @@ namespace dotNet5781_02_4307_0719
                             }
                         }
 
-                        catch (ArgumentOutOfRangeException ex)//from indexer
+                        catch (ArgumentOutOfRangeException ex)//from indexer -We used this exception because a bus line is not in the area of ​​the lines
                         {
                             Console.WriteLine(ex.Message);
                         }
@@ -179,45 +184,48 @@ namespace dotNet5781_02_4307_0719
                                 {
                                     subLines.Add(line.subLine(station1, station2));
                                 }
-                                catch (ArgumentException)
+                                catch (ArgumentException)//We do not want to execute the exception shot so as not to stop the search sequence
                                 {
                                     
                                 }
                             }
-                            BusLines sublinesSort = new BusLines();
+                            BusLines sublinesSort = new BusLines();//We will create a new collection of lines, we will initialize it in the list of lines that pass through the stations
                             sublinesSort.Lines = subLines;
-                            sublinesSort = sublinesSort.SortedList();
+                            sublinesSort = sublinesSort.SortedList();//We will print after sorting
                             foreach (BusLineRoute line in sublinesSort)
                             {
-                                Console.WriteLine("line:{0,-2} Travel time:{1}", line.BusLine, line.subLine(station1, station2).TotalTime());//הקווים שעוברים בתחנות והזמן בין התחנות!
+                                Console.WriteLine("line:{0,-2} Travel time:{1}", line.BusLine, line.subLine(station1, station2).TotalTime());
                             }
                         }
                         break;
 
-                    case OPERATION.PRINT:
+                    case OPERATION.PRINT:/*Printing options:
+                                     Or all bus lines in the system
+                           Or a list of all stations and line numbers passing through them*/
+                                           
                         Console.WriteLine("enter 0 to print Print details of all lines,");
                         Console.WriteLine("1 Print for each station the numbers of the lines passing through it:");
                         zeroOrOne(out choice);
                         if (choice == CHOICE.ZERO)
-                            Console.Write(listOfLines);
-                        else
+                            Console.Write(listOfLines);// print all bus lines in the system
+                        else// print a list of all stations and line numbers passing through them
                         {
                             List<BusLineStation> allStations = new List<BusLineStation>();
-                            foreach (BusLineRoute line in listOfLines)
+                            foreach (BusLineRoute line in listOfLines)//Go through all the lines
                             {
-                                foreach (BusLineStation station in line.Stations)
+                                foreach (BusLineStation station in line.Stations)//Go through all the stations for each line
                                 {
-                                    if (!allStations.Exists(station1 => station1.BusStationKey == station.BusStationKey))
+                                    if (!allStations.Exists(station1 => station1.BusStationKey == station.BusStationKey))//If we did not meet at this station - we will printing
                                     {
                                         Console.Write("station number:{0,-6} lines numbers: ", station.BusStationKey);
                                         foreach (BusLineRoute line1 in listOfLines)
                                         {
-                                            if (line1.CheckStation(station.BusStationKey))
+                                            if (line1.CheckStation(station.BusStationKey))//For each line containing the station, printing
                                             {
                                                 Console.Write(line1.BusLine + " ");
                                             }
                                         }
-                                        allStations.Add(station);
+                                        allStations.Add(station);//We will save the current station so that it is not reprinted
                                         Console.WriteLine();
                                     }
 
@@ -226,14 +234,14 @@ namespace dotNet5781_02_4307_0719
                         }
                         break;
 
-                    case OPERATION.EXIT:
+                    case OPERATION.EXIT:// EXIT
                         break;
                     default:
                         Console.WriteLine("try again");
                         break;
                 }
 
-            } while (oper != OPERATION.EXIT);
+            } while (oper != OPERATION.EXIT);//As long as the user does not want to log out, we will display the menu
 
         }
     }
