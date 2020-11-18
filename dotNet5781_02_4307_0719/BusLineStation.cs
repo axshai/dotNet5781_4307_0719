@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-    class BusLineStation//Bus line station
+    public class BusLineStation//Bus line station
     {
         private const int FIRST_TIME = 0;//Constant that representing time from previous station if this is the first station (0)
         private const int TIME_CALCULATION = 1;//Constant used for time lottery from previous station

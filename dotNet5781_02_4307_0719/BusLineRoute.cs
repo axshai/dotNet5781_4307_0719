@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-    class BusLineRoute : IComparable//Single bus line
+   public class BusLineRoute : IComparable//Single bus line
     {
         /// <summary>
         /// BusLineRoute ctor-creat list of his stations
@@ -18,7 +18,7 @@ namespace dotNet5781_02_4307_0719
         /// <param name="area">Area of ​​activity</param>
         /// <param name="first">his first station</param>
         /// <param name="last">his lirst station</param>
-        public BusLineRoute(string lineNumber, string area,BusStation first, BusStation last)
+        public BusLineRoute(string lineNumber, string area, BusStation first, BusStation last)
         {
             Area a1;
             bool check = Enum.TryParse(area.Replace(" ", "").ToUpper(), out a1);
@@ -62,7 +62,7 @@ namespace dotNet5781_02_4307_0719
         {
             set
             {
-               Stations.Insert(0, value);
+                Stations.Insert(0, value);
                 if (Stations.Count() > 1)
                 {
                     Stations[1].Distance = Stations[1].DistanceCalculate(value.Latitude, value.Longitude);//Make the station that was first become second (calculate distance and time from it to new)
@@ -135,11 +135,11 @@ namespace dotNet5781_02_4307_0719
             int LastIndex = index1 > index2 ? index1 : index2;
             BusStation first = new BusStation(Stations[FirstIndex].BusStationKey, Stations[FirstIndex].Latitude, Stations[FirstIndex].Longitude);
             BusStation last = new BusStation(Stations[LastIndex].BusStationKey, Stations[LastIndex].Latitude, Stations[LastIndex].Longitude);
-            BusLineRoute newLine = new BusLineRoute(BusLine, Region.ToString(),new BusStation(first.BusStationKey,first.Latitude,first.Longitude), new BusStation(last.BusStationKey, last.Latitude, last.Longitude));//Creating the new bus line-We assume that the number of the sub-line is equal to the large one
-            for (int i = FirstIndex+1,j=1; i <= LastIndex; i++,j++)
+            BusLineRoute newLine = new BusLineRoute(BusLine, Region.ToString(), new BusStation(first.BusStationKey, first.Latitude, first.Longitude), new BusStation(last.BusStationKey, last.Latitude, last.Longitude));//Creating the new bus line-We assume that the number of the sub-line is equal to the large one
+            for (int i = FirstIndex + 1, j = 1; i <= LastIndex; i++, j++)
             {
                 newLine.Stations.Insert(j, Stations[i]);
-               
+
             }
             newLine.Stations.RemoveAt(newLine.Stations.Count() - 1);
             return newLine;
@@ -217,7 +217,7 @@ namespace dotNet5781_02_4307_0719
                     longit = station2.Longitude;
                     previous = "-1";
                 }
-                
+
                 foreach (BusLineRoute line in l1)//Check that there is no such station number in a different location
                 {
                     foreach (BusLineStation station1 in line.Stations)
@@ -292,4 +292,3 @@ namespace dotNet5781_02_4307_0719
         }
     }
 }
-

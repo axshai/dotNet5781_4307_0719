@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-    class BusStation
+    public class BusStation
     {
         private const int MIN_LAT = -90;  //For longitude and latitude ranges
         private const int MAX_LAT = 90;

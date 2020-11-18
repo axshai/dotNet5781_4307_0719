@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace dotNet5781_02_4307_0719
 {
-    class BusLines : IEnumerable//A collection of lines
+    public class BusLines : IEnumerable//A collection of lines
     {
         /// <summary>
         /// BusLines ctor-Creates a new List of BusLineRoute
