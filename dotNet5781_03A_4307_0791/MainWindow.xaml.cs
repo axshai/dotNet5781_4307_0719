@@ -55,8 +55,8 @@ namespace dotNet5781_03A_4307_0791
             }
             //Adding an existing station where at least 2 lines will pass
             listOfLines["10", "101"].FirstStation = listOfLines["1", "21"].Stations[1];
+            
 
-           
         }
         BusLines listOfLines= new BusLines();
         private BusLineRoute currentDisplayBusLine;
