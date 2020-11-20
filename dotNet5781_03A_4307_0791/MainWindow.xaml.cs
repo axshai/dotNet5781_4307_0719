@@ -26,8 +26,8 @@ namespace dotNet5781_03A_4307_0791
         public MainWindow()
         {
             InitializeComponent();
-            cbBusLines.ItemsSource = listOfLines;
-            cbBusLines.DisplayMemberPath = "BusLine";
+            cbBusLines.ItemsSource = listOfLines;//combo-box
+            cbBusLines.DisplayMemberPath = "BusLine";//choose by the line-number
             cbBusLines.SelectedIndex = 0;
             
             Random r = new Random(DateTime.Now.Millisecond);//Random number for station longitude and latitude lines (and area for lines)
@@ -61,22 +61,19 @@ namespace dotNet5781_03A_4307_0791
         BusLines listOfLines= new BusLines();
         private BusLineRoute currentDisplayBusLine;
 
-        private void cbBusLines_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cbBusLines_SelectionChanged(object sender, SelectionChangedEventArgs e)//event of new selection in combobox
         {
-            ShowBusLine((cbBusLines.SelectedValue as BusLineRoute).BusLine, (cbBusLines.SelectedValue as BusLineRoute).FirstStation.BusStationKey);
+            ShowBusLine((cbBusLines.SelectedValue as BusLineRoute).BusLine, (cbBusLines.SelectedValue as BusLineRoute).FirstStation.BusStationKey);//show the stations of the selected line
         }
         private void ShowBusLine(string index, string firstStation)
         {
             currentDisplayBusLine = listOfLines[index, firstStation];
             UpGrid.DataContext = currentDisplayBusLine;
-            lbBusLineStations.DataContext = currentDisplayBusLine.Stations;
-            tbArea.Text = currentDisplayBusLine.Region.ToString();
+            lbBusLineStations.DataContext = currentDisplayBusLine.Stations;//show the stations of the selcted line
+            tbArea.Text = currentDisplayBusLine.Region.ToString();//shoe the area of the selcted line
         }
 
-        private void tbArea_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
+        
     }
 
 

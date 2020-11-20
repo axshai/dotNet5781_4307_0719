@@ -62,7 +62,8 @@ namespace dotNet5781_02_4307_0719
         {
             set
             {
-                Stations.Insert(0, value);
+                BusLineStation first = new BusLineStation(new BusStation(value.BusStationKey, value.Latitude, value.Longitude));
+                Stations.Insert(0, first);
                 if (Stations.Count() > 1)
                 {
                     Stations[1].Distance = Stations[1].DistanceCalculate(value.Latitude, value.Longitude);//Make the station that was first become second (calculate distance and time from it to new)
