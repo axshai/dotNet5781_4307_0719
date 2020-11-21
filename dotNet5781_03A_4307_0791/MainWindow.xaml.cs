@@ -58,8 +58,8 @@ namespace dotNet5781_03A_4307_0791
             
 
         }
-        BusLines listOfLines= new BusLines();
-        private BusLineRoute currentDisplayBusLine;
+        BusLines listOfLines= new BusLines();//Create a collection of lines
+        private BusLineRoute currentDisplayBusLine; //The selected line to display
 
         private void cbBusLines_SelectionChanged(object sender, SelectionChangedEventArgs e)//event of new selection in combobox
         {
