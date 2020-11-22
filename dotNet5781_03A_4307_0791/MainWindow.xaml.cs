@@ -25,9 +25,13 @@ namespace dotNet5781_03A_4307_0791
     {
         public MainWindow()
         {
-
+            InitializeComponent();
+            cbBusLines.ItemsSource = listOfLines;//combo-box
+            cbBusLines.DisplayMemberPath = "BusLine";//choose by the line-number
+            cbBusLines.SelectedIndex = 0;
+            
             Random r = new Random(DateTime.Now.Millisecond);//Random number for station longitude and latitude lines (and area for lines)
-
+            
             for (int i = 1; i <= 10; i++)//First loop to boot 10 lines
             {
                 //Creating two new stations for the current line, we will initialize random longitude and latitude lines depending on the range
@@ -45,23 +49,22 @@ namespace dotNet5781_03A_4307_0791
                 //Currently, there are 10 lines and each line has 4 stations
 
             }
-
-            InitializeComponent();
-            cbBusLines.ItemsSource = listOfLines;//combo-box
-            cbBusLines.DisplayMemberPath = "BusLine";//choose by the line-number
-            cbBusLines.SelectedIndex = 0;
+            for (int i = 1; i <= 9; i++)//A loop that will take care of adding to each line a station that already exists (and so there will be 9 stations that will go through at least 2 lines)
+            {
+                listOfLines[i.ToString(), i.ToString() + 1].FirstStation = listOfLines[(i + 1).ToString(), (i + 1).ToString() + 1].FirstStation;
+            }
+            //Adding an existing station where at least 2 lines will pass
+            listOfLines["10", "101"].FirstStation = listOfLines["1", "21"].Stations[1];
             
+
         }
-
-        BusLines listOfLines= new BusLines();
-
-        private BusLineRoute currentDisplayBusLine;
+        BusLines listOfLines= new BusLines();//Create a collection of lines
+        private BusLineRoute currentDisplayBusLine; //The selected line to display
 
         private void cbBusLines_SelectionChanged(object sender, SelectionChangedEventArgs e)//event of new selection in combobox
         {
             ShowBusLine((cbBusLines.SelectedValue as BusLineRoute).BusLine, (cbBusLines.SelectedValue as BusLineRoute).FirstStation.BusStationKey);//show the stations of the selected line
         }
-
         private void ShowBusLine(string index, string firstStation)
         {
             currentDisplayBusLine = listOfLines[index, firstStation];
