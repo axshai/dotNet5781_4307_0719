@@ -42,7 +42,6 @@ namespace dotNet5781_03A_4307_0791
                     x = i.ToString() + j.ToString(); //We will save the station code to the first new station
                 }
                 //Currently, there are 10 lines and each line has 4 stations
-
             }
             
             for (int i = 1; i <= 9; i++)//A loop that will take care of adding to each line a station that already exists (and so there will be 9 stations that will go through at least 2 lines)
