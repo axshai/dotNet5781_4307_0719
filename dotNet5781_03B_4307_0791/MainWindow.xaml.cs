@@ -21,16 +21,16 @@ namespace dotNet5781_03B_4307_0791
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<Bus> buses = new ObservableCollection<Bus>();
 
+        public ObservableCollection<Bus> Buses { get; set; }
         public MainWindow()
         {
+            Buses = new ObservableCollection<Bus>();
+            Buses.Add(new Bus(DateTime.Parse("03/03/2020"), "12445678"));//*
+            Buses[0].DoRefuel();//*
 
-            buses.Add(new Bus(DateTime.Parse("03/03/2020"), "12445678"));
-
-            buses[0].DoRefuel();
             InitializeComponent();
-            lbbuses.ItemsSource = buses;
+            lbbuses.ItemsSource = Buses;
 
 
         }
@@ -54,6 +54,10 @@ namespace dotNet5781_03B_4307_0791
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
+            AddWindow addBus = new AddWindow(Buses);
+            addBus.Show();
+
+
 
         }
     }
