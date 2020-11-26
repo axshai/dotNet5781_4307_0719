@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace dotNet5781_03B_4307_0791
 {
@@ -20,23 +21,40 @@ namespace dotNet5781_03B_4307_0791
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Bus> buses = new List<Bus>();
+        ObservableCollection<Bus> buses = new ObservableCollection<Bus>();
+
         public MainWindow()
         {
 
-            buses.Add(new Bus(DateTime.Parse("03/03/2020"), "12345678"));
+            buses.Add(new Bus(DateTime.Parse("03/03/2020"), "12445678"));
+
             buses[0].DoRefuel();
             InitializeComponent();
-            lvbuses.ItemsSource = buses;
+            lbbuses.ItemsSource = buses;
+
+
         }
 
-        private void driveButtom_Click(object sender, RoutedEventArgs e)
+        private void DriveButtom_Click(object sender, RoutedEventArgs e)
         {
             var fxElt = sender as FrameworkElement;
             Bus selcted = fxElt.DataContext as Bus;
             drivewindow w1 = new drivewindow(selcted);
             w1.Show();
-           
+
+        }
+
+        private void Refuelbutton_Click(object sender, RoutedEventArgs e)
+        {
+            var fxElt = sender as FrameworkElement;
+            Bus toRefuel = fxElt.DataContext as Bus;
+            toRefuel.DoRefuel();
+        }
+
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

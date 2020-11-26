@@ -20,7 +20,7 @@ namespace dotNet5781_03B_4307_0791
     public partial class drivewindow : Window
     {
         Bus toDrive;
-        
+
         public drivewindow(Bus b1)
         {
             toDrive = b1;

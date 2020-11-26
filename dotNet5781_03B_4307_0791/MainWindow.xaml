@@ -5,34 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dotNet5781_03B_4307_0791"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <DataTemplate x:Key="MyDataTemplate"  DataType="local:Bus">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="License number: " HorizontalAlignment="center" VerticalAlignment="center" FontSize="20"/>
+                <TextBlock Grid.Column="1"  Text="{Binding License}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" FontWeight="Bold" />
+                <Button Width="100"  Height="40" Grid.Column="2" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="drivebutton"  Content="make drive" Click="DriveButtom_Click" Background="#FF14A21F" />
+                <Button Width="100"  Height="40"  Grid.Column="3"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="refuelbutton"  Content="make refuel" Click="Refuelbutton_Click" Background="#FFCDA81F" />
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
-        <ListView x:Name="lvbuses"  HorizontalAlignment="Left" Height="373" Margin="25,25,0,0" VerticalAlignment="Top" Width="744">
-            <ListView.View>
-                <GridView x:Name="usergridview">
-                    <GridViewColumn Header="License" Width="120" DisplayMemberBinding="{Binding License}" />
-                    <GridViewColumn Header="total km" Width="50" DisplayMemberBinding="{Binding TotalKm}" />
-                    <GridViewColumn Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button  x:Name="driveButtom" Content="make drive"  Margin="0"
-                                VerticalAlignment="Center" Click="driveButtom_Click"
-                                />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button x:Name="refuelbutton"  Content="makerefuel"  Margin="0"
-                                VerticalAlignment="Center"
-                                />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <ListBox Grid.Row="1" x:Name="lbbuses" ItemTemplate="{StaticResource MyDataTemplate}"   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"   />
+        <Button x:Name="addButton" Content="ADD NEW BUS" HorizontalAlignment="CENTER" Margin="10,10" VerticalAlignment="CENTER" Width="200" Height="50" Click="AddButton_Click"/>
 
     </Grid>
 </Window>
