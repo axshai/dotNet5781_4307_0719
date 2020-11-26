@@ -4,18 +4,31 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.ComponentModel;
 namespace dotNet5781_03B_4307_0791
 {
-    public class Bus //bus
+    public class Bus: INotifyPropertyChanged //bus
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
         private const int MAX_FUEL = 1200;//
         private const int MAX_KM = 20000;//
         private String licence;//licence NUMBER
         private DateTime dateOfAbsorption;//The year of the ascent to the road
         public DateTime LastTreatment { get; set; }//The date of the last treatment
         public int Fuel { get; set; }//Fuel condition
-        public int TotalKm { get; set; }//Total mileage
+        private int totalKm;
+        public int TotalKm
+        {
+            get { return totalKm; }
+            set
+            {
+                totalKm = value;
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("TotalKm"));
+            }
+        }//Total mileage
         public int KmofTreatment { get; set; }//Mileage since last treatment
 
         public Bus(DateTime date, string license)//ctor
@@ -28,7 +41,27 @@ namespace dotNet5781_03B_4307_0791
 
         public String License//Licensing property
         {
-            get { return licence; }
+            get
+            {
+                string prefix, middle, suffix;
+                string result;
+                if (licence.Length == 7)//If a 7-digit license number
+                {
+                    prefix = licence.Substring(0, 2);
+                    middle = licence.Substring(2, 3);
+                    suffix = licence.Substring(5, 2);
+                    result = string.Format("{0}-{1}-{2}", prefix, middle, suffix);
+                }
+                else//If a 8-digit license number
+                {
+                    prefix = licence.Substring(0, 3);
+                    middle = licence.Substring(3, 2);
+                    suffix = licence.Substring(5, 3);
+
+                }
+                return string.Format("{0}-{1}-{2}", prefix, middle, suffix);//The required display of the license number
+            }
+            
 
             set//set-Checking the validity of a license number
             {
@@ -104,7 +137,6 @@ namespace dotNet5781_03B_4307_0791
                 prefix = licence.Substring(0, 3);
                 middle = licence.Substring(3, 2);
                 suffix = licence.Substring(5, 3);
-
                 result = string.Format("{0}-{1}-{2}", prefix, middle, suffix);//The required display of the license number
             }
 
