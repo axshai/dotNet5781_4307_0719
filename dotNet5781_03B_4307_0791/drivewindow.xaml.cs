@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using System.Text.RegularExpressions;
 namespace dotNet5781_03B_4307_0791
 {
     /// <summary>
@@ -27,13 +27,20 @@ namespace dotNet5781_03B_4307_0791
             InitializeComponent();
         }
 
-        private void drivethebus_Click(object sender, RoutedEventArgs e)
+        private void tbdistance_KeyDown(object sender, KeyEventArgs e)
         {
-            string distance = tbdistance.Text;
-            toDrive.Drive(int.Parse(distance));
-            this.Close();
-
+            if (e.Key == Key.Enter)
+            {
+                string distance = tbdistance.Text;
+                toDrive.Drive(int.Parse(distance));
+                this.Close();
+            }
+           
         }
-
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
     }
 }

@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <Label Content="ADD NEW BUS:" Grid.Row="0" HorizontalAlignment="Center" Margin="10"  VerticalAlignment="Center" FontSize="36" FontWeight="Bold" Foreground="#FFC08585"/>
         <TextBox x:Name="tbLicense"  Grid.Row="1" HorizontalAlignment="Center" Height="30"  TextWrapping="Wrap" Text="enter license number" VerticalAlignment="Center" Width="200" Margin="10" FontSize="20"/>
-        <TextBox x:Name="tbDate"  Grid.Row="2" HorizontalAlignment="Center" Height="30"  TextWrapping="Wrap" Text="enter date of start of activity" VerticalAlignment="Center" Width="200" Margin="10" FontSize="14"/>
+        <TextBox x:Name="tbDate"  Grid.Row="2" HorizontalAlignment="Center" Height="30"  TextWrapping="Wrap" Text="enter date of start of activity" VerticalAlignment="Center" Width="200" Margin="10" FontSize="14" />
         <Button Content="ADD" HorizontalAlignment="Center"  Grid.Row="3" VerticalAlignment="Center"  Width="180" Height="43" Margin="15" FontSize="24" FontFamily="David Investec Fixed" Click="AddBusButton_Click" />
 
 

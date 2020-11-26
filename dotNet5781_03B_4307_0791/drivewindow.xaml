@@ -17,8 +17,8 @@
             FontSize="30" Height="53"
             ></Label>
         <TextBlock   Text="  make a drive" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" FontWeight="Light" Margin="10,10,233.6,375" Width="550" Height="35" />
-        <TextBox x:Name="tbdistance" Background="Azure" HorizontalAlignment="Center" Height="53" Margin="494,50,32.6,0" TextWrapping="Wrap"     Text="  " VerticalAlignment="Top" Width="267" FontSize="22" />
-        <Button x:Name="drivethebus" Background= "Gray"  Content="Click to travel" HorizontalAlignment="Left" Margin="223,146,0,0" VerticalAlignment="Top" Width="386" Height="58" Click="drivethebus_Click"/>
+        <TextBox x:Name="tbdistance" Background="Azure" HorizontalAlignment="Center" Height="53" Margin="494,50,32.6,0" TextWrapping="Wrap"     Text="  " VerticalAlignment="Top" Width="267" FontSize="22" KeyDown="tbdistance_KeyDown" PreviewTextInput="NumberValidationTextBox"/>
+
 
     </Grid>
 </Window>
