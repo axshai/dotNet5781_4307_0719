@@ -49,6 +49,7 @@ namespace dotNet5781_03B_4307_0791
             var fxElt = sender as FrameworkElement;
             Bus toRefuel = fxElt.DataContext as Bus;
             toRefuel.DoRefuel();
+            MessageBox.Show("Refueling performed");
         }
 
 
@@ -58,6 +59,11 @@ namespace dotNet5781_03B_4307_0791
             addBus.Show();
 
 
+
+        }
+
+        private void lbbuses_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
         }
     }

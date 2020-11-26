@@ -34,5 +34,10 @@ namespace dotNet5781_03B_4307_0791
             this.Close();
 
         }
+
+        private void tbdistance_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }
