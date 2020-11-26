@@ -34,7 +34,7 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
 
-        <ListBox  Grid.Row="1" x:Name="lbbuses"  Background="AntiqueWhite" ItemTemplate="{StaticResource MyDataTemplate}"   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" SelectionChanged="lbbuses_SelectionChanged"   />
+        <ListBox  Grid.Row="1" x:Name="lbbuses"  Background="AntiqueWhite" ItemTemplate="{StaticResource MyDataTemplate}"   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" />
         <Button x:Name="addButton" Grid.Row="0" Content="ADD NEW BUS" Background ="Brown" HorizontalAlignment="CENTER" Margin="10,10" VerticalAlignment="CENTER" Width="200" Height="50" Click="AddButton_Click"/>
 
     </Grid>

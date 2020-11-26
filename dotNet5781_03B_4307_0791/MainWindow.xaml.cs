@@ -62,9 +62,5 @@ namespace dotNet5781_03B_4307_0791
 
         }
 
-        private void lbbuses_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
