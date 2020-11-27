@@ -30,12 +30,14 @@
     </Window.Resources>
     <Grid  Background="AntiqueWhite">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="87*"/>
+            <RowDefinition/>
+            <RowDefinition Height="263*"/>
         </Grid.RowDefinitions>
 
-        <ListBox  Grid.Row="1" x:Name="lbbuses"  Background="AntiqueWhite" ItemTemplate="{StaticResource MyDataTemplate}"   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" />
-        <Button x:Name="addButton" Grid.Row="0" Content="ADD NEW BUS" Background ="Brown" HorizontalAlignment="CENTER" Margin="10,10" VerticalAlignment="CENTER" Width="200" Height="50" Click="AddButton_Click"/>
+        <ListBox  Grid.Row="1" x:Name="lbbuses"  Background="AntiqueWhite" ItemTemplate="{StaticResource MyDataTemplate}"   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0.4,-0.4,0" Grid.RowSpan="3" SelectionChanged="lbbuses_SelectionChanged_1" />
+        <Button x:Name="addButton" Grid.Row="0" Content="ADD NEW BUS" Background ="Brown" HorizontalAlignment="CENTER" Margin="297,10,296.6,9.6" VerticalAlignment="CENTER" Width="200" Height="50" Click="AddButton_Click"/>
 
     </Grid>
 </Window>

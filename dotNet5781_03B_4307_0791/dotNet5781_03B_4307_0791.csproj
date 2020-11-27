@@ -61,6 +61,9 @@
     <Compile Include="drivewindow.xaml.cs">
       <DependentUpon>drivewindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="showbus.xaml.cs">
+      <DependentUpon>showbus.xaml</DependentUpon>
+    </Compile>
     <Page Include="AddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,6 +83,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="drivewindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="showbus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -10,31 +10,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Collections.ObjectModel;
 
 namespace dotNet5781_03B_4307_0791
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// <sumary>
+    /// Interaction logic for showbus.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class showbus : Window
     {
-
-        public ObservableCollection<Bus> Buses { get; set; }
-        public MainWindow()
+        List<Bus> busshow = new List<Bus>();
+        Bus b1;
+        public showbus(Bus myshowbus)
         {
-            Buses = new ObservableCollection<Bus>();
-            Buses.Add(new Bus(DateTime.Parse("03/03/2020"), "12445678"));//*
-            Buses[0].DoRefuel();//*
-
+            b1 = myshowbus;
             InitializeComponent();
-            lbbuses.ItemsSource = Buses;
-
-
+            busshow.Add(b1);
+            lbbuseshow.ItemsSource = busshow;
+            
+            
         }
-
         private void DriveButtom_Click(object sender, RoutedEventArgs e)
         {
             var fxElt = sender as FrameworkElement;
@@ -43,7 +38,6 @@ namespace dotNet5781_03B_4307_0791
             w1.Show();
 
         }
-
         private void Refuelbutton_Click(object sender, RoutedEventArgs e)
         {
             var fxElt = sender as FrameworkElement;
@@ -53,21 +47,5 @@ namespace dotNet5781_03B_4307_0791
         }
 
 
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            AddWindow addBus = new AddWindow(Buses);
-            addBus.Show();
-            
-
-
-        }
-
-        private void lbbuses_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-            Bus showbus= lbbuses.SelectedItem as Bus;
-            showbus myshowbus=new showbus(showbus);
-            myshowbus.Show();
-
-        }
     }
 }

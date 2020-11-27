@@ -19,6 +19,8 @@ namespace dotNet5781_03B_4307_0791
         public DateTime LastTreatment { get; set; }//The date of the last treatment
         public int Fuel { get; set; }//Fuel condition
         private int totalKm;
+        private DateTime dateTime;
+
         public int TotalKm
         {
             get { return totalKm; }
@@ -37,6 +39,11 @@ namespace dotNet5781_03B_4307_0791
             LastTreatment = date;
             License = license;
             State = STATUS.READY;
+        }
+
+        public Bus(DateTime dateTime)
+        {
+            this.dateTime = dateTime;
         }
 
         public String License//Licensing property
