@@ -62,12 +62,11 @@ namespace dotNet5781_03B_4307_0791
 
         }
 
-        private void lbbuses_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        private void lbbuses_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Bus showbus= lbbuses.SelectedItem as Bus;
-            showbus myshowbus=new showbus(showbus);
+            Bus showbus = lbbuses.SelectedItem as Bus;
+            showbus myshowbus = new showbus(showbus);
             myshowbus.Show();
-
         }
     }
 }
