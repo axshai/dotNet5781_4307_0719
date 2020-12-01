@@ -20,7 +20,16 @@ namespace dotNet5781_03B_4307_0791
         public int Fuel { get; set; }//Fuel condition
         private int totalKm;
         private DateTime dateTime;
-
+        private bool isReady;
+        public bool IsReady 
+        { 
+            get=>State==STATUS.READY; 
+            set 
+            {
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("ISready"));
+            } 
+        }
         public int TotalKm
         {
             get { return totalKm; }
@@ -90,12 +99,22 @@ namespace dotNet5781_03B_4307_0791
                 }
             }
         }
-
-        public STATUS State { get; set; }
+        private STATUS state;
+        public STATUS State
+        {
+            get { return state; }
+            set
+            {
+                state = value;
+                isReady = true;
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("State"));
+            }
+        }
 
         public DateTime DateOfAbsorption//dateOfAbsorption property
         {
-            get { return dateOfAbsorption; }
+            get { return dateOfAbsorption;}
 
             set
             {
@@ -109,7 +128,7 @@ namespace dotNet5781_03B_4307_0791
         {
             //Check that the bus is not dangerous and that there is enough fuel:
             if ((kmToDrive > Fuel) || ((DateTime.Now - LastTreatment).TotalDays > 365) || TotalKm - KmofTreatment > MAX_KM)
-                Console.WriteLine("It is not possible to make the trip");
+                throw new Exception("It is not possible to make the trip");
             else
             {
                 Fuel -= kmToDrive;//Fuel reduction
@@ -126,6 +145,7 @@ namespace dotNet5781_03B_4307_0791
         {
             LastTreatment = DateTime.Now;//update the date and km of last treatment
             KmofTreatment = TotalKm;
+            Fuel = MAX_FUEL;
         }
 
         public override string ToString()//Print requested details for the bus

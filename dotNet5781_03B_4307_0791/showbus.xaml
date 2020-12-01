@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dotNet5781_03B_4307_0791"
+   
         mc:Ignorable="d"
         Title="showbus" Height="450" Width="800">
     <Window.Resources>
+       
         <DataTemplate x:Key="MyDataTemplate"  DataType="local:Bus">
-            <Grid>
+            <Grid IsEnabled="True">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="10*"/>
                     <RowDefinition Height="10*"/>
@@ -70,11 +72,11 @@
                 <TextBlock Grid.Row="5"  Grid.Column="2"  Text="    " HorizontalAlignment="Left" VerticalAlignment="center"  FontWeight="Bold" FontSize="20"/>
                 <TextBlock Grid.Row="6"  Grid.Column="2"  Text="{Binding  DateOfAbsorption}" HorizontalAlignment="Left" FontWeight="Bold"  VerticalAlignment="center" FontSize="20" />
                 <TextBlock Grid.Row="7"  Grid.Column="2"  Text="    " HorizontalAlignment="Left" VerticalAlignment="center" FontWeight="Bold"  FontSize="20"/>
-                <TextBlock Grid.Row="8"  Grid.Column="2"  Text="{Binding  State}" HorizontalAlignment="Left"  FontWeight="Bold" VerticalAlignment="center" FontSize="20"  />
+                <TextBlock x:Name="TBSTATE" Grid.Row="8"  Grid.Column="2"  Text="{Binding  State}" HorizontalAlignment="Left"  FontWeight="Bold" VerticalAlignment="center" FontSize="20"  />
                 <TextBlock Grid.Row="9"  Grid.Column="2"  Text="    " HorizontalAlignment="Left"  FontWeight="Bold" VerticalAlignment="center" FontSize="20"  />
                 <TextBlock Grid.Row="10" Grid.Column="2"  Text="{Binding  Fuel}" HorizontalAlignment="Left"  FontWeight="Bold" VerticalAlignment="center" FontSize="20"  />
                 <TextBlock Grid.Row="11" Grid.Column="2"  Text="    " HorizontalAlignment="Left"  FontWeight="Bold" VerticalAlignment="center" FontSize="20"  />
-                <Button Width="100"  Height="40" Grid.Row="12" Grid.Column="2" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="drivebutton"  Content="make drive" Click="DriveButtom_Click" Background="#FF14A21F" />
+                <Button Width="160"  Height="40" Grid.Row="12" Grid.Column="2" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="maintenanceButton"  Content="make maintenance" Click="maintenanceButton_Click"   Background="#FF14A21F"/>
                 <Button Width="100"  Height="40"  Grid.Row="12" Grid.Column="4"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="refuelbutton"  Content="make refuel" Click="Refuelbutton_Click" Background="#FFCDA81F" />
 
             </Grid>

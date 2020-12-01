@@ -64,6 +64,7 @@
     <Compile Include="showbus.xaml.cs">
       <DependentUpon>showbus.xaml</DependentUpon>
     </Compile>
+    <Compile Include="statusToColor.cs" />
     <Page Include="AddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
