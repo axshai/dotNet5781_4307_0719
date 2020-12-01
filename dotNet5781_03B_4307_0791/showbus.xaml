@@ -63,7 +63,7 @@
                 <TextBlock Grid.Row="10" Grid.Column="0"  Text="Fuel:    " HorizontalAlignment="Left" VerticalAlignment="center" FontSize="20"/>
                 <TextBlock Grid.Row="11" Grid.Column="0"  Text="   " HorizontalAlignment="Left" VerticalAlignment="center" FontSize="20"/>
                 <TextBlock Grid.Row="12" Grid.Column="0"  Text="make drive/refuel" HorizontalAlignment="Left" VerticalAlignment="center" FontSize="20"/>
-                <TextBlock Grid.Row="0" Grid.Column="3"  Text="KmofTreatment: " HorizontalAlignment="Left" VerticalAlignment="center" FontSize="20"/>
+                <TextBlock Grid.Row="0" Grid.Column="3"  Text="  KmofTreatment:   " HorizontalAlignment="Left" VerticalAlignment="center" FontSize="20"/>
 
 
                 <TextBlock Grid.Row="0"  Grid.Column="2"  Text="{Binding  License }" HorizontalAlignment="Left" FontWeight="Bold" VerticalAlignment="center" FontSize="20"/>
