@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.ComponentModel;
+using System.Diagnostics;
 namespace dotNet5781_03B_4307_0791
 {
     /// <summary>
@@ -21,56 +22,91 @@ namespace dotNet5781_03B_4307_0791
     /// </summary>
     public partial class drivewindow : Window
     {
-        BackgroundWorker driving;
-        Bus toDrive;
-        object driveBut;
-        public drivewindow(object sender, Bus b1)
+        BackgroundWorker driving;//thread for driving
+        BackgroundWorker timeCounter;//thread for time Counter(time to end of the prossec)
+        Bus toDrive;//bus to make the drive
+        object driveBut;//the drive buttom in the main windeo-(to not enable click in the drive)
+        int speed;
+        int distance;
+        
+        public drivewindow(object sender, Bus b1)//ctor
         {
             InitializeComponent();
             toDrive = b1;
             driveBut = sender;
+            speed = new Random(DateTime.Now.Millisecond).Next(20, 50);//Speed ​​lottery
             driving = new BackgroundWorker();
+            timeCounter = new BackgroundWorker();
             driving.DoWork += Driving_DoWork;
             driving.RunWorkerCompleted += Driving_RunWorkerCompleted;
+            timeCounter.DoWork += TimeCounter_DoWork;
+            timeCounter.ProgressChanged += TimeCounter_ProgressChanged;
+            timeCounter.RunWorkerCompleted += TimeCounter_RunWorkerCompleted;
+           
+        }
+       
+        private void TimeCounter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//When the timer finishes running
+        {
+            toDrive.TimerText = "00:00:00";//show 00:00:00
         }
 
-        private void Driving_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void TimeCounter_ProgressChanged(object sender, ProgressChangedEventArgs e)//During the process
         {
-            toDrive.State = STATUS.READY;
-            (driveBut as Button).IsEnabled = true;
-            if (e.Error != null)
-                MessageBox.Show(e.Error.Message);
+
+            toDrive.TimerText = (DateTime.Now.AddSeconds(6*(distance / speed)) - DateTime.Now.AddSeconds(e.ProgressPercentage)).ToString().Substring(0, 8);//Update the timer
         }
 
-        private void tbdistance_KeyDown(object sender, KeyEventArgs e)
+        private void TimeCounter_DoWork(object sender, DoWorkEventArgs e)//work of timer
         {
-            if (e.Key == Key.Enter)
+           
+            int i=0;
+            while (!toDrive.IsReady)
             {
-                string distance = tbdistance.Text;
-
-                (driveBut as Button).IsEnabled = false;
-                driving.RunWorkerAsync(distance);
-                this.Close();
-
+                TimeCounter_ProgressChanged(this, new ProgressChangedEventArgs(i, new object()));//Update every second
+                i++;
+                Thread.Sleep(1000);
             }
         }
 
-        private void Driving_DoWork(object sender, DoWorkEventArgs e)
+
+        private void Driving_DoWork(object sender, DoWorkEventArgs e)//to drivind-work of drivimg prosses
         {
-            Random r = new Random(DateTime.Now.Millisecond);
-            int speed = r.Next(20, 50);
-            string dista = (string)e.Argument;
-            int dista2 = int.Parse(dista);
-            toDrive.State = STATUS.INDRIVE;
-            toDrive.Drive(dista2);
-            Thread.Sleep(1000*(dista2/speed));
+            string distance2 = (string)e.Argument;
+            distance = int.Parse(distance2);
+            toDrive.State = STATUS.INDRIVE;//update the status
+            toDrive.Drive(distance);//make drive
+            timeCounter.RunWorkerAsync(distance);//begin timer thread
+            Thread.Sleep(6000 * (distance / speed));//sleep until drive will finish
+
+        }
+
+        private void Driving_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//That the drive was over
+        {
+            toDrive.State = STATUS.READY;//update the status
+            (driveBut as Button).IsEnabled = true;//Enable click on the button
+            if (e.Error != null)//If the trip was unsuccessful (as a result of the bus danger)
+                MessageBox.Show(e.Error.Message);
             
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)//Enables typing of digits only
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void tbdistance_KeyDown(object sender, KeyEventArgs e)//when the usur Press on a key
+        {
+            if (e.Key == Key.Enter)//if he  Press enter
+            {
+                string distance = tbdistance.Text;
+
+                (driveBut as Button).IsEnabled = false;//not eEnable press on the button during the drive
+                driving.RunWorkerAsync(distance);//begin the drive thread
+
+                this.Close();//close the window
+
+            }
         }
     }
 }

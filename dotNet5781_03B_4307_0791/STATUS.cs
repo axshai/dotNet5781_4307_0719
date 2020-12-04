@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace dotNet5781_03B_4307_0791
 {
 
-    public enum STATUS
+    public enum STATUS//ENUM FOR STATUS OF THE BUS
     {
         READY, INDRIVE, INREFUEL, INCARE
     }

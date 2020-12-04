@@ -7,11 +7,11 @@
         mc:Ignorable="d"
          Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
-        <local:statusToColor 
-            x:Key="statusToColor"/>
+        <local:StatusToColor 
+            x:Key="StatusToColor"/>
 
         <DataTemplate x:Key="MyDataTemplate"  DataType="local:Bus" >
-            <Grid Background="{Binding State, Converter={StaticResource statusToColor}}" VerticalAlignment="Stretch">
+            <Grid Background="{Binding State, Converter={StaticResource StatusToColor}}" VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="200"/>
@@ -23,12 +23,12 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="License number: " HorizontalAlignment="center" VerticalAlignment="center" FontSize="20"/>
                 <TextBlock Grid.Column="1"  Text="{Binding License}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" FontWeight="Bold" />
-               
-                <Button Width="100"  Height="40" Grid.Column="4" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="drivebutton"   Content="make drive" Click="DriveButtom_Click" Background="#FF14A21F" />
+                <TextBlock Grid.Column="6"  Text="{Binding TimerText}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" FontWeight="Bold" />
+                <Button Width="100"  Height="40" Grid.Column="4" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="drivebutton"  IsEnabled="{Binding IsReady}" Content="make drive" Click="DriveButtom_Click" Background="#FF14A21F" />
                 <Button Width="100"  Height="40"  Grid.Column="5"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="refuelbutton" IsEnabled="{Binding ElementName=drivebutton, Path=IsEnabled, Mode=TwoWay}" Content="make refuel" Click="Refuelbutton_Click" Background="#FFCDA81F" />
             </Grid>
         </DataTemplate>
-        
+
     </Window.Resources>
     <Grid  Background="AntiqueWhite">
         <Grid.RowDefinitions>
@@ -43,4 +43,3 @@
 
     </Grid>
 </Window>
-

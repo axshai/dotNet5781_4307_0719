@@ -61,10 +61,10 @@
     <Compile Include="drivewindow.xaml.cs">
       <DependentUpon>drivewindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="showbus.xaml.cs">
-      <DependentUpon>showbus.xaml</DependentUpon>
+    <Compile Include="ShowBusWindow.xaml.cs">
+      <DependentUpon>ShowBusWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="statusToColor.cs" />
+    <Compile Include="converters.cs" />
     <Page Include="AddWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -78,7 +78,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bus.cs" />
-    <Compile Include="CHOICE.cs" />
+    <Compile Include="STATUS.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -87,7 +87,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="showbus.xaml">
+    <Page Include="ShowBusWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

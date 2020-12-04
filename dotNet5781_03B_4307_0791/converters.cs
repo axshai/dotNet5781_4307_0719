@@ -18,7 +18,7 @@ using System.Globalization;
 
 namespace dotNet5781_03B_4307_0791
 {
-    public class statusToColor : IValueConverter
+    public class StatusToColor : IValueConverter//Color matching for any status to To display a bus color according to the process it is currently going through(binding status to grid.Background )
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -46,8 +46,23 @@ namespace dotNet5781_03B_4307_0791
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+            
         }
     }
 
-   
+    public class ShortDate : IValueConverter//convert DateTime to DateTime.shortstring For a proper presentation of the bus dates(binding bus textblocks to dates of the bus)
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTime d = (DateTime)value;
+            return d.ToShortDateString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
 }

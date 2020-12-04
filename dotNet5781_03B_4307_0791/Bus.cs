@@ -7,30 +7,71 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 namespace dotNet5781_03B_4307_0791
 {
-    public class Bus: INotifyPropertyChanged //bus
+    public class Bus : INotifyPropertyChanged //bus
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;//event for update Visual objects
 
+        private const int MAX_FUEL = 1200;//max fuel
+        private const int MAX_KM = 20000;//mex kmwithout care
 
-        private const int MAX_FUEL = 1200;//
-        private const int MAX_KM = 20000;//
-        private String licence;//licence NUMBER
-        private DateTime dateOfAbsorption;//The year of the ascent to the road
-        public DateTime LastTreatment { get; set; }//The date of the last treatment
-        public int Fuel { get; set; }//Fuel condition
-        private int totalKm;
-        private DateTime dateTime;
-        private bool isReady;
-        public bool IsReady 
-        { 
-            get=>State==STATUS.READY; 
-            set 
+        public Bus(DateTime date, string license)//ctor
+        {
+            DateOfAbsorption = date;
+            LastTreatment = date;
+            License = license;
+            State = STATUS.READY;
+            TimerText = "00:00:00";
+        }
+
+        private int fuel;//Fuel condition
+        public int Fuel
+        {
+            get { return fuel; }
+            set
+            {
+                fuel = value;
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("fuel"));
+            }
+        }
+
+        private DateTime lastTreatment;//The date of the last treatment
+        public DateTime LastTreatment//The date of the last treatment
+        {
+            get { return lastTreatment; }
+            set
+            {
+                lastTreatment = value;
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("lastTreatment"));
+            }
+        }
+
+        private string timerText;//tp presemt time until to end of prosses(like drive,reful)
+        public string TimerText
+        {
+            get { return timerText; }
+            set
+            {
+                timerText = value;
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("timerText"));
+            }
+        }
+
+        private bool isReady;//if bus not beasy
+        public bool IsReady
+        {
+            get => State == STATUS.READY;
+            set
             {
                 if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("ISready"));
-            } 
+            }
         }
-        public int TotalKm
+
+        private int totalKm;
+        public int TotalKm//Total mileage
         {
             get { return totalKm; }
             set
@@ -39,22 +80,21 @@ namespace dotNet5781_03B_4307_0791
                 if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("TotalKm"));
             }
-        }//Total mileage
-        public int KmofTreatment { get; set; }//Mileage since last treatment
-
-        public Bus(DateTime date, string license)//ctor
+        }
+        
+        private int kmofTreatment;//Mileage since last treatment
+        public int KmofTreatment//Mileage since last treatment
         {
-            DateOfAbsorption = date;
-            LastTreatment = date;
-            License = license;
-            State = STATUS.READY;
+            get { return kmofTreatment; }
+            set
+            {
+                kmofTreatment = value;
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("KmofTreatment"));
+            }
         }
 
-        public Bus(DateTime dateTime)
-        {
-            this.dateTime = dateTime;
-        }
-
+        private String licence;//licence NUMBER
         public String License//Licensing property
         {
             get
@@ -77,13 +117,13 @@ namespace dotNet5781_03B_4307_0791
                 }
                 return string.Format("{0}-{1}-{2}", prefix, middle, suffix);//The required display of the license number
             }
-            
+
 
             set//set-Checking the validity of a license number
             {
                 bool valid;
                 uint toNum;
-                if (!(valid = uint.TryParse(value,out toNum)))//Check that the license number includes only digits
+                if (!(valid = uint.TryParse(value, out toNum)))//Check that the license number includes only digits
                     throw new FormatException("A license number can contain digits only");
                 if (DateOfAbsorption.Year >= 2018 && value.Length == 8)
                 {
@@ -99,7 +139,8 @@ namespace dotNet5781_03B_4307_0791
                 }
             }
         }
-        private STATUS state;
+
+        private STATUS state;//state of the bus-what its doing now
         public STATUS State
         {
             get { return state; }
@@ -112,9 +153,10 @@ namespace dotNet5781_03B_4307_0791
             }
         }
 
+        private DateTime dateOfAbsorption;//The year of the ascent to the road
         public DateTime DateOfAbsorption//dateOfAbsorption property
         {
-            get { return dateOfAbsorption;}
+            get { return dateOfAbsorption; }
 
             set
             {
@@ -127,12 +169,13 @@ namespace dotNet5781_03B_4307_0791
         public void Drive(int kmToDrive)//Make a trip
         {
             //Check that the bus is not dangerous and that there is enough fuel:
-            if ((kmToDrive > Fuel) || ((DateTime.Now - LastTreatment).TotalDays > 365) || TotalKm - KmofTreatment > MAX_KM)
-                throw new Exception("It is not possible to make the trip");
+            if ((kmToDrive > Fuel) || ((DateTime.Now - LastTreatment).TotalDays > 365) || KmofTreatment+ kmToDrive > MAX_KM)
+                throw new InvalidEnumArgumentException("It is not possible to make the trip");
             else
             {
                 Fuel -= kmToDrive;//Fuel reduction
                 TotalKm += kmToDrive;//Add to mileage
+                KmofTreatment += kmToDrive;
             }
         }
 
@@ -144,7 +187,7 @@ namespace dotNet5781_03B_4307_0791
         public void DoHandle()//make a treatment
         {
             LastTreatment = DateTime.Now;//update the date and km of last treatment
-            KmofTreatment = TotalKm;
+            KmofTreatment = 0;
             Fuel = MAX_FUEL;
         }
 
@@ -167,9 +210,18 @@ namespace dotNet5781_03B_4307_0791
                 result = string.Format("{0}-{1}-{2}", prefix, middle, suffix);//The required display of the license number
             }
 
-            return string.Format("licence: {0,-10} KM: {1}",result,(TotalKm- KmofTreatment));
+            return string.Format("licence: {0,-10} KM: {1}", result, (TotalKm - KmofTreatment));
 
         }
     }
 }
+
+
+
+
+
+
+
+
+
 
