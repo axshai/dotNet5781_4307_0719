@@ -17,6 +17,7 @@ namespace dotNet5781_03B_4307_0791
         public Bus(DateTime date, string license)//ctor
         {
             DateOfAbsorption = date;
+
             LastTreatment = date;
             License = license;
             State = (DateTime.Now - LastTreatment).TotalDays > 365 ? STATUS.DANGEROUS : STATUS.READY;
@@ -42,6 +43,7 @@ namespace dotNet5781_03B_4307_0791
             set
             {
                 lastTreatment = value;
+                if (!this.DangerTest()) State = STATUS.READY;
                 if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("lastTreatment"));
             }

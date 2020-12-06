@@ -31,16 +31,43 @@ namespace dotNet5781_03B_4307_0791
 
         public ObservableCollection<Bus> Buses { get; set; }//list of all buses
         Button refBut;
+        private void initializatione(ObservableCollection<Bus> Buses)
+        {
+            Random r = new Random(DateTime.Now.Millisecond); 
+            for (int i=0; i<7; i++) 
+            {
+             Buses.Add(new Bus(DateTime.Now.AddMonths(-2 * i), r.Next(1000000, 9999999).ToString() + i));
+                Buses[Buses.Count() - 1].TotalKm=(i+1)*100;
+                Buses[Buses.Count() - 1].LastTreatment = DateTime.Now.AddMonths(-i);
+                Buses[Buses.Count() - 1].KmofTreatment = r.Next(50, Buses[Buses.Count() - 1].TotalKm);
+                Buses[Buses.Count() - 1].DoRefuel();
+            }
+            Buses.Add(new Bus(DateTime.Now.AddMonths(-2*7),"12345677"));
+            Buses[Buses.Count() - 1].TotalKm =800;
+            Buses[Buses.Count() - 1].KmofTreatment =800;
+            Buses[Buses.Count() - 1].DoRefuel();
+
+            Buses.Add(new Bus(DateTime.Now.AddMonths(-2*8), "12345678"));
+            Buses[Buses.Count() - 1].LastTreatment = DateTime.Now.AddMonths(-1);
+            Buses[Buses.Count() - 1].TotalKm = 25000;
+            Buses[Buses.Count() - 1].KmofTreatment =19950;
+            Buses[Buses.Count() - 1].DoRefuel();
+
+            Buses.Add(new Bus(DateTime.Now.AddMonths(-2 * 9), "12345679"));
+            Buses[Buses.Count() - 1].LastTreatment = DateTime.Now.AddMonths(-1);
+            Buses[Buses.Count() - 1].TotalKm = 25000;
+            Buses[Buses.Count() - 1].KmofTreatment =200;
+            Buses[Buses.Count() - 1].Fuel = 50;
+
+        }
+
+
 
         public MainWindow()
         {
             InitializeComponent();
             Buses = new ObservableCollection<Bus>();//creat list of buses
-            Buses.Add(new Bus(DateTime.Parse("03/03/2017"), "1244567"));//*
-            Buses.Add(new Bus(DateTime.Parse("07/03/2020"), "22445679"));//*
-            Buses[0].DoRefuel();//*
-            Buses[1].DoRefuel();//*
-            Buses[1].Fuel = 80;
+            initializatione(Buses);
             lbbuses.ItemsSource = Buses;//Determining the list as the source of the listbox
             updateStatus = new BackgroundWorker();//c
             updateStatus.DoWork += UpdateStatus_DoWork;
