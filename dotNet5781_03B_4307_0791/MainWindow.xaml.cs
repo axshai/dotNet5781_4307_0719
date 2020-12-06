@@ -27,7 +27,7 @@ namespace dotNet5781_03B_4307_0791
         const int REFTIME = 12000;//time of refuel prosses
         BackgroundWorker refuling;//thread for reful
         BackgroundWorker timeCounter; //thread for timer
-
+        BackgroundWorker updateStatus;//thread for check if the bus is dangerous
 
         public ObservableCollection<Bus> Buses { get; set; }//list of all buses
         Button refBut;
@@ -36,29 +36,40 @@ namespace dotNet5781_03B_4307_0791
         {
             InitializeComponent();
             Buses = new ObservableCollection<Bus>();//creat list of buses
-            Buses.Add(new Bus(DateTime.Parse("03/03/2020"), "12445678"));//*
-            //Buses.Add(new Bus(DateTime.Parse("07/03/2020"), "22445679"));//*
+            Buses.Add(new Bus(DateTime.Parse("03/03/2017"), "1244567"));//*
+            Buses.Add(new Bus(DateTime.Parse("07/03/2020"), "22445679"));//*
             Buses[0].DoRefuel();//*
+            Buses[1].DoRefuel();//*
+            Buses[1].Fuel = 80;
             lbbuses.ItemsSource = Buses;//Determining the list as the source of the listbox
-            
-            //Registration for the functions of the refueling and timer threads
-            refuling = new BackgroundWorker();
-            timeCounter=new BackgroundWorker();
-            refuling.DoWork += refuling_DoWork;
-            refuling.RunWorkerCompleted += refuling_RunWorkerCompleted;
-            timeCounter.DoWork += TimeCounter_DoWork;
-            timeCounter.ProgressChanged += TimeCounter_ProgressChanged;
-            timeCounter.RunWorkerCompleted += TimeCounter_RunWorkerCompleted;
-           
-
+            updateStatus = new BackgroundWorker();//c
+            updateStatus.DoWork += UpdateStatus_DoWork;
+            updateStatus.RunWorkerAsync();
         }
+           
+            
+       
+
+        private void UpdateStatus_DoWork(object sender, DoWorkEventArgs e)//The function checks for each bus on the list if it becomes dangerous every 10 minutes
+        {
+            while (true)
+            {
+                foreach(Bus b in Buses)
+                {
+                    if (b.State == STATUS.READY)
+                        b.DangerTest();
+                }
+                Thread.Sleep(600000);
+            }
+        }
+
         //-------------------------------------------Functions associated with timer thread:------------------------------------------------
 
         private void TimeCounter_DoWork(object sender, DoWorkEventArgs e)//work of timer
         {
             Bus toReful = e.Argument as Bus;
             int i = 0;
-            while (!toReful.IsReady)
+            while (!toReful.IsReadyOrDangroeus)
             {
                 TimeCounter_ProgressChanged(this, new ProgressChangedEventArgs(i, toReful));//Update every second
                 i++;
@@ -88,13 +99,14 @@ namespace dotNet5781_03B_4307_0791
             refBut = sender as Button;
             Bus toRefuel = fxElt.DataContext as Bus;
             
-            if (!toRefuel.IsReady)//If the bus is in the middle of another operation
+            if (!toRefuel.IsReadyOrDangroeus)//If the bus is in the middle of another operation
                 MessageBox.Show("can not make refuel now");
             else
             {
-                refBut.IsEnabled = false;//Do not allow the button to be pressed
-                refuling.RunWorkerAsync(toRefuel);//Start refueling and timer processes
-                timeCounter.RunWorkerAsync(toRefuel);
+                refuling = new BackgroundWorker();//Registration for the functions of the refueling and timer and updateStatus threads
+                refuling.DoWork += refuling_DoWork;
+                refuling.RunWorkerCompleted += refuling_RunWorkerCompleted;
+                refuling.RunWorkerAsync(toRefuel);
             }
         }
 
@@ -102,15 +114,22 @@ namespace dotNet5781_03B_4307_0791
         private void refuling_DoWork(object sender, DoWorkEventArgs e)//work of refuling
         {
             Bus toRefuel = e.Argument as Bus;
+            timeCounter = new BackgroundWorker();//Creating a process for the timer
+            timeCounter.DoWork += TimeCounter_DoWork;
+            timeCounter.ProgressChanged += TimeCounter_ProgressChanged;
+            timeCounter.RunWorkerCompleted += TimeCounter_RunWorkerCompleted;
             toRefuel.State = STATUS.INREFUEL;
-            Thread.Sleep(REFTIME);
+            timeCounter.RunWorkerAsync(toRefuel);//Turn on the timer
+            Thread.Sleep(REFTIME);//Wait for the time required and after that - refuel
             toRefuel.DoRefuel();
-            toRefuel.State = STATUS.READY;
+            if (!toRefuel.DangerTest())
+                toRefuel.State = STATUS.READY;
+            
         }
 
         private void refuling_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//When the refuling finishes running
         {
-            refBut.IsEnabled = true;//allow the button to be pressed
+            refBut.IsEnabled = true;//allow the button to be pressed 
         }
 
         //--------------------------------------------------------------------------------------------------
@@ -119,9 +138,13 @@ namespace dotNet5781_03B_4307_0791
         {
             var fxElt = sender as FrameworkElement;//Extract the bus that needs to make drive
             Bus selcted = fxElt.DataContext as Bus;
-           
-            if (!selcted.IsReady)//If the bus is in the middle of another operation
+            
+            if (!selcted.IsReadyOrDangroeus)//If the bus is in the middle of another operation
                 MessageBox.Show("can not make drive now");
+
+            else if (selcted.DangerTest())//if the bus is dangerous
+                MessageBox.Show("The bus is dangerous to travel!");
+           
             else
             {
                 drivewindow w1 = new drivewindow(sender, selcted);//open the drive window

@@ -18,22 +18,21 @@ using System.Diagnostics;
 namespace dotNet5781_03B_4307_0791
 {
     /// <summary>
-    /// Interaction logic for Window1.xaml
+    /// Interaction logic for driveWindow.xaml
     /// </summary>
     public partial class drivewindow : Window
     {
         BackgroundWorker driving;//thread for driving
         BackgroundWorker timeCounter;//thread for time Counter(time to end of the prossec)
         Bus toDrive;//bus to make the drive
-        object driveBut;//the drive buttom in the main windeo-(to not enable click in the drive)
+
         int speed;
         int distance;
-        
+
         public drivewindow(object sender, Bus b1)//ctor
         {
             InitializeComponent();
             toDrive = b1;
-            driveBut = sender;
             speed = new Random(DateTime.Now.Millisecond).Next(20, 50);//Speed ​​lottery
             driving = new BackgroundWorker();
             timeCounter = new BackgroundWorker();
@@ -42,9 +41,9 @@ namespace dotNet5781_03B_4307_0791
             timeCounter.DoWork += TimeCounter_DoWork;
             timeCounter.ProgressChanged += TimeCounter_ProgressChanged;
             timeCounter.RunWorkerCompleted += TimeCounter_RunWorkerCompleted;
-           
+
         }
-       
+
         private void TimeCounter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//When the timer finishes running
         {
             toDrive.TimerText = "00:00:00";//show 00:00:00
@@ -53,13 +52,13 @@ namespace dotNet5781_03B_4307_0791
         private void TimeCounter_ProgressChanged(object sender, ProgressChangedEventArgs e)//During the process
         {
 
-            toDrive.TimerText = (DateTime.Now.AddSeconds(6*(distance / speed)) - DateTime.Now.AddSeconds(e.ProgressPercentage)).ToString().Substring(0, 8);//Update the timer
+            toDrive.TimerText = (DateTime.Now.AddSeconds(6 * (distance / speed)) - DateTime.Now.AddSeconds(e.ProgressPercentage)).ToString().Substring(0, 8);//Update the timer
         }
 
         private void TimeCounter_DoWork(object sender, DoWorkEventArgs e)//work of timer
         {
-           
-            int i=0;
+
+            int i = 0;
             while (!toDrive.IsReady)
             {
                 TimeCounter_ProgressChanged(this, new ProgressChangedEventArgs(i, new object()));//Update every second
@@ -82,11 +81,11 @@ namespace dotNet5781_03B_4307_0791
 
         private void Driving_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//That the drive was over
         {
-            toDrive.State = STATUS.READY;//update the status
-            (driveBut as Button).IsEnabled = true;//Enable click on the button
+            if (!toDrive.DangerTest())
+                toDrive.State = STATUS.READY;//update the status
             if (e.Error != null)//If the trip was unsuccessful (as a result of the bus danger)
                 MessageBox.Show(e.Error.Message);
-            
+
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)//Enables typing of digits only
@@ -101,7 +100,7 @@ namespace dotNet5781_03B_4307_0791
             {
                 string distance = tbdistance.Text;
 
-                (driveBut as Button).IsEnabled = false;//not eEnable press on the button during the drive
+
                 driving.RunWorkerAsync(distance);//begin the drive thread
 
                 this.Close();//close the window

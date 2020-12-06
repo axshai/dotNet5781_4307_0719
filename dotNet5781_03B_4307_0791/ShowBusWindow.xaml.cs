@@ -34,19 +34,22 @@ namespace dotNet5781_03B_4307_0791
         Bus bus;
         public ShowBusWindow(Bus myshowbus)
         {
-            bus = myshowbus;
             InitializeComponent();
+            bus = myshowbus;
             busshow.Add(bus);
             lbbuseshow.ItemsSource = busshow;
             process = new BackgroundWorker();
             timeCounter = new BackgroundWorker();
             process.DoWork += Process_DoWork;
+            process.RunWorkerCompleted += Process_RunWorkerCompleted;
             timeCounter.DoWork += TimeCounter_DoWork;
             timeCounter.ProgressChanged += TimeCounter_ProgressChanged;
             timeCounter.RunWorkerCompleted += TimeCounter_RunWorkerCompleted;
            
 
         }
+
+       
 
         private void TimeCounter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -63,7 +66,7 @@ namespace dotNet5781_03B_4307_0791
         {
             
             int i = 0;
-            while (!bus.IsReady)
+            while (!bus.IsReadyOrDangroeus)
             {
 
                 TimeCounter_ProgressChanged(this, new ProgressChangedEventArgs(i, e.Argument));
@@ -90,14 +93,20 @@ namespace dotNet5781_03B_4307_0791
                 Thread.Sleep(REFTIME);
                 bus.DoRefuel();
             }
-            bus.State = STATUS.READY;
+           
 
+        }
+
+        private void Process_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+           if(!bus.DangerTest())
+                bus.State = STATUS.READY;
         }
 
         private void Refuelbutton_Click(object sender, RoutedEventArgs e)
         {
 
-            if (!bus.IsReady)
+            if (!bus.IsReadyOrDangroeus)
                 MessageBox.Show("can not make refuel now,please wait");
             else
             {
@@ -109,7 +118,7 @@ namespace dotNet5781_03B_4307_0791
 
         private void maintenanceButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!bus.IsReady)
+            if (!bus.IsReadyOrDangroeus)
                 MessageBox.Show("can not make maintenance now,please wait");
             else
             {

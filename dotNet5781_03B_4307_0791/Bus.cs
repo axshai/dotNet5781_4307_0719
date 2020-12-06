@@ -19,7 +19,7 @@ namespace dotNet5781_03B_4307_0791
             DateOfAbsorption = date;
             LastTreatment = date;
             License = license;
-            State = STATUS.READY;
+            State = (DateTime.Now - LastTreatment).TotalDays > 365 ? STATUS.DANGEROUS : STATUS.READY;
             TimerText = "00:00:00";
         }
 
@@ -59,10 +59,20 @@ namespace dotNet5781_03B_4307_0791
             }
         }
 
-        private bool isReady;//if bus not beasy
+        //private bool isReady;//if bus not beasy
         public bool IsReady
         {
             get => State == STATUS.READY;
+            set
+            {
+                if (PropertyChanged != null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("ISready"));
+            }
+        }
+
+        public bool IsReadyOrDangroeus
+        {
+            get => State == STATUS.READY || State== STATUS.DANGEROUS;
             set
             {
                 if (PropertyChanged != null)
@@ -81,7 +91,7 @@ namespace dotNet5781_03B_4307_0791
                     PropertyChanged(this, new PropertyChangedEventArgs("TotalKm"));
             }
         }
-        
+
         private int kmofTreatment;//Mileage since last treatment
         public int KmofTreatment//Mileage since last treatment
         {
@@ -147,7 +157,8 @@ namespace dotNet5781_03B_4307_0791
             set
             {
                 state = value;
-                isReady = true;
+                IsReady = true;
+                IsReadyOrDangroeus = true;
                 if (PropertyChanged != null)
                     PropertyChanged(this, new PropertyChangedEventArgs("State"));
             }
@@ -169,14 +180,15 @@ namespace dotNet5781_03B_4307_0791
         public void Drive(int kmToDrive)//Make a trip
         {
             //Check that the bus is not dangerous and that there is enough fuel:
-            if ((kmToDrive > Fuel) || ((DateTime.Now - LastTreatment).TotalDays > 365) || KmofTreatment+ kmToDrive > MAX_KM)
-                throw new InvalidEnumArgumentException("It is not possible to make the trip");
-            else
-            {
-                Fuel -= kmToDrive;//Fuel reduction
-                TotalKm += kmToDrive;//Add to mileage
-                KmofTreatment += kmToDrive;
-            }
+            if ((kmToDrive > Fuel) || KmofTreatment + kmToDrive > MAX_KM)
+                throw new InvalidOperationException("It is not possible to make the trip-Check the fuel condition or the mileage status");
+            if (State == STATUS.DANGEROUS)
+                throw new InvalidOperationException("The bus is dangerous!");
+
+            Fuel -= kmToDrive;//Fuel reduction
+            TotalKm += kmToDrive;//Add to mileage
+            KmofTreatment += kmToDrive;
+            
         }
 
         public void DoRefuel()//Make a refueling
@@ -189,6 +201,17 @@ namespace dotNet5781_03B_4307_0791
             LastTreatment = DateTime.Now;//update the date and km of last treatment
             KmofTreatment = 0;
             Fuel = MAX_FUEL;
+        }
+
+        public bool DangerTest()
+        {
+            if ((DateTime.Now - LastTreatment).TotalDays > 365 || KmofTreatment >= MAX_KM)
+            {
+                State = STATUS.DANGEROUS;
+                return true;
+            }
+            else
+                return false;
         }
 
         public override string ToString()//Print requested details for the bus

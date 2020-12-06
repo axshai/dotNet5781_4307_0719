@@ -38,7 +38,7 @@ namespace dotNet5781_03B_4307_0791
                     return Brushes.PaleTurquoise;
                     
                 default:
-                    return Brushes.PaleTurquoise;
+                    return Brushes.Orange;
                   
             }
           

@@ -24,8 +24,8 @@
                 <TextBlock Grid.Column="0" Text="License number: " HorizontalAlignment="center" VerticalAlignment="center" FontSize="20"/>
                 <TextBlock Grid.Column="1"  Text="{Binding License}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" FontWeight="Bold" />
                 <TextBlock Grid.Column="6"  Text="{Binding TimerText}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" FontWeight="Bold" />
-                <Button Width="100"  Height="40" Grid.Column="4" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="drivebutton"  IsEnabled="{Binding IsReady}" Content="make drive" Click="DriveButtom_Click" Background="#FF14A21F" />
-                <Button Width="100"  Height="40"  Grid.Column="5"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="refuelbutton" IsEnabled="{Binding ElementName=drivebutton, Path=IsEnabled, Mode=TwoWay}" Content="make refuel" Click="Refuelbutton_Click" Background="#FFCDA81F" />
+                <Button Width="100"  Height="40" Grid.Column="4" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="drivebutton"  Content="make drive" Click="DriveButtom_Click" Background="#FF14A21F" />
+                <Button Width="100"   Height="40"  Grid.Column="5"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="refuelbutton" Content="make refuel" Click="Refuelbutton_Click" Background="#FFCDA81F" IsEnabled="{Binding IsReadyOrDangroeus}" />
             </Grid>
         </DataTemplate>
 
@@ -39,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <ListBox  Grid.Row="1" x:Name="lbbuses"  Background="AntiqueWhite" ItemTemplate="{StaticResource MyDataTemplate}"   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Margin="0,0.4,-0.4,0" Grid.RowSpan="3" MouseDoubleClick="lbbuses_MouseDoubleClick" />
-        <Button x:Name="addButton" Grid.Row="0" Content="ADD NEW BUS" Background ="Brown" HorizontalAlignment="CENTER" Margin="297,10,296.6,9.6" VerticalAlignment="CENTER" Width="200" Height="50" Click="AddButton_Click"/>
+        <Button x:Name="addButton" Grid.Row="0" Content="ADD NEW BUS" Background ="Brown" HorizontalAlignment="CENTER" Margin="297,10,296.6,9.6" VerticalAlignment="CENTER" Width="200" Height="50" Click="AddButton_Click" />
 
     </Grid>
 </Window>
