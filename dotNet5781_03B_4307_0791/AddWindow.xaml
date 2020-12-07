@@ -5,20 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dotNet5781_03B_4307_0791"
         mc:Ignorable="d"
-        Title="AddWindow" Height="300" Width="330">
+        Title="AddWindow" Height="327.725" Width="330">
     <Grid Background="AntiqueWhite">
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="ADD NEW BUS:" Grid.Row="0" HorizontalAlignment="Center" Margin="10"  VerticalAlignment="Center" FontSize="36" FontWeight="Bold" Foreground="#FFC08585"/>
-        <TextBox x:Name="tbLicense"  Grid.Row="1" HorizontalAlignment="Center" Height="30"  TextWrapping="Wrap" Text="enter license number" VerticalAlignment="Center" Width="200" Margin="10" FontSize="20"/>
-        <TextBox x:Name="tbDate"  Grid.Row="2" HorizontalAlignment="Center" Height="30"  TextWrapping="Wrap" Text="enter date of start of activity" VerticalAlignment="Center" Width="200" Margin="10" FontSize="14" />
-        <Button Content="ADD" HorizontalAlignment="Center"  Grid.Row="3" VerticalAlignment="Center"  Width="180" Height="43" Margin="15" FontSize="24" FontFamily="David Investec Fixed" Click="AddBusButton_Click" />
+        <Label Content="enter license&#xD;&#xA; number:         -&gt;" Grid.Row="1" HorizontalAlignment="Center" Margin="11,10.4,141.2,3.2"  VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Foreground="Black" Height="76" Width="171" RenderTransformOrigin="0.5,0.5">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="3.014"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="0.658"/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
 
+        <Label Content="ADD NEW BUS:" Grid.Row="0" HorizontalAlignment="Center" Margin="10"  VerticalAlignment="Center" FontSize="36" FontWeight="Bold" Foreground="#FFC08585"/>
+        <TextBox x:Name="tbLicense"  Grid.Row="1" HorizontalAlignment="Center" Height="30"  TextWrapping="Wrap" VerticalAlignment="Center" Width="125" Margin="188,41.4,10.2,18.2" FontSize="20"/>
+        <TextBox x:Name="tbDate"  Grid.Row="2" HorizontalAlignment="Center" Height="30"  TextWrapping="Wrap" VerticalAlignment="Center" Width="123" Margin="188,10.8,12.2,9.6" FontSize="14" />
+        <Button Content="ADD" HorizontalAlignment="Center"  Grid.Row="3" VerticalAlignment="Center"  Width="180" Height="43" Margin="15" FontSize="24" FontFamily="David Investec Fixed" Click="AddBusButton_Click" />
+        <Label Content="enter date of start of &#xD;&#xA;activity                    -&gt;" Grid.Row="1"  HorizontalAlignment="Center" Height="53" FontWeight="Bold" VerticalAlignment="Center" Width="153" Margin="10,89.4,160.2,0" FontSize="14" Grid.RowSpan="2" />
 
     </Grid>
 </Window>
