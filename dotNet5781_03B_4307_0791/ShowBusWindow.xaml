@@ -80,7 +80,7 @@
                 <TextBlock Grid.Row="10" Grid.Column="2"  Text="{Binding  Fuel}" HorizontalAlignment="Left"  FontWeight="Bold" VerticalAlignment="center" FontSize="20"  />
                 <TextBlock Grid.Row="11" Grid.Column="2"  Text="    " HorizontalAlignment="Left"  FontWeight="Bold" VerticalAlignment="center" FontSize="20"  />
                 <Button Width="160"  Height="40" Grid.Row="12" Grid.Column="2" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="maintenanceButton"  Content="make maintenance" Click="maintenanceButton_Click"   Background="#FF59BECD"/>
-                <Button Width="100"  Height="40"  Grid.Row="12" Grid.Column="4"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="refuelbutton"  Content="make refuel" Click="Refuelbutton_Click"  Background="#FFCDA81F" />
+                <Button Width="100"  Height="40"  Grid.Row="12" Grid.Column="4"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="refuelbutton"   Content="make refuel" Click="Refuelbutton_Click"  Background="#FFCDA81F" />
                 <TextBlock Grid.Row="0" Grid.Column="4"  Text="{Binding KmofTreatment}" HorizontalAlignment="Left" VerticalAlignment="center" FontWeight="Bold" FontSize="20"/>
                 <TextBlock Grid.Row="1" Grid.Column="4"  Text="{Binding TimerText}" HorizontalAlignment="Left" VerticalAlignment="center" FontWeight="Bold" FontSize="20"/>
 

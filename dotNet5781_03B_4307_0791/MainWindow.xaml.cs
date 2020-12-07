@@ -31,32 +31,33 @@ namespace dotNet5781_03B_4307_0791
 
         public ObservableCollection<Bus> Buses { get; set; }//list of all buses
         Button refBut;
-        private void initializatione(ObservableCollection<Bus> Buses)
+        private void initializatione(ObservableCollection<Bus> Buses) // initializatione 10 buses
         {
-            Random r = new Random(DateTime.Now.Millisecond); 
-            for (int i=0; i<7; i++) 
+            Random r = new Random(DateTime.Now.Millisecond);  //for the License number
+            for (int i = 0; i < 7; i++) //initializatione 7 buses
             {
-             Buses.Add(new Bus(DateTime.Now.AddMonths(-2 * i), r.Next(1000000, 9999999).ToString() + i));
-                Buses[Buses.Count() - 1].TotalKm=(i+1)*100;
-                Buses[Buses.Count() - 1].LastTreatment = DateTime.Now.AddMonths(-i);
-                Buses[Buses.Count() - 1].KmofTreatment = r.Next(50, Buses[Buses.Count() - 1].TotalKm);
-                Buses[Buses.Count() - 1].DoRefuel();
+                Buses.Add(new Bus(DateTime.Now.AddMonths(-2 * i), r.Next(1000000, 9999999).ToString() + i));//add bus
+                Buses[Buses.Count() - 1].TotalKm = (i + 1) * 100;//initializatione the curnet bus--totalKM
+                Buses[Buses.Count() - 1].LastTreatment = DateTime.Now.AddMonths(-i);//initializatione the curnet bus-- LastTreatment
+                Buses[Buses.Count() - 1].KmofTreatment = r.Next(50, Buses[Buses.Count() - 1].TotalKm);//initializatione the curnet bus-- KmofTreatment
+                Buses[Buses.Count() - 1].DoRefuel();//do reful to the curnet bus
             }
-            Buses.Add(new Bus(DateTime.Now.AddMonths(-2*7),"12345677"));
-            Buses[Buses.Count() - 1].TotalKm =800;
-            Buses[Buses.Count() - 1].KmofTreatment =800;
+            //One bus will be after the next treatment date
+            Buses.Add(new Bus(DateTime.Now.AddMonths(-2 * 7), "12345677")); //We will add the eighth bus
+            Buses[Buses.Count() - 1].TotalKm = 800;
+            Buses[Buses.Count() - 1].KmofTreatment = 800;
             Buses[Buses.Count() - 1].DoRefuel();
-
-            Buses.Add(new Bus(DateTime.Now.AddMonths(-2*8), "12345678"));
+            //One bus will be close to the next treatment passenger
+            Buses.Add(new Bus(DateTime.Now.AddMonths(-2 * 8), "12345678"));//We will add the ninth bus
             Buses[Buses.Count() - 1].LastTreatment = DateTime.Now.AddMonths(-1);
             Buses[Buses.Count() - 1].TotalKm = 25000;
-            Buses[Buses.Count() - 1].KmofTreatment =19950;
+            Buses[Buses.Count() - 1].KmofTreatment = 19950;
             Buses[Buses.Count() - 1].DoRefuel();
-
+            //One bus will be with little fuel
             Buses.Add(new Bus(DateTime.Now.AddMonths(-2 * 9), "12345679"));
-            Buses[Buses.Count() - 1].LastTreatment = DateTime.Now.AddMonths(-1);
+            Buses[Buses.Count() - 1].LastTreatment = DateTime.Now.AddMonths(-1);//We will add the tenth bus
             Buses[Buses.Count() - 1].TotalKm = 25000;
-            Buses[Buses.Count() - 1].KmofTreatment =200;
+            Buses[Buses.Count() - 1].KmofTreatment = 200;
             Buses[Buses.Count() - 1].Fuel = 50;
 
         }
@@ -73,15 +74,15 @@ namespace dotNet5781_03B_4307_0791
             updateStatus.DoWork += UpdateStatus_DoWork;
             updateStatus.RunWorkerAsync();
         }
-           
-            
-       
+
+
+
 
         private void UpdateStatus_DoWork(object sender, DoWorkEventArgs e)//The function checks for each bus on the list if it becomes dangerous every 10 minutes
         {
             while (true)
             {
-                foreach(Bus b in Buses)
+                foreach (Bus b in Buses)
                 {
                     if (b.State == STATUS.READY)
                         b.DangerTest();
@@ -123,9 +124,9 @@ namespace dotNet5781_03B_4307_0791
         {
 
             var fxElt = sender as FrameworkElement;//Extract the bus that needs to be refueled
-            refBut = sender as Button;
+            //refBut = sender as Button;
             Bus toRefuel = fxElt.DataContext as Bus;
-            
+
             if (!toRefuel.IsReadyOrDangroeus)//If the bus is in the middle of another operation
                 MessageBox.Show("can not make refuel now");
             else
@@ -151,7 +152,7 @@ namespace dotNet5781_03B_4307_0791
             toRefuel.DoRefuel();
             if (!toRefuel.DangerTest())
                 toRefuel.State = STATUS.READY;
-            
+
         }
 
         private void refuling_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//When the refuling finishes running
@@ -160,18 +161,18 @@ namespace dotNet5781_03B_4307_0791
         }
 
         //--------------------------------------------------------------------------------------------------
-        
+
         private void DriveButtom_Click(object sender, RoutedEventArgs e)//Event of pressing the drive button
         {
             var fxElt = sender as FrameworkElement;//Extract the bus that needs to make drive
             Bus selcted = fxElt.DataContext as Bus;
-            
+
             if (!selcted.IsReadyOrDangroeus)//If the bus is in the middle of another operation
                 MessageBox.Show("can not make drive now");
 
             else if (selcted.DangerTest())//if the bus is dangerous
                 MessageBox.Show("The bus is dangerous to travel!");
-           
+
             else
             {
                 drivewindow w1 = new drivewindow(sender, selcted);//open the drive window

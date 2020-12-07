@@ -28,10 +28,11 @@ namespace dotNet5781_03B_4307_0791
 
         int speed;
         int distance;
-
+        Button  senderBtn;
         public drivewindow(object sender, Bus b1)//ctor
         {
             InitializeComponent();
+            senderBtn = sender as Button;
             toDrive = b1;
             speed = new Random(DateTime.Now.Millisecond).Next(20, 50);//Speed ​​lottery
             driving = new BackgroundWorker();
@@ -85,6 +86,7 @@ namespace dotNet5781_03B_4307_0791
                 toDrive.State = STATUS.READY;//update the status
             if (e.Error != null)//If the trip was unsuccessful (as a result of the bus danger)
                 MessageBox.Show(e.Error.Message);
+            senderBtn.IsEnabled = true;
 
         }
 

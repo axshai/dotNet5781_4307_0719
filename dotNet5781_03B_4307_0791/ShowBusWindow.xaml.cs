@@ -25,48 +25,46 @@ namespace dotNet5781_03B_4307_0791
     /// </summary>
     public partial class ShowBusWindow : Window
     {
-        
+
         BackgroundWorker process;
         BackgroundWorker timeCounter;
-        const int REFTIME = 12000;
-        const int CARETIME =144000;
-        List<Bus> busshow = new List<Bus>();
+        const int REFTIME = 12000;//time for reful
+        const int CARETIME = 144000;//time for care
+        List<Bus> busshow = new List<Bus>();//the "list" of buses
         Bus bus;
-        public ShowBusWindow(Bus myshowbus)
+        public ShowBusWindow(Bus myshowbus)//We will get a bus builder for the show
         {
             InitializeComponent();
             bus = myshowbus;
             busshow.Add(bus);
-            lbbuseshow.ItemsSource = busshow;
-            process = new BackgroundWorker();
+            lbbuseshow.ItemsSource = busshow;//We will tie the List Box
+            process = new BackgroundWorker(); //create new process
             timeCounter = new BackgroundWorker();
-            process.DoWork += Process_DoWork;
-            process.RunWorkerCompleted += Process_RunWorkerCompleted;
-            timeCounter.DoWork += TimeCounter_DoWork;
-            timeCounter.ProgressChanged += TimeCounter_ProgressChanged;
-            timeCounter.RunWorkerCompleted += TimeCounter_RunWorkerCompleted;
-           
-
+            process.DoWork += Process_DoWork; //Write the function for the event
+            process.RunWorkerCompleted += Process_RunWorkerCompleted;//Write the function for the event
+            timeCounter.DoWork += TimeCounter_DoWork;//Write the function for the event
+            timeCounter.ProgressChanged += TimeCounter_ProgressChanged;//Write the function for the event
+            timeCounter.RunWorkerCompleted += TimeCounter_RunWorkerCompleted;//Write the function for the event 
         }
 
-       
 
-        private void TimeCounter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+
+        private void TimeCounter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//At the end of the treatment / refueling
         {
-           bus.TimerText = "00:00:00";
+            bus.TimerText = "00:00:00";
         }
 
-        private void TimeCounter_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void TimeCounter_ProgressChanged(object sender, ProgressChangedEventArgs e)//Update the countdown timer
         {
-            int time = ((string)e.UserState)== "12000"? REFTIME: CARETIME;
-            bus.TimerText = (DateTime.Now.AddMilliseconds(time) - DateTime.Now.AddSeconds(e.ProgressPercentage)).ToString().Substring(0, 8);
+            int time = ((string)e.UserState) == "12000" ? REFTIME : CARETIME;//We will check whether it is a treatment or refueling
+            bus.TimerText = (DateTime.Now.AddMilliseconds(time) - DateTime.Now.AddSeconds(e.ProgressPercentage)).ToString().Substring(0, 8);//We will update the "clock"
         }
 
-        private void TimeCounter_DoWork(object sender, DoWorkEventArgs e)
+        private void TimeCounter_DoWork(object sender, DoWorkEventArgs e)//Countdown clock in case of refueling or handling
         {
-            
+
             int i = 0;
-            while (!bus.IsReadyOrDangroeus)
+            while (!bus.IsReadyOrDangroeus)//while it is not a "dangerous" bus
             {
 
                 TimeCounter_ProgressChanged(this, new ProgressChangedEventArgs(i, e.Argument));
@@ -76,54 +74,56 @@ namespace dotNet5781_03B_4307_0791
             }
         }
 
-        private void Process_DoWork(object sender, DoWorkEventArgs e)
+        private void Process_DoWork(object sender, DoWorkEventArgs e)// process (to case of refueling or handling)
         {
-            
-            if (int.Parse(e.Argument as string) == 1)
+
+            if (int.Parse(e.Argument as string) == 1)//to handling
             {
-                bus.State = STATUS.INCARE;
+                bus.State = STATUS.INCARE;//We will update the status of the treatment
                 timeCounter.RunWorkerAsync(CARETIME.ToString());
-                Thread.Sleep(CARETIME);
-                bus.DoHandle();
+                Thread.Sleep(CARETIME);//Bus delay for treatment
+                bus.DoHandle();//do  handling
             }
-            else 
+            else
             {
                 bus.State = STATUS.INREFUEL;
+                //to handling
+
                 timeCounter.RunWorkerAsync(REFTIME.ToString());
-                Thread.Sleep(REFTIME);
-                bus.DoRefuel();
+                Thread.Sleep(REFTIME); //We will update the status of the reful
+                bus.DoRefuel(); // reful the bus
             }
-           
+
 
         }
 
-        private void Process_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void Process_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//thr reful or  treatment Completed
         {
-           if(!bus.DangerTest())
+            if (!bus.DangerTest())
                 bus.State = STATUS.READY;
         }
 
-        private void Refuelbutton_Click(object sender, RoutedEventArgs e)
+        private void Refuelbutton_Click(object sender, RoutedEventArgs e)// "Refuelbutton event"
         {
 
             if (!bus.IsReadyOrDangroeus)
                 MessageBox.Show("can not make refuel now,please wait");
             else
             {
-                process.RunWorkerAsync("0");
-               
+                process.RunWorkerAsync("0"); //strat the process for thr "reful event"
+
             }
         }
 
 
-        private void maintenanceButton_Click(object sender, RoutedEventArgs e)
+        private void maintenanceButton_Click(object sender, RoutedEventArgs e)//"maintenance event"
         {
             if (!bus.IsReadyOrDangroeus)
                 MessageBox.Show("can not make maintenance now,please wait");
             else
             {
-                process.RunWorkerAsync("1");
-               
+                process.RunWorkerAsync("1");//strat the process for thr "maintenance event"
+
             }
         }
     }

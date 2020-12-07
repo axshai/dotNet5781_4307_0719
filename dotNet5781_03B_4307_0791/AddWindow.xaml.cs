@@ -22,7 +22,7 @@ namespace dotNet5781_03B_4307_0791
     public partial class AddWindow : Window
     {
         private ObservableCollection<Bus> listOfBuses;//list of all lines
-        public AddWindow(ObservableCollection <Bus> Buses)
+        public AddWindow(ObservableCollection<Bus> Buses)
         {
             InitializeComponent();
             listOfBuses = Buses;
@@ -46,7 +46,7 @@ namespace dotNet5781_03B_4307_0791
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
             finally
             {
                 this.Close();
@@ -59,7 +59,7 @@ namespace dotNet5781_03B_4307_0791
             bool validDate = DateTime.TryParse(tbDate.Text, out startActiv);//Checking the correctness of the date
             if (!validDate)
                 throw new FormatException("Invalid date!");
-            
+
             string license1, license = tbLicense.Text;//Convert the input string to a license number
             if (license.Length == 7)
             {
@@ -71,15 +71,15 @@ namespace dotNet5781_03B_4307_0791
                 license1 = license.Insert(3, "-");
                 license1 = license1.Insert(6, "-");
             }
-           
+
             foreach (Bus bus in listOfBuses)//Check that there is no such bus in the list
                 if (bus.License == license1)
-                    throw new DuplicateWaitObjectException ("There is already a bus with the same license number!");//*
-            
+                    throw new DuplicateWaitObjectException("There is already a bus with the same license number!");//*
+
             listOfBuses.Add(new Bus(DateTime.Parse(tbDate.Text), license));//add the new bus
-            
+
         }
 
-        
+
     }
 }

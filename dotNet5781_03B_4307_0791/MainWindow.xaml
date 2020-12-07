@@ -24,8 +24,10 @@
                 <TextBlock Grid.Column="0" Text="License number: " HorizontalAlignment="center" VerticalAlignment="center" FontSize="20"/>
                 <TextBlock Grid.Column="1"  Text="{Binding License}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" FontWeight="Bold" />
                 <TextBlock Grid.Column="6"  Text="{Binding TimerText}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" FontWeight="Bold" />
-                <Button Width="100"  Height="40" Grid.Column="4" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"  x:Name="drivebutton"  Content="make drive" Click="DriveButtom_Click" Background="#FF14A21F" />
-                <Button Width="100"   Height="40"  Grid.Column="5"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="refuelbutton" Content="make refuel" Click="Refuelbutton_Click" Background="#FFCDA81F" IsEnabled="{Binding IsReadyOrDangroeus}" />
+                <Button Width="100"  Height="40" Grid.Column="4" Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                        x:Name="drivebutton"  Content="make drive" Click="DriveButtom_Click" Background="#FF14A21F" />
+                <Button Width="100"   Height="40"  Grid.Column="5"  Margin="10,10" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        x:Name="refuelbutton" Content="make refuel" Click="Refuelbutton_Click" Background="#FFCDA81F" IsEnabled="{Binding IsReadyOrDangroeus}" />
             </Grid>
         </DataTemplate>
 
