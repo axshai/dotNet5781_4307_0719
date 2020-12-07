@@ -81,23 +81,21 @@ namespace dotNet5781_03B_4307_0791
             {
                 bus.State = STATUS.INCARE;//We will update the status of the treatment
                 timeCounter.RunWorkerAsync(CARETIME.ToString());
-                Thread.Sleep(CARETIME);//Bus delay for treatment
+                Thread.Sleep(CARETIME);
                 bus.DoHandle();//do  handling
             }
-            else 
+            else //to reafuling
             {
-                bus.State = STATUS.INREFUEL;
-                //to handling
-                
-                    timeCounter.RunWorkerAsync(REFTIME.ToString());
-                Thread.Sleep(REFTIME); //We will update the status of the reful
+                bus.State = STATUS.INREFUEL;//We will update the status of the reful
+                timeCounter.RunWorkerAsync(REFTIME.ToString());
+                Thread.Sleep(REFTIME); //Bus delay for reaful
                 bus.DoRefuel(); // reful the bus
             }
            
 
         }
 
-        private void Process_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//thr reful or  treatment Completed
+        private void Process_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//the reful or  treatment Completed
         {
            if(!bus.DangerTest())
                 bus.State = STATUS.READY;
@@ -116,7 +114,7 @@ namespace dotNet5781_03B_4307_0791
         }
 
 
-        private void maintenanceButton_Click(object sender, RoutedEventArgs e)//"maintenance event"
+        private void maintenanceButton_Click(object sender, RoutedEventArgs e)//"maintenancebutton  event"
         {
             if (!bus.IsReadyOrDangroeus)
                 MessageBox.Show("can not make maintenance now,please wait");
