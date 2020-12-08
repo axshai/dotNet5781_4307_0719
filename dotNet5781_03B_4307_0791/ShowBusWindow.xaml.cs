@@ -51,7 +51,7 @@ namespace dotNet5781_03B_4307_0791
 
         private void TimeCounter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//At the end of the treatment / refueling
         {
-           bus.TimerText = "00:00:00";
+           bus.TimerText = "";
         }
 
         private void TimeCounter_ProgressChanged(object sender, ProgressChangedEventArgs e)//Update the countdown timer

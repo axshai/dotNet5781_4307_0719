@@ -21,7 +21,7 @@ namespace dotNet5781_03B_4307_0791
             LastTreatment = date;
             License = license;
             State = (DateTime.Now - LastTreatment).TotalDays > 365 ? STATUS.DANGEROUS : STATUS.READY;
-            TimerText = "00:00:00";
+            TimerText = "";
         }
 
         private int fuel;//Fuel condition

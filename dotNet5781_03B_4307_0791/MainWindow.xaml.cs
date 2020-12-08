@@ -114,7 +114,7 @@ namespace dotNet5781_03B_4307_0791
 
         private void TimeCounter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//When the timer finishes running
         {
-            (e.Result as Bus).TimerText = "00:00:00";
+            (e.Result as Bus).TimerText = "";
         }
         //---------------------------------------------------------------------------------------------
 
@@ -132,7 +132,6 @@ namespace dotNet5781_03B_4307_0791
             {
                 refuling = new BackgroundWorker();//Registration for the functions of the refueling and timer and updateStatus threads
                 refuling.DoWork += refuling_DoWork;
-                refuling.RunWorkerCompleted += refuling_RunWorkerCompleted;
                 refuling.RunWorkerAsync(toRefuel);
             }
         }
@@ -154,10 +153,6 @@ namespace dotNet5781_03B_4307_0791
             
         }
 
-        private void refuling_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//When the refuling finishes running
-        {
-            refBut.IsEnabled = true;//allow the button to be pressed 
-        }
 
         //--------------------------------------------------------------------------------------------------
         
@@ -174,6 +169,7 @@ namespace dotNet5781_03B_4307_0791
            
             else
             {
+                (sender as Button).IsEnabled = false;
                 drivewindow w1 = new drivewindow(sender, selcted);//open the drive window
                 w1.Show();
             }

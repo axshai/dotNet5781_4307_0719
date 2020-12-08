@@ -47,7 +47,7 @@ namespace dotNet5781_03B_4307_0791
 
         private void TimeCounter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)//When the timer finishes running
         {
-            toDrive.TimerText = "00:00:00";//show 00:00:00
+            toDrive.TimerText = "";//show 00:00:00
         }
 
         private void TimeCounter_ProgressChanged(object sender, ProgressChangedEventArgs e)//During the process
