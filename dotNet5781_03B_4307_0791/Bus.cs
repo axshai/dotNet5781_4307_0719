@@ -68,7 +68,7 @@ namespace dotNet5781_03B_4307_0791
             set
             {
                 if (PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("ISready"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("IsReady"));
             }
         }
 
@@ -78,7 +78,7 @@ namespace dotNet5781_03B_4307_0791
             set
             {
                 if (PropertyChanged != null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("ISready"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("IsReadyOrDangroeus"));
             }
         }
 
