@@ -8,11 +8,6 @@ namespace DO
 {
     public class BusLineDO
     {
-        public BusLineDO()
-        {
-            Id = Ids++;
-        }
-
         public static int Ids { get; set; }
         public int Id { get; set; }
         public string LineNumber { get; set; }//אולי מכיל גם אותיות

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace DO
 {
-    class LineStation 
+   public class LineStation 
     {
-        public int LineKey { get; set; }
+        public string LineNumber { get; set; }
         public int StationKey { get;set; }
+        public int Serial { get; set; }
 
     }
 }

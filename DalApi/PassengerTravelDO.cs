@@ -8,11 +8,6 @@ namespace DO
 {
     public class PassengerTravelDO
     {
-        public PassengerTravelDO()
-        {
-            Id = Ids++;
-        }
-
         public static int Ids { get; set; }
         public int Id { get; set; }
         public String Name { get; set; }

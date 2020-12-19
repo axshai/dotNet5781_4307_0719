@@ -8,11 +8,7 @@ namespace DO
 {
    public class BusInTravelDO
     {
-       public BusInTravelDO()
-        {
-            Id = Ids++;
-        }
-
+      
         public static int Ids { get; set; }
         public int Id { get; set; }
         public int LicenseNum { get; set; }

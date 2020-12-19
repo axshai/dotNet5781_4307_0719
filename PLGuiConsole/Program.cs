@@ -10,6 +10,9 @@ namespace PLGuiConsole
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("HELLO WORLD!");
+            Console.WriteLine("press any key");
+            Console.ReadKey();
         }
     }
 }

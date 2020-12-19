@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,7 +46,10 @@
     <Compile Include="BusLineDO.cs" />
     <Compile Include="BusLineScheduleDO.cs" />
     <Compile Include="ConsecutiveStationsDO.cs" />
+    <Compile Include="DalConfig.cs" />
+    <Compile Include="DLFactory.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="IDAL.cs" />
     <Compile Include="LineStationDO.cs" />
     <Compile Include="PassengerTravelDO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
