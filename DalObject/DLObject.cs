@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DalApi;
 using DO;
 using DS;
-namespace DalObject
+namespace Dal
 {
 
     sealed class DLObject : IDAL
@@ -71,4 +71,6 @@ namespace DalObject
       
         
     }
+
+    
 }

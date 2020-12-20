@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DO
 {
-   public class LineStation 
+   public class LineStationDO
     {
         public string LineNumber { get; set; }
         public int StationKey { get;set; }

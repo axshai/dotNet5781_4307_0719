@@ -8,7 +8,6 @@ namespace DO
 {
     public class BusLineDO
     {
-        public static int Ids { get; set; }
         public int Id { get; set; }
         public string LineNumber { get; set; }//אולי מכיל גם אותיות
         public Area LineArea { get; set; }
