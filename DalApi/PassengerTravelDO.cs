@@ -8,6 +8,8 @@ namespace DO
 {
     public class PassengerTravelDO
     {
+
+     
         public static int Ids { get; set; }
         public int Id { get; set; }
         public String Name { get; set; }
@@ -17,5 +19,10 @@ namespace DO
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public bool IsExists { get; set; }
+        public override string ToString()
+        {
+            string result = "Id: " + Id.ToString() + "\nName: " + Name + "\nLineNumber" + LineNumber + "\nStartingStation: " + StartingStation.ToString() + "\nDestinationStation" + DestinationStation.ToString() + "\nStart: " + Start.ToString() + "\nEnd" + End.ToString() + "\nIsExists? " + IsExists.ToString();
+            return result;
+        }
     }
 }
