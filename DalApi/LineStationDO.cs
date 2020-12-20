@@ -11,7 +11,7 @@ namespace DO
         public override string ToString()
         {
             string result = "LineNumber: " + LineNumber + "\nStationKey: " + StationKey.ToString() + "\nSerial: " + Serial.ToString();
-            return result();
+            return result;
         }
         public string LineNumber { get; set; }
         public int StationKey { get;set; }

@@ -10,7 +10,7 @@ namespace DO
     {
 
      
-        public static int Ids { get; set; }
+       
         public int Id { get; set; }
         public String Name { get; set; }
         public string LineNumber { get; set; }

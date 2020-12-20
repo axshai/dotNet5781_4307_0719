@@ -9,7 +9,7 @@ namespace DO
    public class BusInTravelDO
     {
        
-        public static int Ids { get; set; }
+       
         public int Id { get; set; }
         public int LicenseNum { get; set; }
         public string LineNum { get; set; }//יכול להכיל גם אותיות אולי
