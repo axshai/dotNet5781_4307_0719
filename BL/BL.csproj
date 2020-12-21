@@ -43,7 +43,8 @@
   <ItemGroup>
     <Compile Include="BLFactory.cs" />
     <Compile Include="BLImp.cs" />
-    <Compile Include="BusStationBO.cs" />
+    <Compile Include="BusLineScheduleBO.cs" />
+    <Compile Include="BusLineStationBO.cs" />
     <Compile Include="IBL.cs" />
     <Compile Include="LineStationBO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
