@@ -24,7 +24,7 @@ namespace DS
         public static List<BusLineScheduleDO> BusLineSchedules;
         public static List<BusStationDO> BusStations;
         public static List<ConsecutiveStationsDO> AllConsecutiveStations;
-        public static List<LineStation> LineStations;
+        public static List<LineStationDO> LineStations;
         public static List<PassengerTravelDO> PassengerTravels;
         public static List<UserDO> Users;
 

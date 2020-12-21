@@ -7,7 +7,7 @@ using BLApi;
 using DalApi;
 namespace BL
 {
-    class BLImp: IBL
+   internal class BLImp: IBL
     {
         #region singelton
         static readonly BLImp instance = new BLImp();
