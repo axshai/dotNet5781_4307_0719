@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-    class BusLineBO
+    public class BusLineBO
     {
-        public ObservableCollection<LineStationBO> StationList { get; set; }//List of stations for the line
-
-
-
+        public IEnumerable<BusLineStationBO> StationList { get; set; }//List of stations for the line
+        public IEnumerable<BusLineScheduleBO> ScheduleList { get; set; }//List of Schedule Line
+        public string LineNumber {get; set;}
 
     }
 }
