@@ -154,28 +154,39 @@ namespace Dal
         #region LineStation
         public IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate)
         {
-            throw new NotImplementedException();
+            return from station in DataSource.LineStations
+                   where predicate(station) && station.IsExist == true
+                   select station.Clone();
         }
         #endregion
 
         #region BusStation functions
         public BusStationDO GetBusStation(int key)
         {
-            throw new NotImplementedException();
+            BusStationDO station = DataSource.BusStations.Find(station1 => station1.StationKey  == key && station1.IsExists == true);
+            if (station != null)
+                return station.Clone();
+            throw new Exception("This station was not found!");
         }
+   
         #endregion
 
         #region ConsecutiveStations functions
         public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
         {
-            throw new NotImplementedException();
+            ConsecutiveStationsDO c1= DataSource.AllConsecutiveStations.Find(c2 =>c2.Station1Key== stationKey1&&c2.Station2Key== stationKey2);
+            if (c1  != null)
+                return c1.Clone();
+            throw new Exception("These stations were not found as  Consecutive!");
         }
         #endregion
 
         #region BusLineSchedule functions
-        public IEnumerable<BusLineScheduleDO> GetAllSchedulesBy(Predicate<LineStationDO> predicate)
+        public IEnumerable<BusLineScheduleDO> GetAllSchedulesBy(Predicate<BusLineScheduleDO> predicate)
         {
-            throw new NotImplementedException();
+            return from schedule in DataSource.BusLineSchedules
+                   where predicate(schedule) && schedule.IsExists == true
+                   select schedule.Clone();
         }
         #endregion
 

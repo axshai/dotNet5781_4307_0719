@@ -12,6 +12,11 @@ namespace BO
         public string StationName { get; set; }
         public double DistanceFromPrev { get; set; }
         public TimeSpan TimeFromPrev { get; set; }
+        
+        public override string ToString()
+        {
+            return "StationKey: " + StationKey + " StationName " + StationName + " DistanceFromPrev " + DistanceFromPrev + " TimeFromPrev " + TimeFromPrev.ToString();
+        }
 
     }
 }

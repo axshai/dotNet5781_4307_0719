@@ -8,5 +8,6 @@ namespace BLApi
 {
     public interface IBL
     {
+        IEnumerable<BusLineBO> GetAllLines();
     }
 }

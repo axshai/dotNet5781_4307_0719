@@ -14,9 +14,9 @@ namespace BO
         public int frequency { get; set; }
         public override string ToString()
         {
-            string result = "LineNumber: " + LineNumber + "\nStartActivity: " + StartActivity.ToString() + "EndActivity: " + EndActivity.ToString() + "frequency: " + frequency.ToString();
+            return  "LineNumber: " + LineNumber + " StartActivity: " + StartActivity.ToString() + " EndActivity: " + EndActivity.ToString() + " frequency: " + frequency.ToString();
 
-            return result;
+            
         }
 
     }

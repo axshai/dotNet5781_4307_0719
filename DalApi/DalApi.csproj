@@ -46,7 +46,7 @@
     <Compile Include="BusLineDO.cs" />
     <Compile Include="BusLineScheduleDO.cs" />
     <Compile Include="ConsecutiveStationsDO.cs" />
-    <Compile Include="DalConfig.cs" />
+    <Compile Include="DLConfig.cs" />
     <Compile Include="DLFactory.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="IDAL.cs" />

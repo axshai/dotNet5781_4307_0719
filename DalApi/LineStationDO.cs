@@ -16,6 +16,7 @@ namespace DO
         public string LineNumber { get; set; }
         public int StationKey { get;set; }
         public int Serial { get; set; }
+        public bool IsExist { get; set; }
 
     }
 }
