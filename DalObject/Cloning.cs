@@ -9,7 +9,7 @@ namespace Dal
 {
     static class Cloning
     {
-        internal static T Clone<T>(this T orginal) where   T:new()
+        internal static T Clone<T>(this T orginal) where T : new()
         {
             T copy = new T();
             foreach (PropertyInfo properetyInfo in typeof(T).GetProperties())
@@ -19,7 +19,8 @@ namespace Dal
             return copy;
         }
 
-
+    }
+}
 
 
     //#region BusDO Clone
@@ -158,4 +159,3 @@ namespace Dal
     //    }
     //    #endregion
     //}
-}

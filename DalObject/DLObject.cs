@@ -17,27 +17,48 @@ namespace Dal
         DLObject() { }
         public static DLObject Instance { get => instance; }
         #endregion
-        #region Bus functions
-        public IEnumerable<BusDO> GetAllBuses()
-        { throw new NotImplementedException(); }
+        
+        #region Line functions
+        public IEnumerable<BusLineDO> GetAllLines()
+        {
+            return from line in DataSource.BusLines
+                   where line.IsExists == true
+                   select line.Clone();
+        }
 
-        public IEnumerable<BusDO> GetAllBusesBy(Predicate<BusDO> predicate)
-        { throw new NotImplementedException(); }
-        public BusDO GetBus(int licenseNum)
-        { throw new NotImplementedException(); }
-        public void AddBus(BusDO bus)
+        public IEnumerable<BusLineDO> GetAllLinesBy(Predicate<BusLineDO> predicate)
+        {
+            return from line in DataSource.BusLines
+                   where predicate(line) && line.IsExists == true
+                   select line.Clone();
+        }
+        
+        public BusLineDO GetLine(string lineNumber)
+        {
+            BusLineDO line1 = DataSource.BusLines.Find(line => line.LineNumber == lineNumber && line.IsExists == true);
+            if (line1!= null)
+                return line1.Clone();
+            throw new Exception("This line was not found!");
+        }
+
+        public void AddLine(BusLineDO line)
         {
             throw new NotImplementedException();
         }
-        public void UpdateBus(BusDO bus)
+
+
+        public void UpdateLine(BusDO bus)
         {
             throw new NotImplementedException();
         }
-        public void UpdateBus(int id, Action<BusDO> toUpdate) //method that knows to updt specific fields in Person
+      
+        public void UpdateLine(int id, Action<BusDO> toUpdate) //method that knows to updt specific fields in Person
         { throw new NotImplementedException(); }
-        public void DeleteBus(int licenseNum)
+       
+        public void DeleteLine(int licenseNum)
         { throw new NotImplementedException(); }
         #endregion
+       
         #region User functions
         public IEnumerable<UserDO> GetAllUsers()
         {
@@ -90,6 +111,71 @@ namespace Dal
             if (user1 != null)
                 user1.IsExists = false;
             throw new Exception("This user was not found!");
+        }
+        #endregion
+
+        #region Bus functions
+        public IEnumerable<BusDO> GetAllBuses()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BusDO> GetAllBusesBy(Predicate<BusDO> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BusDO GetBus(int licenseNum)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddBus(BusDO bus)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateBus(BusDO bus)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateBus(int id, Action<BusDO> toUpdate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteBus(int licenseNum)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region LineStation
+        public IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region BusStation functions
+        public BusStationDO GetBusStation(int key)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region ConsecutiveStations functions
+        public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region BusLineSchedule functions
+        public IEnumerable<BusLineScheduleDO> GetAllSchedulesBy(Predicate<LineStationDO> predicate)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
