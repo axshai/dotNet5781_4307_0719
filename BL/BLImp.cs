@@ -82,8 +82,30 @@ namespace BL
 
         }
 
+        public IEnumerable<BusLineBO> GetAllStation()
+        {
+            from station in myDal.GetAllStations()
+            select new BusStationBO
+            {
+                StationKey = station.StationKey,
+                StationName=station.StationName,
+                ListLines= from line in GetAllLines()
+                           where line.StationList.a
 
-      
+
+            }
+
+
+
+
+
+            return 
+        }
+
+
+
+
+
     }
 
 

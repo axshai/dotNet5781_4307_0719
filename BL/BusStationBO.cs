@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BO
+{
+    public class BusStationBO
+    {
+        public IEnumerable<BusLineBO> ListLines { get; set; }
+
+        public string StationName { get; set; }
+        public int StationKey { get; set; }
+
+
+    }
+}

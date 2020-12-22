@@ -188,9 +188,20 @@ namespace Dal
                    where predicate(schedule) && schedule.IsExists == true
                    select schedule.Clone();
         }
+
+
         #endregion
 
-
+        #region BusStation Function
+        public IEnumerable<BusStationDO> GetAllStations()
+        {
+            
+                return from station in DataSource.BusStations
+                       where station.IsExists == true
+                       select station.Clone();
+         
+        }
+        #endregion
     }
 
 

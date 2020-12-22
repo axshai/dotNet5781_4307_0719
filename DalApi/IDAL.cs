@@ -37,6 +37,10 @@ namespace DalApi
         #region BusLineSchedule
         IEnumerable<BusLineScheduleDO> GetAllSchedulesBy(Predicate<BusLineScheduleDO> predicate);
         #endregion
+
+        IEnumerable<BusStationDO> GetAllStations();
+
+
     }
 
 
