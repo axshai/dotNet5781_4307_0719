@@ -11,7 +11,7 @@ namespace PLGuiConsole
         static void Main(string[] args)
         {
             IBL mybl = BLFactory.GetBL("1");
-            foreach (var item in mybl.GetAllLines())
+            foreach (var item in mybl.GetAllLines().ToList())
             {
                 Console.WriteLine(item);
             }

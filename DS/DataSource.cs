@@ -14,6 +14,15 @@ namespace DS
 
         static DataSource()
         {
+            Buses = new List<BusDO>();
+            BusesInTravel = new List<BusInTravelDO>();
+            BusLines = new List<BusLineDO>();
+            BusLineSchedules = new List<BusLineScheduleDO>();
+            BusStations = new List<BusStationDO>();
+            AllConsecutiveStations = new List<ConsecutiveStationsDO>();
+            LineStations = new List<LineStationDO>();
+            PassengerTravels = new List<PassengerTravelDO>();
+            Users = new List<UserDO>();
             InitBusLines();
             InitBusStations();
             InitConsecutiveStations();
@@ -116,28 +125,32 @@ namespace DS
             {
                 LineNumber = 66.ToString(),
                 StationKey = 123,
-                Serial = 1
+                Serial = 1,
+                IsExist=true
             });
 
             LineStations.Add(new LineStationDO
             {
                 LineNumber = 66.ToString(),
                 StationKey = 456,
-                Serial = 2
+                Serial = 2,
+                IsExist = true
             });
 
             LineStations.Add(new LineStationDO
             {
                 LineNumber = 82.ToString(),
                 StationKey = 456,
-                Serial = 1
+                Serial = 1,
+                IsExist = true
             });
 
             LineStations.Add(new LineStationDO
             {
                 LineNumber = 82.ToString(),
                 StationKey = 789,
-                Serial = 2
+                Serial = 2,
+                IsExist = true
             });
         }
 
@@ -152,7 +165,7 @@ namespace DS
                 IsExists = true
 
             });
-            
+
             BusLineSchedules.Add(new BusLineScheduleDO
             {
                 StartActivity = TimeSpan.Parse("12:00:00"),
@@ -177,7 +190,7 @@ namespace DS
             {
                 StartActivity = TimeSpan.Parse("15:00:00"),
                 EndActivity = TimeSpan.Parse("17:00:00"),
-                LineNumber = 66.ToString(),
+                LineNumber = 82.ToString(),
                 frequency = 7,
                 IsExists = true
 

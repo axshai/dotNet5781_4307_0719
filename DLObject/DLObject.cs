@@ -17,7 +17,7 @@ namespace Dal
         DLObject() { }
         public static DLObject Instance { get => instance; }
         #endregion
-        
+
         #region Line functions
         public IEnumerable<BusLineDO> GetAllLines()
         {
@@ -32,11 +32,11 @@ namespace Dal
                    where predicate(line) && line.IsExists == true
                    select line.Clone();
         }
-        
+
         public BusLineDO GetLine(string lineNumber)
         {
             BusLineDO line1 = DataSource.BusLines.Find(line => line.LineNumber == lineNumber && line.IsExists == true);
-            if (line1!= null)
+            if (line1 != null)
                 return line1.Clone();
             throw new Exception("This line was not found!");
         }
@@ -51,49 +51,49 @@ namespace Dal
         {
             throw new NotImplementedException();
         }
-      
+
         public void UpdateLine(int id, Action<BusDO> toUpdate) //method that knows to updt specific fields in Person
         { throw new NotImplementedException(); }
-       
+
         public void DeleteLine(int licenseNum)
         { throw new NotImplementedException(); }
         #endregion
-       
+
         #region User functions
         public IEnumerable<UserDO> GetAllUsers()
         {
             return from user in DataSource.Users
-                   where user.IsExists==true
+                   where user.IsExists == true
                    select user.Clone();
         }
 
         public IEnumerable<UserDO> GetAllUsersBy(Predicate<UserDO> predicate)
         {
             return from user in DataSource.Users
-                   where predicate(user)&& user.IsExists == true
+                   where predicate(user) && user.IsExists == true
                    select user.Clone();
 
         }
         public UserDO GetUser(string name)
         {
-            UserDO user1= DataSource.Users.Find(user => user.Name == name && user.IsExists == true);
+            UserDO user1 = DataSource.Users.Find(user => user.Name == name && user.IsExists == true);
             if (user1 != null)
                 return user1.Clone();
             throw new Exception("This user was not found!");
         }
-        
+
         public void AddUser(UserDO user)//לא ניתן לתת שם גם של משתמש ישן!
         {
             UserDO toAdd = user.Clone();
-            if(DataSource.Users.Exists(user1 => user1.Name == toAdd.Name))
+            if (DataSource.Users.Exists(user1 => user1.Name == toAdd.Name))
                 throw new Exception("There is already such a user with the same name in the system!");
             DataSource.Users.Add(toAdd);
         }
-       
+
         public void UpdateUser(UserDO user)
         {
-           int index = DataSource.Users.FindIndex(user1 => user1.Name == user.Name && user1.IsExists == true);
-            if(index==-1)
+            int index = DataSource.Users.FindIndex(user1 => user1.Name == user.Name && user1.IsExists == true);
+            if (index == -1)
                 throw new Exception("This user was not found!");
             DataSource.Users[index] = user.Clone();
         }
@@ -104,10 +104,10 @@ namespace Dal
                 toUpdate(user1);
             throw new Exception("This user was not found!");
         }
-       
+
         public void DeleteUser(string name)
         {
-            UserDO user1 = DataSource.Users.Find(user => user.Name == name&& user.IsExists==true);
+            UserDO user1 = DataSource.Users.Find(user => user.Name == name && user.IsExists == true);
             if (user1 != null)
                 user1.IsExists = false;
             throw new Exception("This user was not found!");
@@ -163,19 +163,19 @@ namespace Dal
         #region BusStation functions
         public BusStationDO GetBusStation(int key)
         {
-            BusStationDO station = DataSource.BusStations.Find(station1 => station1.StationKey  == key && station1.IsExists == true);
+            BusStationDO station = DataSource.BusStations.Find(station1 => station1.StationKey == key && station1.IsExists == true);
             if (station != null)
                 return station.Clone();
             throw new Exception("This station was not found!");
         }
-   
+
         #endregion
 
         #region ConsecutiveStations functions
         public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
         {
-            ConsecutiveStationsDO c1= DataSource.AllConsecutiveStations.Find(c2 =>c2.Station1Key== stationKey1&&c2.Station2Key== stationKey2);
-            if (c1  != null)
+            ConsecutiveStationsDO c1 = DataSource.AllConsecutiveStations.Find(c2 => c2.Station1Key == stationKey1 && c2.Station2Key == stationKey2);
+            if (c1 != null)
                 return c1.Clone();
             throw new Exception("These stations were not found as  Consecutive!");
         }

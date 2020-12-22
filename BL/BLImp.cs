@@ -26,16 +26,17 @@ namespace BL
         /// <returns>IEnumerable BusLineStationBO-all the station of the line </returns>
         private IEnumerable<BusLineStationBO> getStationsOfLine(string LineNum)
         {
-            IEnumerable<BusLineStationBO> result = from station in myDal.GetAllLineStationsBy(station1 => station1.LineNumber == LineNum)//List of stations while receiving the number and name of each station
+            IEnumerable<BusLineStationBO> result = (from station in myDal.GetAllLineStationsBy(station1 => station1.LineNumber == LineNum)//List of stations while receiving the number and name of each station
                                                    orderby station.Serial
+                                                  
                                                    select new BusLineStationBO
                                                    {
                                                        StationName = myDal.GetBusStation(station.StationKey).StationName,
-                                                       StationKey = station.StationKey,
-                                                       DistanceFromPrev = 0,
-                                                       TimeFromPrev = TimeSpan.Zero
-                                                   };
+                                                       StationKey = station.StationKey
+                                                       
+                                                   });
 
+            result = result.ToList();
             for (int i = 1; i < result.Count(); i++)//receiving the Distance and TimeFrom from Previous station of each station
             {
                 result.ElementAt(i).DistanceFromPrev = myDal.GetConsecutiveStations(result.ElementAt(i - 1).StationKey, result.ElementAt(i).StationKey).Distance;
