@@ -11,10 +11,15 @@ namespace BL
     internal class BLImp : IBL
     {
         #region singelton
-        static readonly BLImp instance = new BLImp();
+        static readonly BLImp instance;
         static BLImp() { }
         BLImp() { }
-        public static BLImp Instance { get => instance; }
+        public static BLImp Instance {
+            get {
+                if (instance == null) return new BLImp();
+                return instance;
+                 }
+        }
         #endregion
 
         IDAL myDal = DLFactory.GetDL();
