@@ -41,9 +41,9 @@ namespace BL
         /// </summary>
         /// <param name="LineNum">the number of the Wanted line</param>
         /// <returns>IEnumerable BusLineStationBO-all the station of the line </returns>
-        private IEnumerable<BusLineStationBO> getStationsOfLine(string LineNum)
+        private IEnumerable<BusLineStationBO> getStationsOfLine(int lineId)
         {
-            IEnumerable<BusLineStationBO> result = (from station in myDal.GetAllLineStationsBy(station1 => station1.LineNumber == LineNum)//List of stations while receiving the number and name of each station
+            IEnumerable<BusLineStationBO> result = (from station in myDal.GetAllLineStationsBy(station1 => station1.LineId == lineId)//List of stations while receiving the number and name of each station
                                                     orderby station.Serial
 
                                                     select new BusLineStationBO
@@ -68,14 +68,15 @@ namespace BL
         /// </summary>
         /// <param name="LineNum">the number of the Wanted line</param>
         /// <returns>IEnumerable BusLineScheduleBO-all the Schedule of the line </returns>
-        private IEnumerable<BusLineScheduleBO> getSchedulesOfLine(string LineNum)
+        private IEnumerable<BusLineScheduleBO> getSchedulesOfLine(int lineId)
         {
-            return from Schedule in myDal.GetAllSchedulesBy(Schedule1 => Schedule1.LineNumber == LineNum)
+            return from Schedule in myDal.GetAllSchedulesBy(Schedule1 => Schedule1.LineId== lineId)
                    orderby Schedule.StartActivity
                    select new BusLineScheduleBO
                    {
                        StartActivity = Schedule.StartActivity,
-                       LineNumber = Schedule.LineNumber,
+                       LineId= lineId,
+                       LineNumber = myDal.GetLine(Schedule.LineId).LineNumber,
                        EndActivity = Schedule.EndActivity,
                        frequency = Schedule.frequency
                    };
@@ -93,8 +94,9 @@ namespace BL
                    orderby line.LineNumber
                    select new BusLineBO
                    {
-                       StationList = getStationsOfLine(line.LineNumber),
-                       ScheduleList = getSchedulesOfLine(line.LineNumber),
+                       Id=line.Id,
+                       StationList = getStationsOfLine(line.Id),
+                       ScheduleList = getSchedulesOfLine(line.Id),
                        LineNumber = line.LineNumber
                    };
 
