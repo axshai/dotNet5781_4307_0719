@@ -8,7 +8,7 @@ namespace BO
 {
     public class BusStationBO
     {
-        public IEnumerable<BusLineBO> ListLines { get; set; }
+        public IEnumerable<BusLineBO> ListOfLines { get; set; }
 
         public string StationName { get; set; }
         public int StationKey { get; set; }
