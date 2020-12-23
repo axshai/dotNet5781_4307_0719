@@ -18,7 +18,18 @@ namespace BL
         #endregion
 
         IDAL myDal = DLFactory.GetDL();
-        
+
+        private IEnumerable<BusLineBO> getLinesOfStations(int stateKey)
+        {
+            IEnumerable<BusLineBO> result = from line in GetAllLines()
+                                            where line.StationList.Any(station => station.StationKey == stateKey)
+                                            select line;
+            return result;
+        }
+
+
+
+
         /// <summary>
         /// The function receives a line number and returns a list of all its stations
         /// </summary>
@@ -27,14 +38,14 @@ namespace BL
         private IEnumerable<BusLineStationBO> getStationsOfLine(string LineNum)
         {
             IEnumerable<BusLineStationBO> result = (from station in myDal.GetAllLineStationsBy(station1 => station1.LineNumber == LineNum)//List of stations while receiving the number and name of each station
-                                                   orderby station.Serial
-                                                  
-                                                   select new BusLineStationBO
-                                                   {
-                                                       StationName = myDal.GetBusStation(station.StationKey).StationName,
-                                                       StationKey = station.StationKey
-                                                       
-                                                   });
+                                                    orderby station.Serial
+
+                                                    select new BusLineStationBO
+                                                    {
+                                                        StationName = myDal.GetBusStation(station.StationKey).StationName,
+                                                        StationKey = station.StationKey
+
+                                                    });
 
             result = result.ToList();
             for (int i = 1; i < result.Count(); i++)//receiving the Distance and TimeFrom from Previous station of each station
@@ -42,10 +53,10 @@ namespace BL
                 result.ElementAt(i).DistanceFromPrev = myDal.GetConsecutiveStations(result.ElementAt(i - 1).StationKey, result.ElementAt(i).StationKey).Distance;
                 result.ElementAt(i).TimeFromPrev = myDal.GetConsecutiveStations(result.ElementAt(i - 1).StationKey, result.ElementAt(i).StationKey).TravelTime;
             }
-            
+
             return result;
         }
-        
+
         /// <summary>
         /// The function receives a line number and returns a list of all its Schedules
         /// </summary>
@@ -81,35 +92,55 @@ namespace BL
                    };
 
         }
-
-        public IEnumerable<BusLineBO> GetAllStation()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BusStationBO> GetAllStation()
         {
-            from station in myDal.GetAllStations()
-            select new BusStationBO
-            {
-                StationKey = station.StationKey,
-                StationName=station.StationName,
-                ListLines= from line in GetAllLines()
-                           where line.StationList.a
-
-
-            }
-
-
-
-
-
-            return 
-        }
-
-
-
+            return from station in myDal.GetAllStations()
+                   orderby station.StationKey
+                   select new BusStationBO
+                   {
+                       StationKey = station.StationKey,
+                       StationName = station.StationName,
+                       ListOfLines = getLinesOfStations(station.StationKey)
+                   };
+        }        
+        
 
 
     }
-
-
-
-
-
 }
+
+
+
+
+        
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+    
+
+
+
+
+
+
