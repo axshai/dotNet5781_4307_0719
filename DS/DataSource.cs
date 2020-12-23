@@ -123,7 +123,7 @@ namespace DS
         {
             LineStations.Add(new LineStationDO
             {
-                LineNumber = 66.ToString(),
+                LineId = 1,
                 StationKey = 123,
                 Serial = 1,
                 IsExist=true
@@ -131,7 +131,7 @@ namespace DS
 
             LineStations.Add(new LineStationDO
             {
-                LineNumber = 66.ToString(),
+                LineId = 1,
                 StationKey = 456,
                 Serial = 2,
                 IsExist = true
@@ -139,7 +139,7 @@ namespace DS
 
             LineStations.Add(new LineStationDO
             {
-                LineNumber = 82.ToString(),
+                LineId = 2,
                 StationKey = 456,
                 Serial = 1,
                 IsExist = true
@@ -147,7 +147,7 @@ namespace DS
 
             LineStations.Add(new LineStationDO
             {
-                LineNumber = 82.ToString(),
+                LineId = 2,
                 StationKey = 789,
                 Serial = 2,
                 IsExist = true
@@ -160,7 +160,7 @@ namespace DS
             {
                 StartActivity = TimeSpan.Parse("10:00:00"),
                 EndActivity = TimeSpan.Parse("12:00:00"),
-                LineNumber = 66.ToString(),
+                LineId = 1,
                 frequency = 5,
                 IsExists = true
 
@@ -170,7 +170,7 @@ namespace DS
             {
                 StartActivity = TimeSpan.Parse("12:00:00"),
                 EndActivity = TimeSpan.Parse("14:00:00"),
-                LineNumber = 66.ToString(),
+                LineId = 1,
                 frequency = 10,
                 IsExists = true
 
@@ -180,7 +180,7 @@ namespace DS
             {
                 StartActivity = TimeSpan.Parse("12:00:00"),
                 EndActivity = TimeSpan.Parse("15:00:00"),
-                LineNumber = 82.ToString(),
+                LineId = 2,
                 frequency = 10,
                 IsExists = true
 
@@ -190,7 +190,7 @@ namespace DS
             {
                 StartActivity = TimeSpan.Parse("15:00:00"),
                 EndActivity = TimeSpan.Parse("17:00:00"),
-                LineNumber = 82.ToString(),
+                LineId = 2,
                 frequency = 7,
                 IsExists = true
 

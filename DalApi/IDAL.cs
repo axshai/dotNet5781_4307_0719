@@ -20,8 +20,9 @@ namespace DalApi
         
         #region Line
         IEnumerable<BusLineDO> GetAllLines();
+        BusLineDO GetLine(int id);
         #endregion
-       
+
         #region LineStation
         IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate);
         #endregion

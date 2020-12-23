@@ -33,9 +33,9 @@ namespace Dal
                    select line.Clone();
         }
 
-        public BusLineDO GetLine(string lineNumber)
+        public BusLineDO GetLine(int id)
         {
-            BusLineDO line1 = DataSource.BusLines.Find(line => line.LineNumber == lineNumber && line.IsExists == true);
+            BusLineDO line1 = DataSource.BusLines.Find(line => line.Id == id && line.IsExists == true);
             if (line1 != null)
                 return line1.Clone();
             throw new Exception("This line was not found!");

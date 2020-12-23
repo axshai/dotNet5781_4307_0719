@@ -40,7 +40,7 @@ namespace PLGuiWPF
 
         private void ShowBusLine(string index)
         {
-            currentDisplayBusLine = lines.First();
+            //currentDisplayBusLine = lines.First();
             
             //lbLines.DataContext = currentDisplayBusLine.Stations;//show the stations of the selcted line
             //tbArea.Text = currentDisplayBusLine.Region.ToString();//shoe the area of the selcted line
