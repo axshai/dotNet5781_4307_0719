@@ -43,20 +43,37 @@ namespace Dal
 
         public void AddLine(BusLineDO line)
         {
-            throw new NotImplementedException();
+            BusLineDO line1_toadd = line.Clone();
+            if (DataSource.BusLines.Exists(line2 => line2.Id == line1_toadd.Id))
+                throw new Exception("There is already such a line with the same id in the system!");
+            
+            DataSource.BusLines.Add(line1_toadd);
         }
 
 
-        public void UpdateLine(BusDO bus)
+        public void UpdateLine(BusLineDO line)
         {
-            throw new NotImplementedException();
+            int index = DataSource.BusLines.FindIndex(line1 => line1.Id == line.Id && line.IsExists == true);
+            if (index == -1)
+                throw new Exception("This Line was not found!");
+            DataSource.BusLines[index] = line.Clone();
         }
 
-        public void UpdateLine(int id, Action<BusDO> toUpdate) //method that knows to updt specific fields in Person
-        { throw new NotImplementedException(); }
+        public void UpdateLine(int id, Action<BusLineDO> toUpdate) //method that knows to updt specific fields in Line
+        {
+            BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
+            if (line != null)
+                toUpdate(line);
+            throw new Exception("This Line was not found!");
+        }
 
-        public void DeleteLine(int licenseNum)
-        { throw new NotImplementedException(); }
+        public void DeleteLine(int id)
+        {
+            BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
+            if (line != null)
+                line.IsExists=false;
+            throw new Exception("This Line was not found!");
+        }
         #endregion
 
         #region User functions
