@@ -23,7 +23,13 @@ namespace BL
         #endregion
 
         IDAL myDal = DLFactory.GetDL();
-
+     
+        #region private functions-help to the IBLS functions
+        /// <summary>
+        /// The function receives a station key and returns a list of all lines that have a stop in this station
+        /// </summary>
+        /// <param name="stateKey">station key of the wnted station</param>
+        /// <returns></returns>
         private IEnumerable<BusLineBO> getLinesOfStations(int stateKey)
         {
             IEnumerable<BusLineBO> result = from line in GetAllLines()
@@ -80,7 +86,8 @@ namespace BL
                    };
         }
 
-
+        #endregion
+        
         /// <summary>
         /// The function returns all the lines that exist in the system — with their stations and schedules
         /// </summary>
@@ -97,8 +104,9 @@ namespace BL
                    };
 
         }
+
         /// <summary>
-        /// 
+        /// The function returns all the stations that exist in the system — with the lines that pass in this stataion
         /// </summary>
         /// <returns></returns>
         public IEnumerable<BusStationBO> GetAllStation()

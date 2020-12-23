@@ -54,7 +54,7 @@ namespace dotNet5781_03A_4307_0791
             InitializeComponent();
             cbBusLines.ItemsSource = listOfLines;//combo-box
             cbBusLines.DisplayMemberPath = "BusLine";//choose by the line-number
-           // cbBusLines.SelectedIndex = 0;
+           cbBusLines.SelectedIndex = 0;
            
         }
 

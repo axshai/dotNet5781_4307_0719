@@ -27,7 +27,11 @@ namespace PLGuiWPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            lbLines.Visibility = Visibility.Visible;
+            ShowLinesWindow sw = new ShowLinesWindow();
+            sw.Show();
+
+
+            //lbLines.Visibility = Visibility.Visible;
         }
     }
 }
