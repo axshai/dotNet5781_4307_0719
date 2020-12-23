@@ -88,12 +88,13 @@ namespace BL
             select new BusStationBO
             {
                 StationKey = station.StationKey,
-                StationName=station.StationName,
-                ListLines= from line in GetAllLines()
-                           where line.StationList.a
+                StationName = station.StationName,
+                ListLines = from line in GetAllLines()
+                            where line.StationList.Any(  //ToList().Exists(state => state.StationKey == station.StationKey)
+                            select new lin
 
 
-            }
+            };
 
 
 
