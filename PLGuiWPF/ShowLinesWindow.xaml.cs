@@ -24,7 +24,7 @@ namespace PLGuiWPF
     {
         ObservableCollection<BusLineBO> lines;//list of all lines
         BusLineBO currentDisplayBusLine;
-        IBL myBL = BLFactory.GetBL("1");
+        IBL myBL = BLFactory.GetBL("BLImp");
         public ShowLinesWindow()
         {
             InitializeComponent();
@@ -41,7 +41,7 @@ namespace PLGuiWPF
         private void ShowBusLine(string index)
         {
             //currentDisplayBusLine = lines.First();
-            
+
             //lbLines.DataContext = currentDisplayBusLine.Stations;//show the stations of the selcted line
             //tbArea.Text = currentDisplayBusLine.Region.ToString();//shoe the area of the selcted line
         }
