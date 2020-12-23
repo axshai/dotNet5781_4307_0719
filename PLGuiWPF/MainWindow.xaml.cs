@@ -20,6 +20,8 @@ namespace PLGuiWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        BLApi.IBL mybl = BLApi.BLFactory.GetBL("BLImp");
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -27,7 +29,6 @@ namespace PLGuiWPF
 
         private void managButton_Click(object sender, RoutedEventArgs e)
         {
-
             ManagMenuWindow managWindow1 = new ManagMenuWindow();
             managWindow1.Show();
 

@@ -12,7 +12,7 @@ namespace BLApi
         {
             switch (type)
             {
-                case "1":
+                case "BLImp":
                     return BLImp.Instance;
                 default:
                     return BLImp.Instance;

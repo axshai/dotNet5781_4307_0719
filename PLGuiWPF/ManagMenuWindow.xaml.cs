@@ -21,6 +21,7 @@ namespace PLGuiWPF
     {
         public ManagMenuWindow()
         {
+
             InitializeComponent();
         }
 
