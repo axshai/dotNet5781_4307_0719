@@ -46,7 +46,7 @@ namespace Dal
             BusLineDO line1_toadd = line.Clone();
             if (DataSource.BusLines.Exists(line2 => line2.Id == line1_toadd.Id))
                 throw new Exception("There is already such a line with the same id in the system!");
-            
+
             DataSource.BusLines.Add(line1_toadd);
         }
 
@@ -71,7 +71,7 @@ namespace Dal
         {
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
             if (line != null)
-                line.IsExists=false;
+                line.IsExists = false;
             throw new Exception("This Line was not found!");
         }
         #endregion
@@ -209,16 +209,49 @@ namespace Dal
 
         #endregion
 
-         
+
         #region BusStation functions
         public IEnumerable<BusStationDO> GetAllStations()
         {
-            
-                return from station in DataSource.BusStations
-                       where station.IsExists == true
-                       select station.Clone();
-         
+
+            return from station in DataSource.BusStations
+                   where station.IsExists == true
+                   select station.Clone();
+
         }
+        #endregion
+
+        #region BusLineSchedule functions
+        public void DeleteSchedule(int lineId, TimeSpan start)
+        {
+            BusLineScheduleDO Sched = DataSource.BusLineSchedules.Find(Sched1 => Sched1.LineId == lineId && Sched1.StartActivity == start && Sched1.IsExists == true);
+            if (Sched != null)
+                Sched.IsExists = false;
+            else
+                throw new Exception("This Schedule was not found!");
+        }
+
+        public void UpdateSchedule(int lineId, TimeSpan start, int newFreq, TimeSpan? begin = null, TimeSpan? end = null)
+        {
+            BusLineScheduleDO Sched = DataSource.BusLineSchedules.Find(Sched1 => Sched1.LineId == lineId && Sched1.StartActivity == start && Sched1.IsExists == true);
+            if (Sched == null)
+                throw new Exception("This Schedule was not found!");
+            Sched.frequency = newFreq;
+            if (begin != null)
+                Sched.StartActivity = (TimeSpan)begin;
+            if (end != null)
+                Sched.EndActivity = (TimeSpan)end;
+        }
+
+        public void AddSchedule(BusLineScheduleDO toadd)
+        {
+
+            if (DataSource.BusLineSchedules.Exists(sched => sched.LineId == toadd.LineId && sched.StartActivity == toadd.StartActivity))
+                throw new Exception("There is already such a Schedule for the line the system!");
+            DataSource.BusLineSchedules.Add(toadd.Clone());
+        }
+
+
         #endregion
     }
 

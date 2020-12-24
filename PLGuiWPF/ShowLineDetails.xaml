@@ -30,8 +30,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header=" key " Binding="{Binding StationKey}" />
                 <DataGridTextColumn Header=" Name " Binding="{Binding StationName}" />
-                <DataGridTextColumn Header=" Distance from previous station: " Binding="{Binding StationName}" />
-                <DataGridTextColumn Header=" time from previous station: " Binding="{Binding StationName}" />
+                <DataGridTextColumn Header=" Distance from previous station: " Binding="{Binding DistanceFromPrev}" />
+                <DataGridTextColumn Header=" time from previous station: " Binding="{Binding TimeFromPrev}" />
             </DataGrid.Columns>
         </DataGrid>
 
