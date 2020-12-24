@@ -178,22 +178,27 @@ namespace BL
 
             foreach (BusLineScheduleBO item in toChange)
             {
-                if (item.StartActivity > begin1 && item.EndActivity < end1)
-                    DeleteSchedule(item);
-                if (item.StartActivity > begin1)
-                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, begin: end1);
-                if (item.EndActivity < end1)
-                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, end: begin1);
-                else 
+                if (item.StartActivity > begin1 && item.EndActivity < end1)//אם החדש בולע אותו
                 {
-                    myDal.AddSchedule(new BusLineScheduleDO
+                    DeleteSchedule(item);
+                    continue;
+                }
+
+                if (item.StartActivity > begin1)//אם הוא מתחיל בתוך החדש
+                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, begin: end1);//עשה שיתחיל אחריו
+               else if (item.EndActivity < end1)//אם נגמר בתוך החדש
+                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, end: begin1);//עשה שיגמר לפניו
+                else
+                {
+                    myDal.AddSchedule(new BusLineScheduleDO//אם הוא בולע את החדש
                     { IsExists = true, StartActivity = end1, EndActivity = item.EndActivity, frequency = item.frequency, LineId = lineId });
-                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency,end: begin1);
+                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, end: begin1);
 
                 }
-                myDal.AddSchedule(new BusLineScheduleDO 
-                { IsExists = true, StartActivity = begin1, EndActivity = end1, frequency = freq, LineId = lineId});
             }
+            myDal.AddSchedule(new BusLineScheduleDO
+            { IsExists = true, StartActivity = begin1, EndActivity = end1, frequency = freq, LineId = lineId });
+
 
 
         }
