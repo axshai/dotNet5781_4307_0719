@@ -22,28 +22,20 @@ namespace PLGuiWPF
     /// </summary>
     public partial class ShowLinesWindow : Window
     {
-        ObservableCollection<BusLineBO> lines;//list of all lines
-        BusLineBO currentDisplayBusLine;
-        IBL myBL = BLFactory.GetBL("1");
+
         public ShowLinesWindow()
         {
             InitializeComponent();
-            lines = new ObservableCollection<BusLineBO>(myBL.GetAllLines());
-            cbLines.ItemsSource = lines;
-           
+
+
         }
 
-        private void lbLines_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ShowBusLine((cbLines.SelectedValue as BusLineBO).LineNumber);
-        }
 
-        private void ShowBusLine(string index)
-        {
-            //currentDisplayBusLine = lines.First();
-            
-            //lbLines.DataContext = currentDisplayBusLine.Stations;//show the stations of the selcted line
-            //tbArea.Text = currentDisplayBusLine.Region.ToString();//shoe the area of the selcted line
+            System.Windows.Data.CollectionViewSource busLineBOViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("busLineBOViewSource")));
+            // Load data by setting the CollectionViewSource.Source property:
+            // busLineBOViewSource.Source = [generic data source]
         }
     }
 }

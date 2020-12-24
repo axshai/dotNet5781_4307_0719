@@ -209,7 +209,8 @@ namespace Dal
 
         #endregion
 
-        #region BusStation Function
+         
+        #region BusStation functions
         public IEnumerable<BusStationDO> GetAllStations()
         {
             
