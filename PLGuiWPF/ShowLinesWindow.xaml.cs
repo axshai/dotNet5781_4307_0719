@@ -13,8 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
 using BLApi;
-using System.Collections.ObjectModel;
-
 namespace PLGuiWPF
 {
     /// <summary>
@@ -22,28 +20,26 @@ namespace PLGuiWPF
     /// </summary>
     public partial class ShowLinesWindow : Window
     {
-        ObservableCollection<BusLineBO> lines;//list of all lines
-        BusLineBO currentDisplayBusLine;
-        IBL myBL = BLFactory.GetBL("BLImp");
+        IBL blObject;
+        List<BusLineBO> lines;
         public ShowLinesWindow()
         {
             InitializeComponent();
-            lines = new ObservableCollection<BusLineBO>(myBL.GetAllLines());
-            cbLines.ItemsSource = lines;
-           
+            blObject = BLFactory.GetBL("1");
+            lines = blObject.GetAllLines().ToList();
+            lbLines.ItemsSource = lines;
         }
 
-        private void lbLines_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void delButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowBusLine((cbLines.SelectedValue as BusLineBO).LineNumber);
+
         }
 
-        private void ShowBusLine(string index)
+        private void lbLines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            //currentDisplayBusLine = lines.First();
-
-            //lbLines.DataContext = currentDisplayBusLine.Stations;//show the stations of the selcted line
-            //tbArea.Text = currentDisplayBusLine.Region.ToString();//shoe the area of the selcted line
+            BusLineBO line = lbLines.SelectedItem as BusLineBO;
+            ShowLineDetails ws1 = new ShowLineDetails(line);
+             ws1.Show();
         }
     }
 }

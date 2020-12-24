@@ -34,6 +34,6 @@
                 </Label.RenderTransform>
             </Label>
         </Grid>
-        <ListBox Name="lbBusLineStations" ItemsSource="{Binding}" HorizontalAlignment="Left" Height="286" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="774" Background="#FFC7ED44"/>
+        <ListBox Name="lbBusLineStations" ItemsSource="{Binding}" HorizontalAlignment="Left" Height="286" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="774" Background="#FFE2E780"/>
     </Grid>
 </Window>

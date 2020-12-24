@@ -34,5 +34,10 @@ namespace PLGuiWPF
             managWindow1.Show();
 
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+          
+        }
     }
 }
