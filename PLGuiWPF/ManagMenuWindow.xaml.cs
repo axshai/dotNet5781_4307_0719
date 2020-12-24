@@ -20,13 +20,12 @@ namespace PLGuiWPF
     /// Interaction logic for ManagMenuWindow.xaml
     /// </summary>
     public partial class ManagMenuWindow : Window
-    {
+    {           
         IBL myBL = BLFactory.GetBL("BLImp");
         ObservableCollection<BusLineBO> lines;//list of all lines
-        BusLineBO currentDisplayBusLine;
+        
         public ManagMenuWindow()
-
-        {
+        { 
             InitializeComponent();
             lines = new ObservableCollection<BusLineBO>(myBL.GetAllLines());
             lbLines.ItemsSource = lines;
@@ -38,8 +37,7 @@ namespace PLGuiWPF
 
         private void Buttonshowline_Click(object sender, RoutedEventArgs e)
         {
-            //ShowLinesWindow sw = new ShowLinesWindow();
-            //sw.Show();
+            (new ShowLinesWindow()).Show();
 
             lbLines.Visibility = Visibility.Visible;
             closeButton.Visibility = Visibility.Visible;
