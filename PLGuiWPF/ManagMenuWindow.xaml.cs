@@ -20,13 +20,13 @@ namespace PLGuiWPF
     /// Interaction logic for ManagMenuWindow.xaml
     /// </summary>
     public partial class ManagMenuWindow : Window
-    {           
+    {
         IBL myBL = BLFactory.GetBL("BLImp");
         ObservableCollection<BusLineBO> lines;//list of all lines
         BusLineBO currentDisplayBusLine;
         public ManagMenuWindow()
 
-        { 
+        {
             InitializeComponent();
             lines = new ObservableCollection<BusLineBO>(myBL.GetAllLines());
             lbLines.ItemsSource = lines;
