@@ -27,7 +27,7 @@ namespace PLGuiWPF
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
             lines = blObject.GetAllLines().ToList();
-            lbLines.ItemsSource = lines;
+            dgLines.ItemsSource = lines;
         }
 
         private void delButton_Click(object sender, RoutedEventArgs e)
@@ -35,11 +35,12 @@ namespace PLGuiWPF
 
         }
 
-        private void lbLines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+
+        private void dgLines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BusLineBO line = lbLines.SelectedItem as BusLineBO;
+            BusLineBO line = dgLines.SelectedItem as BusLineBO;
             ShowLineDetails ws1 = new ShowLineDetails(line);
-             ws1.Show();
+            ws1.Show();
         }
     }
 }
