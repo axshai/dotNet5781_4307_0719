@@ -9,5 +9,6 @@ namespace BLApi
     public interface IBL
     {
         IEnumerable<BusLineBO> GetAllLines();
+        void DeleteLine(int id);
     }
 }

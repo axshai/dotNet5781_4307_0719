@@ -21,16 +21,18 @@ namespace DalApi
         #region Line
         IEnumerable<BusLineDO> GetAllLines();
         BusLineDO GetLine(int id);
+
         #endregion
 
         #region LineStation
         IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate);
         #endregion
-        
+
         #region BusStation
         BusStationDO GetBusStation(int key);
+        IEnumerable<BusStationDO> GetAllStations();
         #endregion
-        
+
         #region ConsecutiveStations
         ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2);
         #endregion
@@ -39,9 +41,8 @@ namespace DalApi
         IEnumerable<BusLineScheduleDO> GetAllSchedulesBy(Predicate<BusLineScheduleDO> predicate);
         #endregion
 
-        IEnumerable<BusStationDO> GetAllStations();
-
-
+     
+        void DeleteLine(int id);
     }
 
 

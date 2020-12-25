@@ -121,11 +121,19 @@ namespace BL
                        StationName = station.StationName,
                        ListOfLines = getLinesOfStations(station.StationKey)
                    };
-        }        
-        
+        }
+
+        public void DeleteLine(int id)
+        {
+            //myDal.DeleteLine(id);
 
 
 
+
+
+
+
+        }
     }
 }
 
