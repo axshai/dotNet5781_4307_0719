@@ -21,7 +21,15 @@ namespace DalApi
         #region Line
         IEnumerable<BusLineDO> GetAllLines();
         BusLineDO GetLine(int id);
+        public void DeleteLine(int id);
+        void UpdateLine(int id, Action<BusLineDO> toUpdate);
+        void UpdateLine(BusLineDO line);
+        void AddLine(BusLineDO line);
+        IEnumerable<BusLineDO> GetAllLinesBy(Predicate<BusLineDO> predicate);
+
+
         #endregion
+
 
         #region LineStation
         IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate);
@@ -42,6 +50,7 @@ namespace DalApi
         void DeleteSchedule(int lineId, TimeSpan start);
         void AddSchedule(BusLineScheduleDO toadd);
         #endregion
+
 
 
 

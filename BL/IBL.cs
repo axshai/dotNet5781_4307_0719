@@ -17,5 +17,7 @@ namespace BLApi
         void UpdateSchedule(BusLineScheduleBO toUpdate, int newFreq);//ניתן לעדכן רק תדירות! כל השאר זה מפתח הישות
         void AddSchedule(int lineId, TimeSpan begin, TimeSpan end, int freq);
         #endregion
+
+        
     }
 }

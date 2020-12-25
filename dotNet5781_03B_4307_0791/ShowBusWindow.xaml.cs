@@ -34,10 +34,10 @@ namespace dotNet5781_03B_4307_0791
         Bus bus;
         public ShowBusWindow(Bus myshowbus)//We will get a bus builder for the show
         {
-            InitializeComponent();
+           // InitializeComponent();
             bus = myshowbus; 
             busshow.Add(bus);
-            lbbuseshow.ItemsSource = busshow;//We will tie the List Box
+           // lbbuseshow.ItemsSource = busshow;//We will tie the List Box
             process = new BackgroundWorker(); //create new process
             timeCounter = new BackgroundWorker();
             process.DoWork += Process_DoWork; //Write the function for the event
