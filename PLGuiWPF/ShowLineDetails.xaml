@@ -50,14 +50,14 @@
                 <DataGridTextColumn Header=" start: " Binding="{Binding StartActivity}" />
                 <DataGridTextColumn Header=" end: " Binding="{Binding EndActivity}" />
                 <DataGridTextColumn Header=" frequency " Binding="{Binding frequency}" />
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button x:Name="updateSchelButton" Content="change" Margin="5" Background="#FFCDE4B0" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button x:Name="deleteSchelButton" Content="delete" Margin="5" Background="#FFCCB2E4" />
@@ -74,10 +74,12 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button x:Name="stationAddButton" Content="add new station" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
-            <Button  x:Name="stationDelButton" Content="delete station" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
-            <Button  x:Name="schedAddButton" Content="add new schedule" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
+            <Button  x:Name="renameButton" Content="rename the line" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
+            <Button x:Name="stationAddButton" Content="add new station" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
+            <Button  x:Name="stationDelButton" Content="delete station" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
+            <Button  x:Name="schedAddButton" Content="add new schedule" Grid.Row="3" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
         </Grid>
     </Grid>
 
