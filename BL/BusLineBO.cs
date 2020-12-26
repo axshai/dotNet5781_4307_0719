@@ -11,9 +11,9 @@ namespace BO
     {
         
         public IEnumerable<BusLineStationBO> StationList { get; set; }//List of stations for the line
+        public IEnumerable<BusStationBO> restStationList { get; set; }//List of stations that the line doesnt pass there
         public IEnumerable<BusLineScheduleBO> ScheduleList { get; set; }//List of Schedule Line
         public string LineNumber { get; set; }
-        public BusLineStationBO LastStationBO { get; set; }
         public int Id { get; set; } 
         public override string ToString()
         {

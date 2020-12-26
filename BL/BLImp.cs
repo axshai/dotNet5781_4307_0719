@@ -105,7 +105,8 @@ namespace BL
                        Id = line.Id,
                        StationList = getStationsOfLine(line.Id),
                        ScheduleList = getSchedulesOfLine(line.Id),
-                       LineNumber = line.LineNumber
+                       LineNumber = line.LineNumber,
+                        restStationList=getRestStations(line.Id)
                    };
 
         }
@@ -199,8 +200,15 @@ namespace BL
             myDal.AddSchedule(new BusLineScheduleDO
             { IsExists = true, StartActivity = begin1, EndActivity = end1, frequency = freq, LineId = lineId });
 
+            
 
+        }
 
+        public IEnumerable<BusStationBO> getRestStations(int lineId)
+        {
+            return from station in GetAllStation()
+                   where !GetAllLines().FirstOrDefault(line => line.Id == lineId).StationList.Any(state => state.StationKey == station.StationKey)
+                   select new BusStationBO { ListOfLines = getLinesOfStations(station.StationKey), StationKey = station.StationKey, StationName = station.StationName };
         }
     }
 }

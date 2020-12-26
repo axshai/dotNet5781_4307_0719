@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowLineDetails" Height="800" Width="700" >
+        Title="ShowLineDetails" Height="600" Width="700" >
     <Window.Resources>
         <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#FF99EDF1" />
@@ -26,8 +26,8 @@
 
     <Grid Background="#FFE5F5F9" HorizontalAlignment="Stretch"   VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -35,17 +35,17 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <DataGrid  x:Name="dgStations" Style="{StaticResource dataGridStyle}"  Grid.Column="0" Grid.Row="0"  VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="30,50" FontSize="18" Grid.ColumnSpan="2">
+        <DataGrid x:Name="dgStations" Style="{StaticResource dataGridStyle}"  Grid.Column="0" Grid.Row="0"  VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="30,50" FontSize="18" Grid.ColumnSpan="2" ItemsSource="{Binding StationList}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header=" key " Binding="{Binding StationKey}" />
+                <DataGridTextColumn Header=" key " Binding="{Binding StationKey}"/>
                 <DataGridTextColumn Header=" Name " Binding="{Binding StationName}" />
-                <DataGridTextColumn Header=" Distance from previous station: " Binding="{Binding DistanceFromPrev}" />
+                <DataGridTextColumn Header=" Distance from previous station: " Binding="{Binding DistanceFromPrev}"/>
                 <DataGridTextColumn Header=" time from previous station: " Binding="{Binding TimeFromPrev}" />
 
             </DataGrid.Columns>
 
         </DataGrid>
-        <DataGrid x:Name="dgSchedule" Style="{StaticResource dataGridStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,20" Grid.Column="0" Height="180"  Width="400" Grid.Row="1" Grid.ColumnSpan="2"  >
+        <DataGrid x:Name="dgSchedule" Style="{StaticResource dataGridStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,20" Grid.Column="0" Height="180"  Width="400" Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding ScheduleList}"  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header=" start: " Binding="{Binding StartActivity}" />
                 <DataGridTextColumn Header=" end: " Binding="{Binding EndActivity}" />
@@ -76,11 +76,49 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button  x:Name="renameButton" Content="rename the line" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
-            <Button x:Name="stationAddButton" Content="add new station" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
-            <Button  x:Name="stationDelButton" Content="delete station" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
-            <Button  x:Name="schedAddButton" Content="add new schedule" Grid.Row="3" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" />
+            <Button  x:Name="renameButton" Content="rename the line" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="renameButton_Click" >
+            <Button.Style>
+                <Style>
+                    <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=tbxRename, Path=IsVisible}" Value="true">
+                            <Setter Property="Button.Visibility" Value="Hidden">
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            </Button>
+            <Button x:Name="stationAddButton" Content="add new station" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="stationAddButton_Click">
+                <Button.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=cbAddStat, Path=IsVisible}" Value="true">
+                                <Setter Property="Button.Visibility" Value="Hidden">
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button  x:Name="stationDelButton" Content="delete station" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="stationDelButton_Click" >
+                <Button.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=cbDelStat, Path=IsVisible}" Value="true">
+                            <Setter Property="Button.Visibility" Value="Hidden">
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+            </Button>
+            <Button  x:Name="schedAddButton" Content="add new schedule" Grid.Row="3" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol"/>
+
+            <ComboBox Name="cbAddStat" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol" DisplayMemberPath="StationKey" Visibility="Hidden" SelectionChanged="cbAddStat_SelectionChanged"  DropDownClosed="cbAddStat_DropDownClosed" ItemsSource="{Binding restStationList}"/>
+            <ComboBox Name="cbDelStat" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol" DisplayMemberPath="StationKey" Visibility="Hidden" SelectionChanged="cbDelStat_SelectionChanged"  DropDownClosed="cbDelStat_DropDownClosed" ItemsSource="{Binding StationList}"/>
+            <TextBox x:Name="tbxRename" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol"  Visibility="Hidden"  KeyDown="tbxRename_KeyDown" />
         </Grid>
     </Grid>
 
+    
 </Window>

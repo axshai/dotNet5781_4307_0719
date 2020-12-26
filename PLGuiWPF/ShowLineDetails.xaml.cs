@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
+using BLApi;
 namespace PLGuiWPF
 {
     /// <summary>
@@ -20,13 +21,59 @@ namespace PLGuiWPF
     public partial class ShowLineDetails : Window
     {
         BusLineBO showedLine;
+        IBL b1 = BLFactory.GetBL("1");
         public ShowLineDetails(BusLineBO currentLine)
         {
             InitializeComponent();
             showedLine = currentLine;
-            dgSchedule.ItemsSource = currentLine.ScheduleList;
-            dgStations.ItemsSource = currentLine.StationList;
+            this.DataContext = showedLine;
+        }
 
+        private void stationDelButton_Click(object sender, RoutedEventArgs e)
+        {
+            cbDelStat.Visibility = Visibility.Visible;
+            cbDelStat.IsDropDownOpen = true;
+
+
+        }
+
+        private void cbDelStat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+          
+        }
+
+
+        private void cbDelStat_DropDownClosed(object sender, EventArgs e)
+        {
+            (sender as ComboBox).Visibility = Visibility.Hidden;
+        }
+
+        private void cbAddStat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void cbAddStat_DropDownClosed(object sender, EventArgs e)
+        {
+            (sender as ComboBox).Visibility = Visibility.Hidden;
+        }
+
+        private void stationAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            cbAddStat.Visibility = Visibility.Visible;
+            cbAddStat.IsDropDownOpen = true;
+        }
+
+        private void renameButton_Click(object sender, RoutedEventArgs e)
+        {
+            tbxRename.Visibility = Visibility.Visible;
+
+        }
+
+        private void tbxRename_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)//if he  Press enter
+                (sender as TextBox).Visibility = Visibility.Hidden;
         }
     }
 }
