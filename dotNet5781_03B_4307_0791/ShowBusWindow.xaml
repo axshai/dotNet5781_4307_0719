@@ -9,7 +9,7 @@
     <Grid x:Name="myG">
         <Grid HorizontalAlignment="Stretch"   VerticalAlignment="Stretch" Width="100"/>
         <ComboBox x:Name="cbLines"  Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="15"   DisplayMemberPath="LineNumber"  />
-        <ListBox x:Name="lbLines" Grid.Row="1" Grid.ColumnSpan="4"  HorizontalAlignment="Center" VerticalAlignment="Center"  Width="708" Height="316" Margin="43,10,42.6,10" SelectionChanged="lbLines_SelectionChanged"/>
+        <ListBox x:Name="lbLines" Grid.Row="1" Grid.ColumnSpan="4"  HorizontalAlignment="Center" VerticalAlignment="Center"  Width="708" Height="316" Margin="43,10,42.6,10" />
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="4*"/>
