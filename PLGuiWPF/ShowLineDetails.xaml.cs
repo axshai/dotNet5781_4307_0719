@@ -75,5 +75,11 @@ namespace PLGuiWPF
             if (e.Key == Key.Enter)//if he  Press enter
                 (sender as TextBox).Visibility = Visibility.Hidden;
         }
+
+        private void schedAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            NewScheduleWindow w1 = new NewScheduleWindow();
+            w1.Show();
+        }
     }
 }

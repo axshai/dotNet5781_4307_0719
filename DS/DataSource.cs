@@ -96,6 +96,15 @@ namespace DS
                 Latitude = 37,
                 IsExists = true
             });
+            
+            BusStations.Add(new BusStationDO
+            {
+                StationKey = 91011,
+                StationName = "hgefen",
+                Longitude = 32,
+                Latitude = 37,
+                IsExists = true
+            });
         }
 
         private static void InitConsecutiveStations()
