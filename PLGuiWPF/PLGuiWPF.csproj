@@ -59,6 +59,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters.cs" />
+    <Compile Include="FrequencyWindow.xaml.cs">
+      <DependentUpon>FrequencyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewScheduleWindow.xaml.cs">
       <DependentUpon>NewScheduleWindow.xaml</DependentUpon>
     </Compile>
@@ -68,6 +71,10 @@
     <Compile Include="ShowLineDetails.xaml.cs">
       <DependentUpon>ShowLineDetails.xaml</DependentUpon>
     </Compile>
+    <Page Include="FrequencyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

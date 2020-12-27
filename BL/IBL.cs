@@ -11,8 +11,8 @@ namespace BLApi
     {
         #region lines functions
         IEnumerable<BusLineBO> GetAllLines();
-        void Deleteline(int id);
-
+        void DeleteLine(int id);
+        BusLineBO GetLine(int id);
         #endregion
 
         #region Schedules functions

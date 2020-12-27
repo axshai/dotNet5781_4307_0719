@@ -56,6 +56,7 @@ namespace DS
 
             });
 
+
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 82.ToString(),
@@ -130,7 +131,7 @@ namespace DS
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
 
-            }) ;
+            });
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 512.ToString(),
@@ -162,7 +163,7 @@ namespace DS
                 StationName = "frankfurter",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.CENTER,
+                StationArea = Area.CENTER,
                 IsExists = true
 
             }) ; ;
@@ -173,7 +174,7 @@ namespace DS
                 StationName = "rotchild",
                 Longitude = 38,
                 Latitude = 36,
-                Stationarea = Area.CENTER,
+                StationArea = Area.CENTER,
                 IsExists = true
             });
 
@@ -183,7 +184,7 @@ namespace DS
                 StationName = "herzel",
                 Longitude = 37,
                 Latitude = 37,
-                Stationarea = Area.CENTER,
+                StationArea = Area.CENTER,
                 IsExists = true
             });
             
@@ -193,17 +194,17 @@ namespace DS
                 StationName = "hgefen",
                 Longitude = 32,
                 Latitude = 37,
-                Stationarea = Area.CENTER,
+                StationArea = Area.CENTER,
                 IsExists = true
             });
 
             BusStations.Add(new BusStationDO
             {
                 StationKey = 111213,
-                StationName = "elicohen",
+                StationName = "eli cohen",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.CENTER,
+                StationArea = Area.CENTER,
                 IsExists = true
             });
             BusStations.Add(new BusStationDO
@@ -212,113 +213,113 @@ namespace DS
                 StationName = "hzra",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.CENTER,
+                StationArea = Area.CENTER,
                 IsExists = true
             });
             BusStations.Add(new BusStationDO
             {
                 StationKey = 171819,
-                StationName = "benlakish",
+                StationName = "ben lakish",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.JERUSALEM,
+                StationArea = Area.JERUSALEM,
                 IsExists = true
             });
             BusStations.Add(new BusStationDO
             {
                 StationKey = 202122,
-                StationName = "rebiakiva",
+                StationName = "rebi akiva",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.JERUSALEM,
+                StationArea = Area.JERUSALEM,
                 IsExists = true
             });
 
             BusStations.Add(new BusStationDO
             {
                 StationKey = 232425,
-                StationName = "benazy",
+                StationName = "ben azy",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.SHFELA,
+                StationArea = Area.SHFELA,
                 IsExists = true
             });
 
             BusStations.Add(new BusStationDO
             {
                 StationKey = 262728,
-                StationName = "yonahanvie",
+                StationName = "yona hanvie",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.SHFELA,
+                StationArea = Area.SHFELA,
                 IsExists = true
             });
 
             BusStations.Add(new BusStationDO
             {
                 StationKey = 293031,
-                StationName = "yoramgaon",
+                StationName = "yoram gaon",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.SHFELA,
+                StationArea = Area.SHFELA,
                 IsExists = true
             });
 
             BusStations.Add(new BusStationDO
             {
                 StationKey = 323334,
-                StationName = "arikaynshten",
+                StationName = "arik aynshtein",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.SHFELA,
+                StationArea = Area.SHFELA,
                 IsExists = true
             });
 
             BusStations.Add(new BusStationDO
             {
                 StationKey = 353637,
-                StationName = "harvovdia",
+                StationName = "harv ovdia",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.NORTH,
+                StationArea = Area.NORTH,
                 IsExists = true
             });
             BusStations.Add(new BusStationDO
             {
                 StationKey = 383940,
-                StationName = "harvshach",
+                StationName = "harv shach",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.NORTH,
+                StationArea = Area.NORTH,
                 IsExists = true
             });
 
             BusStations.Add(new BusStationDO
             {
                 StationKey = 414243,
-                StationName = "harvchimpinto",
+                StationName = "harv chaim pinto",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.SOUTH,
+                StationArea = Area.SOUTH,
                 IsExists = true
             });
 
             BusStations.Add(new BusStationDO
             {
                 StationKey = 444546,
-                StationName = "harvshtynam",
+                StationName = "harv shtynam",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.SOUTH,
+                StationArea = Area.SOUTH,
                 IsExists = true
             });
             BusStations.Add(new BusStationDO
             {
                 StationKey = 474849,
-                StationName = "aliluzon",
+                StationName = "ali luzon",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.WESTBANK,
+                StationArea = Area.WESTBANK,
                 IsExists = true
             });
             BusStations.Add(new BusStationDO
@@ -327,7 +328,7 @@ namespace DS
                 StationName = "hpoalim",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.WESTBANK,
+                StationArea = Area.WESTBANK,
                 IsExists = true
             });
             BusStations.Add(new BusStationDO
@@ -336,7 +337,7 @@ namespace DS
                 StationName = "mizrachi",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.WESTBANK,
+                StationArea = Area.WESTBANK,
                 IsExists = true
             });
             BusStations.Add(new BusStationDO
@@ -345,7 +346,7 @@ namespace DS
                 StationName = "hamoshava",
                 Longitude = 34,
                 Latitude = 32,
-                Stationarea = Area.WESTBANK,
+                StationArea = Area.WESTBANK,
                 IsExists = true
             });
         }
@@ -688,7 +689,7 @@ namespace DS
             BusLineSchedules.Add(new BusLineScheduleDO
             {
                 StartActivity = TimeSpan.Parse("21:00:00"),
-                EndActivity = TimeSpan.Parse("01:00:00"),
+                EndActivity = TimeSpan.Parse("23:00:00"),
                 LineId = 5,
                 frequency = 3,
                 IsExists = true
@@ -744,15 +745,6 @@ namespace DS
 
             });
 
-            BusLineSchedules.Add(new BusLineScheduleDO
-            {
-                StartActivity = TimeSpan.Parse("12:00:00"),
-                EndActivity = TimeSpan.Parse("14:00:00"),
-                LineId = 1,
-                frequency = 10,
-                IsExists = true
-
-            });
 
             BusLineSchedules.Add(new BusLineScheduleDO
             {

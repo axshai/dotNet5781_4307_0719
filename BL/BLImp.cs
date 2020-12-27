@@ -106,10 +106,11 @@ namespace BL
                    select new BusLineBO
                    {
                        Id = line.Id,
+                       Area = (BO.Area)((int)line.LineArea),
                        StationList = getStationsOfLine(line.Id),
                        ScheduleList = getSchedulesOfLine(line.Id),
                        LineNumber = line.LineNumber,
-                        restStationList=getRestStations(line.Id)
+                       restStationList = getRestStations(line.Id)
                    };
 
         }
@@ -190,7 +191,7 @@ namespace BL
 
                 if (item.StartActivity > begin1)//אם הוא מתחיל בתוך החדש
                     myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, begin: end1);//עשה שיתחיל אחריו
-               else if (item.EndActivity < end1)//אם נגמר בתוך החדש
+                else if (item.EndActivity < end1)//אם נגמר בתוך החדש
                     myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, end: begin1);//עשה שיגמר לפניו
                 else
                 {
@@ -203,32 +204,64 @@ namespace BL
             myDal.AddSchedule(new BusLineScheduleDO
             { IsExists = true, StartActivity = begin1, EndActivity = end1, frequency = freq, LineId = lineId });
 
-            
+
 
         }
-
+        /// <summary>
+        /// The function receives a line number and returns a list of stations that can be added to the line
+        /// </summary>
+        /// <param name="lineId">the id of the wanted line</param>
+        /// <returns></returns>
         public IEnumerable<BusStationBO> getRestStations(int lineId)
         {
-            return from station in GetAllStation()
-                   where !GetAllLines().FirstOrDefault(line => line.Id == lineId).StationList.Any(state => state.StationKey == station.StationKey)
-                   select new BusStationBO { ListOfLines = getLinesOfStations(station.StationKey), StationKey = station.StationKey, StationName = station.StationName };
+            BusLineDO line = myDal.GetLine(lineId);
+            return from station in myDal.GetAllStations()
+                   where !myDal.GetAllLineStationsBy(stat => stat.LineId == lineId).Any(state1 => state1.StationKey == station.StationKey) && (line.LineArea == DO.Area.GENERAL || line.LineArea == station.StationArea)
+                   select new BusStationBO
+                   {
+                       Area = (BO.Area)(int)station.StationArea,
+                       StationKey = station.StationKey,
+                       StationName = station.StationName,
+                       ListOfLines = getLinesOfStations(station.StationKey)
+                   };
         }
 
-        public void Deleteline(int id)
+
+
+        public void DeleteLine(int id)
         {
             try { myDal.DeleteLine(id); }
 
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception(ex.Message, ex);
             }
 
-           
+        }
 
+        public BusLineBO GetLine(int id)
+        {
+            try
+            {
+                BusLineDO line = myDal.GetLine(id);
+                
+                return new BusLineBO
+                {
+                    Id = line.Id,
+                    Area = (BO.Area)((int)line.LineArea),
+                    StationList = getStationsOfLine(line.Id),
+                    ScheduleList = getSchedulesOfLine(line.Id),
+                    LineNumber = line.LineNumber,
+                    restStationList = getRestStations(line.Id)
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
         }
     }
 }
-
 
 
 
