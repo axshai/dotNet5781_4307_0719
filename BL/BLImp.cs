@@ -7,6 +7,8 @@ using BLApi;
 using DalApi;
 using BO;
 using DO;
+using System.ComponentModel;
+
 namespace BL
 {
     internal class BLImp : IBL
@@ -26,6 +28,7 @@ namespace BL
         #endregion
 
         IDAL myDal = DLFactory.GetDL();
+
 
         #region private functions-help to the IBLS functions
         /// <summary>
@@ -209,6 +212,19 @@ namespace BL
             return from station in GetAllStation()
                    where !GetAllLines().FirstOrDefault(line => line.Id == lineId).StationList.Any(state => state.StationKey == station.StationKey)
                    select new BusStationBO { ListOfLines = getLinesOfStations(station.StationKey), StationKey = station.StationKey, StationName = station.StationName };
+        }
+
+        public void Deleteline(int id)
+        {
+            try { myDal.DeleteLine(id); }
+
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+           
+
         }
     }
 }

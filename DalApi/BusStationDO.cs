@@ -15,6 +15,8 @@ namespace DO
         public double Longitude { get; set; }
         public string StationName { get; set; }
         public bool IsExists { get; set; }
+
+        public Area Stationarea { get; set; }
         public override string ToString()
         {
             string result = "StationKey: " + StationKey.ToString() + "\nLatitude: " + Latitude.ToString() + "\nLongitude" + Longitude.ToString() + "\nStationName: " + StationName + "\nIsExists? " + IsExists.ToString();

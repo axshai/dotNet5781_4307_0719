@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BO;
 namespace BLApi
 {
-    public interface IBL
+    public interface IBL 
     {
         #region lines functions
         IEnumerable<BusLineBO> GetAllLines();
+        void Deleteline(int id);
+
         #endregion
 
         #region Schedules functions

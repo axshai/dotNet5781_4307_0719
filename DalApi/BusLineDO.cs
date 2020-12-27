@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,12 @@ namespace DO
         public Area LineArea { get; set; }
         public int FirstStationKey { get; set; }
         public int LastStationKey { get; set; }
-        public bool IsExists { get; set; }//להחזיר אוטובוס לשירות.יש משהו שתלוי בה
+        public bool IsExists
+        {
+            get; set;
+
+        }
+
         public override string ToString()
         {
             string result = "Id: " + Id.ToString() + "\nLineNumber: " + LineNumber + "\nLineArea: " + LineArea.ToString() + "\nFirstStationKey: " + FirstStationKey.ToString() + "\nFirstStationKey:  " + FirstStationKey.ToString() + "\nLastStationKey:  " + LastStationKey.ToString() + "IsExists? " + IsExists.ToString();

@@ -32,7 +32,8 @@ namespace PLGuiWPF
 
         private void delButton_Click(object sender, RoutedEventArgs e)
         {
-
+            BusLineBO line = dgLines.SelectedItem as BusLineBO;
+            blObject.Deleteline(line.Id);
         }
 
 

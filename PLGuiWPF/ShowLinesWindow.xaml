@@ -42,7 +42,7 @@
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="delButton" Content="delete" Margin="5" Background="#FFCDE4B0"  />
+                            <Button x:Name="delButton" Content="delete" Margin="5"  Click="delButton_Click"  Background="#FFCDE4B0"  />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

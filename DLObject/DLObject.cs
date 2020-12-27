@@ -70,9 +70,12 @@ namespace Dal
         public void DeleteLine(int id)
         {
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
-            if (line != null)
-                line.IsExists = false;
-            throw new Exception("This Line was not found!");
+            if (line == null)
+         {
+                throw new Exception("This Line was not found!");
+        }
+            line.IsExists = false;
+
         }
         #endregion
 
