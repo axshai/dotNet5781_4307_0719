@@ -29,7 +29,7 @@ namespace PLGuiWPF
             lines = blObject.GetAllLines().ToList();
             dgLines.ItemsSource = lines;
 
-            DataContext = this;
+            //DataContext = this;
         }
 
         private void delButton_Click(object sender, RoutedEventArgs e)

@@ -71,6 +71,12 @@
     <Compile Include="ShowLineDetails.xaml.cs">
       <DependentUpon>ShowLineDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShowStationDetails.xaml.cs">
+      <DependentUpon>ShowStationDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShowStationWindow.xaml.cs">
+      <DependentUpon>ShowStationWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="FrequencyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -100,6 +106,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ShowLineDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShowStationDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShowStationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
