@@ -28,12 +28,15 @@ namespace PLGuiWPF
             blObject = BLFactory.GetBL("1");
             lines = blObject.GetAllLines().ToList();
             dgLines.ItemsSource = lines;
+
+            DataContext = this;
         }
 
         private void delButton_Click(object sender, RoutedEventArgs e)
         {
             //BusLineBO line = dgLines.SelectedItem as BusLineBO;
             //blObject.Deleteline(line.Id);
+            //lines = blObject.GetAllLines().ToList();
         }
 
 
