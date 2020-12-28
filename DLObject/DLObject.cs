@@ -123,7 +123,8 @@ namespace Dal
             UserDO user1 = DataSource.Users.Find(user => user.Name == name && user.IsExists == true);
             if (user1 != null)
                 toUpdate(user1);
-            throw new Exception("This user was not found!");
+            else
+                throw new Exception("This user was not found!");
         }
 
         public void DeleteUser(string name)
@@ -131,7 +132,8 @@ namespace Dal
             UserDO user1 = DataSource.Users.Find(user => user.Name == name && user.IsExists == true);
             if (user1 != null)
                 user1.IsExists = false;
-            throw new Exception("This user was not found!");
+            else
+                throw new Exception("This user was not found!");
         }
         #endregion
 
@@ -185,13 +187,14 @@ namespace Dal
             LineStationDO station1 = DataSource.LineStations.Find(station => station.StationKey == key && station.IsExist == true);
             if (station1 != null)
                 toUpdate(station1);
-            throw new Exception("This station was not found!");
+            else
+                throw new Exception("This station was not found!");
         }
 
         public void AddLineStation(LineStationDO station)
         {
             LineStationDO toAdd = station.Clone();
-            if (DataSource.LineStations.Exists(station1 => station1.LineId==station.LineId && station1.StationKey == station.StationKey&& station1.IsExist==true))
+            if (DataSource.LineStations.Exists(station1 => station1.LineId == station.LineId && station1.StationKey == station.StationKey && station1.IsExist == true))
                 throw new Exception("There is already such a LineStation with the same key in the system!");
             DataSource.LineStations.Add(toAdd);
         }
@@ -280,7 +283,7 @@ namespace Dal
             DataSource.BusLineSchedules.Add(toadd.Clone());
         }
 
-      
+
         #endregion
     }
 

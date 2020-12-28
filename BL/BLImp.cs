@@ -322,11 +322,11 @@ namespace BL
 
             else
             {
-                index = line.StationList.ToList().FindIndex(state => state.StationKey == prevStationKey)+1;
+                index = line.StationList.ToList().FindIndex(state => state.StationKey == prevStationKey)+2;
                 if (nextDistance == null)//if we dont  received details about time and distance between the stations
                     try
                     {
-                        myDal.GetConsecutiveStations(stationKey, line.StationList.ElementAt(index).StationKey);
+                        myDal.GetConsecutiveStations(stationKey, line.StationList.ElementAt(index-1).StationKey);
                     }
                     catch (Exception ex)
                     {
@@ -335,7 +335,7 @@ namespace BL
 
                 else//if we need to add ConsecutiveStation
                 {
-                    addConsecutiveStations(stationKey, line.StationList.ElementAt(index).StationKey, (double)nextDistance, (TimeSpan)NextTime);
+                    addConsecutiveStations(stationKey, line.StationList.ElementAt(index-1).StationKey, (double)nextDistance, (TimeSpan)NextTime);
                 }
 
                 if (PrevDistance == null)//if we dont  received details about tome and distance between the stations
