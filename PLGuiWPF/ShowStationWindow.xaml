@@ -1,0 +1,54 @@
+﻿<Window x:Class="PLGuiWPF.ShowStationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLGuiWPF"
+        mc:Ignorable="d"
+        Title="ShowStationWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:ListOfStationsToFirst 
+             x:Key="ListOfStationsToFirst"/>
+        <local:ListOfStationsToLast
+             x:Key="ListOfStationsToLast"/>
+
+        <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#FF99EDF1" />
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+
+        </Style>
+        <Style x:Key="dataGridStyle"  TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource HeaderStyle}"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Background" Value="#FF99D3F1"/>
+            <Setter  Property="FontSize" Value="18"/>
+            <Setter  Property="ColumnWidth" Value="auto"/>
+        </Style>
+
+    </Window.Resources>
+    <Grid Background="#FFE5F5F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid x:Name="dgStations" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgLines_MouseDoubleClick"  >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="StationName"  Binding="{Binding StationName}" Width="*" />
+                <DataGridTextColumn Header="station key" Binding="{Binding StationKey}" Width="*"/>
+                <DataGridTextColumn Header="Latitude" Binding="{Binding Area}"  Width="*"/>
+                <DataGridTextColumn Header="Longitude" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToLast}}" Width="*"/>
+                <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="*"/>
+
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="delButton" Content="delete" Margin="5"  Click="delButton_Click"  Background="#FFCDE4B0"  />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

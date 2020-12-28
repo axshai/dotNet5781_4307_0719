@@ -21,6 +21,8 @@ namespace BLApi
         void AddSchedule(int lineId, TimeSpan begin, TimeSpan end, int freq);
         #endregion
 
-        
+        #region BusStation functions
+        IEnumerable<BusStationBO> GetAllStation();
+        #endregion
     }
 }

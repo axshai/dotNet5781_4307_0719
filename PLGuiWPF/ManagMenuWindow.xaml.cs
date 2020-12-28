@@ -49,5 +49,11 @@ namespace PLGuiWPF
             closeButton.Visibility = Visibility.Collapsed;
 
         }
+
+        private void ButtonshowStation_Click(object sender, RoutedEventArgs e)
+        {
+            ShowStationWindow ShowStation = new ShowStationWindow();
+            ShowStation.Show();
+        }
     }
 }

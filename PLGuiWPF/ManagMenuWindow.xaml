@@ -7,9 +7,10 @@
         mc:Ignorable="d"
         Title="ManagMenuWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="ShowAllLines" HorizontalAlignment="Left" Height="53" Margin="29,62,0,0" VerticalAlignment="Top" Width="144"  Click="Buttonshowline_Click"  />
+        <Button  x:Name="Buttonshowline" Content="Show All Lines" HorizontalAlignment="Left" Height="53" Margin="29,62,0,0" VerticalAlignment="Top" Width="144"  Click="Buttonshowline_Click"  />
         <ListBox x:Name="lbLines"  HorizontalAlignment="Left" Height="271" Margin="0,149,0,0" VerticalAlignment="Top" Width="322"/>
         <Button  x:Name="closeButton" Content="Close the lines view" HorizontalAlignment="Left" Margin="201,62,0,0" VerticalAlignment="Top" Width="75" Height="53" Click="Buttoncloseline_Click"/>
         <TextBlock Text="{Binding BusLineBO}" Margin="452,120,136.6,106"/>
+        <Button   x:Name="ButtonshowStation"  Content="Show All BusStations" HorizontalAlignment="Left" Margin="316,62,0,0" VerticalAlignment="Top" Width="98" Height="53"  Click="ButtonshowStation_Click"/>
     </Grid>
 </Window>

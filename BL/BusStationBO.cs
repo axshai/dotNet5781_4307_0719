@@ -12,6 +12,8 @@ namespace BO
 
         public string StationName { get; set; }
         public int StationKey { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public Area Area { get; set; }
         public override string ToString()
         { return "key: " + StationKey + " name: " + StationName; }

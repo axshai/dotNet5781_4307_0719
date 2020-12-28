@@ -125,9 +125,13 @@ namespace BL
                    orderby station.StationKey
                    select new BusStationBO
                    {
+                       Area = (BO.Area)(int)station.StationArea,
                        StationKey = station.StationKey,
                        StationName = station.StationName,
-                       ListOfLines = getLinesOfStations(station.StationKey)
+                       ListOfLines = getLinesOfStations(station.StationKey),
+                       Latitude = station.Latitude,
+                       Longitude = station.Longitude
+                       
                    };
         }
         /// <summary>
@@ -222,7 +226,11 @@ namespace BL
                        Area = (BO.Area)(int)station.StationArea,
                        StationKey = station.StationKey,
                        StationName = station.StationName,
-                       ListOfLines = getLinesOfStations(station.StationKey)
+                       ListOfLines = getLinesOfStations(station.StationKey),
+                       Latitude = station.Latitude,
+                       Longitude=station.Longitude
+            
+                       
                    };
         }
 
@@ -260,6 +268,7 @@ namespace BL
                 throw new Exception(ex.Message, ex);
             }
         }
+
     }
 }
 
