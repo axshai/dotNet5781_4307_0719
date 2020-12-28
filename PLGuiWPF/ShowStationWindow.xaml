@@ -33,21 +33,14 @@
             <RowDefinition Height="70"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dgStations" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgLines_MouseDoubleClick"  >
+        <DataGrid x:Name="dgStations" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgStations_MouseDoubleClick"  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="StationName"  Binding="{Binding StationName}" Width="*" />
                 <DataGridTextColumn Header="station key" Binding="{Binding StationKey}" Width="*"/>
-                <DataGridTextColumn Header="Latitude" Binding="{Binding Area}"  Width="*"/>
-                <DataGridTextColumn Header="Longitude" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToLast}}" Width="*"/>
+                <DataGridTextColumn Header="Latitude" Binding="{Binding Latitude}"  Width="*"/>
+                <DataGridTextColumn Header="Longitude" Binding="{Binding Longitude}" Width="*"/>
                 <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="*"/>
 
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button x:Name="delButton" Content="delete" Margin="5"  Click="delButton_Click"  Background="#FFCDE4B0"  />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

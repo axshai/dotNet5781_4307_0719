@@ -110,7 +110,7 @@ namespace BL
         public IEnumerable<BusLineBO> GetAllLines()
         {
             return from line in myDal.GetAllLines()
-                   orderby line.LineNumber
+                   orderby line.LineNumber 
                    select new BusLineBO
                    {
                        Id = line.Id,
@@ -130,9 +130,12 @@ namespace BL
         public IEnumerable<BusStationBO> GetAllStation()
         {
             return from station in myDal.GetAllStations()
-                   orderby station.StationKey
+                   orderby station.StationArea
                    select new BusStationBO
                    {
+                       Area = (BO.Area)((int)station.StationArea),
+                        Latitude=station.Latitude,
+                        Longitude=station.Longitude,
                        StationKey = station.StationKey,
                        StationName = station.StationName,
                        ListOfLines = getLinesOfStations(station.StationKey)
@@ -231,7 +234,10 @@ namespace BL
                        Area = (BO.Area)(int)station.StationArea,
                        StationKey = station.StationKey,
                        StationName = station.StationName,
-                       ListOfLines = getLinesOfStations(station.StationKey)
+                       ListOfLines = getLinesOfStations(station.StationKey),
+                       Latitude = station.Latitude,
+                       Longitude = station.Longitude
+                       
                    };
         }
 

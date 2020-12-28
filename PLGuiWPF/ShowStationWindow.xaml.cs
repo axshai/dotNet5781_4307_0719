@@ -32,5 +32,14 @@ namespace PLGuiWPF
              dgStations.ItemsSource = stations;
 
         }
+
+        private void dgStations_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            BusStationBO Station = dgStations.SelectedItem as BusStationBO;
+            ShowStationDetails show = new ShowStationDetails(Station);
+
+
+
+        }
     }
 }
