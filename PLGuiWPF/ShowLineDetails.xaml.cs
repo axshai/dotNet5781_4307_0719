@@ -97,5 +97,10 @@ namespace PLGuiWPF
             (sender as TextBox).Visibility = Visibility.Hidden;
         }
 
+        private void deleteSchelButton_Click(object sender, RoutedEventArgs e)
+        {
+            b1.DeleteSchedule((sender as Button).DataContext as BusLineScheduleBO);
+            this.DataContext = b1.GetLine(showedLine.Id);
+        }
     }
 }

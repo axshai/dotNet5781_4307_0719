@@ -61,7 +61,7 @@
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="deleteSchelButton" Content="delete" Margin="5" Background="#FFCCB2E4" />
+                            <Button x:Name="deleteSchelButton" Content="delete" Margin="5" Background="#FFCCB2E4" Click="deleteSchelButton_Click" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

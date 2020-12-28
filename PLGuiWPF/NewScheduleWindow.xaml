@@ -21,9 +21,9 @@
     </Window.Resources>
     <Grid Background="#FFE5F5F9">
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE5F5F9"/>
-        <TextBox  Style="{StaticResource TextboxStyle}" Text="enter start time" Grid.Row="0" FontSize="18" />
-        <TextBox Style="{StaticResource TextboxStyle}" Text="enter end time" Grid.Row="1" FontSize="18" />
-        <TextBox Style="{StaticResource TextboxStyle}" Text="enter frequency" Grid.Row="2"  FontSize="18"/>
+        <TextBox x:Name="tbStart" Style="{StaticResource TextboxStyle}" Text="enter start time" Grid.Row="0" FontSize="18" KeyDown="tbStart_KeyDown" />
+        <TextBox x:Name="tbEnd" Style="{StaticResource TextboxStyle}" Text="enter end time" Grid.Row="1" FontSize="18" KeyDown="tbEnd_KeyDown" />
+        <TextBox x:Name="tbFreq" Style="{StaticResource TextboxStyle}" Text="enter frequency" Grid.Row="2"  FontSize="18" KeyDown="tbFreq_KeyDown" />
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
