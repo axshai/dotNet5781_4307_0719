@@ -12,20 +12,14 @@ namespace PLGuiConsole
         static void Main(string[] args)
         {
             IBL mybl = BLFactory.GetBL("1");
+            
             foreach (var item in mybl.GetAllLines())
             {
                 Console.WriteLine(item);
             }
             // BusLineScheduleBO b1 = new BusLineScheduleBO { EndActivity = TimeSpan.Parse("12:00:00"), StartActivity = TimeSpan.Parse("10:00:00"), frequency = 5, LineId = 1, LineNumber = 66.ToString() };
 
-            mybl.AddSchedule(1, TimeSpan.Parse("11:00:00"), TimeSpan.Parse("11:30:00"), 20);
 
-
-            foreach (var item in mybl.GetAllLines())
-            {
-                Console.WriteLine(item);
-            }
-            Console.ReadKey();
 
         }
     }

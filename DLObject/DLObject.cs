@@ -254,7 +254,6 @@ namespace Dal
             DataSource.BusLineSchedules.Add(toadd.Clone());
         }
 
-
         #endregion
     }
 

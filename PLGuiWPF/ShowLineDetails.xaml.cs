@@ -80,6 +80,27 @@ namespace PLGuiWPF
         {
             NewScheduleWindow w1 = new NewScheduleWindow();
             w1.Show();
+           
+        }
+
+        private void updateSchelButton_Click(object sender, RoutedEventArgs e)
+        {
+            FrequencyWindow wnd = new FrequencyWindow((sender as Button).DataContext as BusLineScheduleBO);
+            wnd.ShowDialog();
+            this.DataContext = b1.GetLine(showedLine.Id);
+
+        }
+
+
+        private void tbxRename_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            (sender as TextBox).Visibility = Visibility.Hidden;
+        }
+
+        private void deleteSchelButton_Click(object sender, RoutedEventArgs e)
+        {
+            b1.DeleteSchedule((sender as Button).DataContext as BusLineScheduleBO);
+            this.DataContext = b1.GetLine(showedLine.Id);
         }
     }
 }

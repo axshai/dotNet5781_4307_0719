@@ -34,7 +34,8 @@
             <ColumnDefinition Width ="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
+        <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="30,0" FontSize="16"  Content="line:" />
+        <Label Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="16"  Content="{Binding LineNumber}" />
         <DataGrid x:Name="dgStations" Style="{StaticResource dataGridStyle}"  Grid.Column="0" Grid.Row="0"  VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="30,50" FontSize="18" Grid.ColumnSpan="2" ItemsSource="{Binding StationList}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header=" key " Binding="{Binding StationKey}"/>
@@ -53,14 +54,14 @@
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="updateSchelButton" Content="change" Margin="5" Background="#FFCDE4B0" />
+                            <Button x:Name="updateSchelButton" Content="change" Margin="5" Background="#FFCDE4B0" Click="updateSchelButton_Click" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="deleteSchelButton" Content="delete" Margin="5" Background="#FFCCB2E4" />
+                            <Button x:Name="deleteSchelButton" Content="delete" Margin="5" Background="#FFCCB2E4" Click="deleteSchelButton_Click" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -76,7 +77,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button  x:Name="renameButton" Content="rename the line" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="renameButton_Click" >
+            <Button  x:Name="renameButton" Content="rename the line" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="renameButton_Click">
             <Button.Style>
                 <Style>
                     <Style.Triggers>
@@ -114,9 +115,9 @@
             </Button>
             <Button  x:Name="schedAddButton" Content="add new schedule" Grid.Row="3" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="schedAddButton_Click"/>
 
-            <ComboBox Name="cbAddStat" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol" DisplayMemberPath="StationKey" Visibility="Hidden" SelectionChanged="cbAddStat_SelectionChanged"  DropDownClosed="cbAddStat_DropDownClosed" ItemsSource="{Binding restStationList}"/>
-            <ComboBox Name="cbDelStat" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol" DisplayMemberPath="StationKey" Visibility="Hidden" SelectionChanged="cbDelStat_SelectionChanged"  DropDownClosed="cbDelStat_DropDownClosed" ItemsSource="{Binding StationList}"/>
-            <TextBox x:Name="tbxRename" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol"  Visibility="Hidden"  KeyDown="tbxRename_KeyDown" />
+            <ComboBox Name="cbAddStat" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol" DisplayMemberPath=" StationName" SelectedValue="StationKey" Visibility="Hidden" SelectionChanged="cbAddStat_SelectionChanged"  DropDownClosed="cbAddStat_DropDownClosed" ItemsSource="{Binding restStationList}"/>
+            <ComboBox Name="cbDelStat" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol"  DisplayMemberPath="StationKey" Visibility="Hidden" SelectionChanged="cbDelStat_SelectionChanged"  DropDownClosed="cbDelStat_DropDownClosed" ItemsSource="{Binding StationList}"/>
+            <TextBox x:Name="tbxRename" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol"  Visibility="Hidden"  KeyDown="tbxRename_KeyDown" LostKeyboardFocus="tbxRename_LostKeyboardFocus" />
         </Grid>
     </Grid>
 

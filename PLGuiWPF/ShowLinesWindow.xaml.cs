@@ -45,6 +45,7 @@ namespace PLGuiWPF
             BusLineBO line = dgLines.SelectedItem as BusLineBO;
             ShowLineDetails ws1 = new ShowLineDetails(line);
             ws1.Show();
+            dgLines.ItemsSource = blObject.GetAllLines().ToList();
         }
     }
 }

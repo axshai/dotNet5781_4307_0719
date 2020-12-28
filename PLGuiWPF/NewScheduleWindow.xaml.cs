@@ -23,5 +23,40 @@ namespace PLGuiWPF
         {
             InitializeComponent();
         }
+
+        private void tbStart_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)//if he  Press enter
+            {
+                addSched();
+
+            }
+        }
+
+        private void tbEnd_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)//if he  Press enter
+            {
+                addSched();
+
+            }
+        }
+
+        private void tbFreq_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)//if he  Press enter
+            {
+                addSched();
+
+            }
+        }
+
+        private void addSched()
+        {
+            string start = tbStart.Text;
+            string end = tbStart.Text;
+            string freq = tbFreq.Text;
+            
+        }
     }
 }

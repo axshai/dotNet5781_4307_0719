@@ -1,0 +1,23 @@
+﻿<Window x:Class="PLGuiWPF.FrequencyWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLGuiWPF"
+        mc:Ignorable="d"
+      Title="FrequencyWindow" Height="200" Width="300">
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE5F5F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+
+
+        <Label Margin="10" Width="200" VerticalAlignment="Stretch" Grid.Row="0" Content="enter new frequency" FontSize="18" HorizontalAlignment="Center" Background="#FFEDDBDB" Foreground="#FF127436" />
+        <TextBox x:Name="tbFreq" HorizontalAlignment="Stretch" Width="100" Height="45"   Margin="10" Grid.Row="1"   VerticalAlignment="Stretch" />
+        <Button x:Name="updateButton" Content="update" HorizontalAlignment="Center" Margin="15" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Background="#FFB99292" Click="updateButton_Click"/>
+
+    </Grid>
+</Window>
