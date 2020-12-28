@@ -17,7 +17,7 @@ namespace PLGuiConsole
 
             //try
            // {
-                mybl.AddLineStation(1, 789, prevStationKey: 456);
+                mybl.AddLineStation(1, 789, prevStationKey: 123, PrevDistance:10,PrevTime:TimeSpan.FromMinutes(10),NextTime: TimeSpan.FromMinutes(10),nextDistance:10);
                 Console.WriteLine(mybl.GetLine(1));
           //  }
             //catch(Exception ex)
