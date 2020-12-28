@@ -78,9 +78,10 @@ namespace PLGuiWPF
 
         private void schedAddButton_Click(object sender, RoutedEventArgs e)
         {
-            NewScheduleWindow w1 = new NewScheduleWindow();
-            w1.Show();
-           
+            NewScheduleWindow w1 = new NewScheduleWindow(showedLine);
+            w1.ShowDialog();
+            this.DataContext = b1.GetLine(showedLine.Id);
+
         }
 
         private void updateSchelButton_Click(object sender, RoutedEventArgs e)

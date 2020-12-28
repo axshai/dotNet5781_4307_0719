@@ -33,6 +33,8 @@ namespace DalApi
 
         #region LineStation
         IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate);
+        void UpdateLineStation(int key, Action<LineStationDO> toUpdate);
+        void AddLineStation(LineStationDO station);
         #endregion
 
         #region BusStation
@@ -42,6 +44,7 @@ namespace DalApi
         
         #region ConsecutiveStations
         ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2);
+        void AddConsecutiveStations(ConsecutiveStationsDO stations);
         #endregion
 
         #region BusLineSchedule

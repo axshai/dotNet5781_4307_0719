@@ -11,7 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using BLApi;
+using BO;
 namespace PLGuiWPF
 {
     /// <summary>
@@ -19,9 +20,13 @@ namespace PLGuiWPF
     /// </summary>
     public partial class NewScheduleWindow : Window
     {
-        public NewScheduleWindow()
+        IBL b1;
+        BusLineBO currentLine;
+        public NewScheduleWindow(BusLineBO line)
         {
             InitializeComponent();
+            b1 = BLFactory.GetBL("1");
+            currentLine = line;
         }
 
         private void tbStart_KeyDown(object sender, KeyEventArgs e)
@@ -53,10 +58,37 @@ namespace PLGuiWPF
 
         private void addSched()
         {
-            string start = tbStart.Text;
-            string end = tbStart.Text;
-            string freq = tbFreq.Text;
-            
+            uint toNum;
+            TimeSpan toTime;
+            if (!TimeSpan.TryParse(tbStart.Text, out toTime) || !TimeSpan.TryParse(tbEnd.Text, out toTime))
+            {
+                MessageBox.Show("Please enter times in the correct format!!(00:00:00)");
+               
+            }
+            else if (!uint.TryParse(tbFreq.Text, out toNum))
+            {
+                MessageBox.Show("Enter digits only!");
+                tbStart.Text = tbEnd.Text = tbFreq.Text = "";
+            }
+            else
+            {
+                try
+                {
+                    b1.AddSchedule(currentLine.Id, TimeSpan.Parse(tbStart.Text), TimeSpan.Parse(tbEnd.Text), int.Parse(tbFreq.Text));
+                    this.Close();
+
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    tbStart.Text = tbEnd.Text = tbFreq.Text = "";
+                }
+            }
+
+
+
+
+
         }
     }
 }
