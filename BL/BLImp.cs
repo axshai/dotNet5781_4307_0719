@@ -28,7 +28,13 @@ namespace BL
         #endregion
 
         IDAL myDal = DLFactory.GetDL();
+        private void addConsecutiveStations(int stateKey1, int stateKey2, double distance, TimeSpan time)
+        {
+            if (distance <= 0 || time <= TimeSpan.Zero)
+                throw new Exception("Distance and time  between two different stations must be positive!");
 
+            myDal.AddConsecutiveStations(new ConsecutiveStationsDO { Distance = distance, TravelTime = time, Station1Key = stateKey1, Station2Key = stateKey2 });
+        }
 
         #region private functions-help to the IBLS functions
         /// <summary>
@@ -94,6 +100,8 @@ namespace BL
         }
 
         #endregion
+
+
 
         /// <summary>
         /// The function returns all the lines that exist in the system — with their stations and schedules
@@ -207,8 +215,9 @@ namespace BL
 
 
         }
+
         /// <summary>
-        /// The function receives a line number and returns a list of stations that can be added to the line
+        /// The function receives a line id and returns a list of stations that can be added to the line
         /// </summary>
         /// <param name="lineId">the id of the wanted line</param>
         /// <returns></returns>
@@ -227,7 +236,10 @@ namespace BL
         }
 
 
-
+        /// <summary>
+        ///The function receives a line id and delete it from the data source 
+        /// </summary>
+        /// <param name="id">>the id of the wanted line</param>
         public void DeleteLine(int id)
         {
             try { myDal.DeleteLine(id); }
@@ -239,12 +251,17 @@ namespace BL
 
         }
 
+        /// <summary>
+        /// The function receives a line id and returns it as BusLineBO
+        /// </summary>
+        /// <param name="id">>the id of the wanted line</param>
+        /// <returns></returns>
         public BusLineBO GetLine(int id)
         {
             try
             {
                 BusLineDO line = myDal.GetLine(id);
-                
+
                 return new BusLineBO
                 {
                     Id = line.Id,
@@ -260,6 +277,96 @@ namespace BL
                 throw new Exception(ex.Message, ex);
             }
         }
+
+        public void AddLineStation(int lineId, int stationKey, int? prevStationKey = null, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null)
+        {
+            BusLineBO line = GetLine(lineId);
+            int index;
+            if (prevStationKey == null)//if we want to add first station
+            {
+                index = 1;
+                if (nextDistance == null)//if we dont  received details about time and distance between the stations
+                    try
+                    {
+                        myDal.GetConsecutiveStations(stationKey, line.StationList.ElementAt(0).StationKey);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("No details on time and distance between this stations end next station", ex);
+                    }
+
+                else//if we need to add ConsecutiveStation
+                {
+                    addConsecutiveStations(stationKey, line.StationList.ElementAt(0).StationKey, (double)nextDistance, (TimeSpan)NextTime);
+                }
+            }
+
+            else if (line.StationList.ElementAt(line.StationList.Count() - 1).StationKey == prevStationKey)//if he wants to add last station
+            {
+                index = line.StationList.Count()+1;
+                if (PrevDistance == null)//if we dont  received details about tome and distance between the stations
+                    try
+                    {
+                        myDal.GetConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("No details on time and distance between this stations end previous station", ex);
+                    }
+                else//if we need to add ConsecutiveStation
+                {
+                    addConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey, (double)PrevDistance, (TimeSpan)PrevTime);
+                }
+
+            }
+
+            else
+            {
+                index = line.StationList.ToList().FindIndex(state => state.StationKey == prevStationKey)+1;
+                if (nextDistance == null)//if we dont  received details about time and distance between the stations
+                    try
+                    {
+                        myDal.GetConsecutiveStations(stationKey, line.StationList.ElementAt(index).StationKey);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("No details on time and distance between this stations end next station", ex);
+                    }
+
+                else//if we need to add ConsecutiveStation
+                {
+                    addConsecutiveStations(stationKey, line.StationList.ElementAt(index).StationKey, (double)nextDistance, (TimeSpan)NextTime);
+                }
+
+                if (PrevDistance == null)//if we dont  received details about tome and distance between the stations
+                    try
+                    {
+                        myDal.GetConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("No details on time and distance between this stations end previous station", ex);
+                    }
+                else//if we need to add ConsecutiveStation
+                {
+                    addConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey, (double)PrevDistance, (TimeSpan)PrevTime);
+                }
+            }
+
+            foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))
+            {
+                myDal.UpdateLineStation(item.StationKey, station => station.Serial++);
+            }
+
+            myDal.AddLineStation(new LineStationDO { IsExist = true, StationKey = stationKey, Serial = index, LineId = lineId });
+        }
+    
+
+
+
+
+
+        
     }
 }
 
