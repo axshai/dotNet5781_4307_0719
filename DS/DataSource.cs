@@ -165,7 +165,7 @@ namespace DS
                 Latitude = 32,
                 StationArea = Area.CENTER,
                 IsExists = true
-
+                
             }) ; ;
 
             BusStations.Add(new BusStationDO

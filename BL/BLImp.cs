@@ -138,7 +138,8 @@ namespace BL
                         Longitude=station.Longitude,
                        StationKey = station.StationKey,
                        StationName = station.StationName,
-                       ListOfLines = getLinesOfStations(station.StationKey)
+                       ListOfLines = getLinesOfStations(station.StationKey),
+                       ListOfConsecutiveLineStations=GetListOfConsecutiveLineStation(station.StationKey)
                    };
         }
         /// <summary>
@@ -366,14 +367,64 @@ namespace BL
 
             myDal.AddLineStation(new LineStationDO { IsExist = true, StationKey = stationKey, Serial = index, LineId = lineId });
         }
-    
+
+
+        public IEnumerable<BusLineStationBO> GetListOfConsecutiveLineStation(int StationKey)
+        {
+            List<BusLineBO> lists = new List<BusLineBO>();
+            List<BusLineStationBO> myStation = new List<BusLineStationBO>();
+
+            foreach (var line1 in GetAllLines())
+            {
+                if (line1.StationList.ToList().Find(line2 => line2.StationKey == StationKey) != null)
+                {
+                    lists.Add(line1);
+                }
+            }
+
+            int index = 0;
+            foreach(var line1 in lists)  
+            {
+                index = line1.StationList.ToList().FindIndex(station1 => station1.StationKey == StationKey);
+                if (index!= line1.StationList.ToList().Count()-1)
+                {
+                    myStation.Add(line1.StationList.ToList()[index + 1]);
+                }
+            }
+
+            //BusStationBO tempstation = new BusStationBO();
+            //List<BusStationBO> myBusstation = new List<BusStationBO>();
+            //foreach(var station1 in myStation)  
+            //{
+                
+            //    tempstation.StationName = station1.StationName;
+            //    tempstation.StationKey = station1.StationKey;
+            //    double longi = myDal.GetAllStations().ToList().Find(station3 => station3.StationKey == station.StationKey).Longitude;
+            //    tempstation.Longitude = longi;
+
+            //    double lati = myDal.GetAllStations().ToList().Find(station3 => station3.StationKey == station.StationKey).Latitude;
+
+            //    tempstation.ListOfLines = getLinesOfStations(station.StationKey);
+                
+
+            return myStation as IEnumerable<BusLineStationBO>;
+
+            }
 
 
 
 
 
-        
+
+
+
     }
+
+
+
+
+
+    
 }
 
 
