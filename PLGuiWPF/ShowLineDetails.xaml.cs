@@ -60,8 +60,9 @@ namespace PLGuiWPF
 
         private void stationAddButton_Click(object sender, RoutedEventArgs e)
         {
-            cbAddStat.Visibility = Visibility.Visible;
-            cbAddStat.IsDropDownOpen = true;
+            AddLineStationWindow wd1 = new AddLineStationWindow(showedLine);
+            wd1.ShowDialog();
+            this.DataContext = b1.GetLine(showedLine.Id);
         }
 
         private void renameButton_Click(object sender, RoutedEventArgs e)

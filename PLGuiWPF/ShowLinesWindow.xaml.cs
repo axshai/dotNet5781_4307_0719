@@ -34,9 +34,9 @@ namespace PLGuiWPF
 
         private void delButton_Click(object sender, RoutedEventArgs e)
         {
-            //BusLineBO line = dgLines.SelectedItem as BusLineBO;
-            //blObject.Deleteline(line.Id);
-            //lines = blObject.GetAllLines().ToList();
+            BusLineBO line = dgLines.SelectedItem as BusLineBO;
+            blObject.DeleteLine(line.Id);
+            dgLines.ItemsSource = blObject.GetAllLines().ToList();
         }
 
 
@@ -44,7 +44,7 @@ namespace PLGuiWPF
         {
             BusLineBO line = dgLines.SelectedItem as BusLineBO;
             ShowLineDetails ws1 = new ShowLineDetails(line);
-            ws1.Show();
+            ws1.ShowDialog();
             dgLines.ItemsSource = blObject.GetAllLines().ToList();
         }
     }

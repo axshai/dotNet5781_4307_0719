@@ -249,11 +249,23 @@ namespace BL
         /// <param name="id">>the id of the wanted line</param>
         public void DeleteLine(int id)
         {
-            try { myDal.DeleteLine(id); }
-
-            catch (Exception ex)
+            try
             {
-                throw new Exception(ex.Message, ex);
+                BusLineBO doDel = GetLine(id);
+                foreach (var item in doDel.StationList)
+                {
+                    myDal.DeleteLineStation(id, item.StationKey);
+                }
+
+                foreach (var item in doDel.ScheduleList)
+                {
+                    myDal.DeleteSchedule(id, item.StartActivity);
+                }
+                myDal.DeleteLine(id);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Deletion failed", ex);
             }
 
         }
@@ -285,13 +297,13 @@ namespace BL
             }
         }
 
-        public void AddLineStation(int lineId, int stationKey, int? prevStationKey = null, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null)
+        public void AddLineStation(int lineId, int stationKey, int index, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null)
         {
             BusLineBO line = GetLine(lineId);
-            int index;
-            if (prevStationKey == null)//if we want to add first station
+           
+            if (index == 1)//if we want to add first station
             {
-                index = 1;
+               
                 if (nextDistance == null)//if we dont  received details about time and distance between the stations
                     try
                     {
@@ -308,9 +320,9 @@ namespace BL
                 }
             }
 
-            else if (line.StationList.ElementAt(line.StationList.Count() - 1).StationKey == prevStationKey)//if he wants to add last station
+            else if (line.StationList.Count()+1==index)//if he wants to add last station
             {
-                index = line.StationList.Count()+1;
+                
                 if (PrevDistance == null)//if we dont  received details about tome and distance between the stations
                     try
                     {
@@ -329,7 +341,7 @@ namespace BL
 
             else
             {
-                index = line.StationList.ToList().FindIndex(state => state.StationKey == prevStationKey)+2;
+                
                 if (nextDistance == null)//if we dont  received details about time and distance between the stations
                     try
                     {
@@ -362,7 +374,7 @@ namespace BL
 
             foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))
             {
-                myDal.UpdateLineStation(item.StationKey, station => station.Serial++);
+                myDal.UpdateLineStation(item.LineId,item.StationKey,station1 => station1.Serial++);
             }
 
             myDal.AddLineStation(new LineStationDO { IsExist = true, StationKey = stationKey, Serial = index, LineId = lineId });
@@ -392,25 +404,12 @@ namespace BL
                 }
             }
 
-            //BusStationBO tempstation = new BusStationBO();
-            //List<BusStationBO> myBusstation = new List<BusStationBO>();
-            //foreach(var station1 in myStation)  
-            //{
-                
-            //    tempstation.StationName = station1.StationName;
-            //    tempstation.StationKey = station1.StationKey;
-            //    double longi = myDal.GetAllStations().ToList().Find(station3 => station3.StationKey == station.StationKey).Longitude;
-            //    tempstation.Longitude = longi;
-
-            //    double lati = myDal.GetAllStations().ToList().Find(station3 => station3.StationKey == station.StationKey).Latitude;
-
-            //    tempstation.ListOfLines = getLinesOfStations(station.StationKey);
-                
-
             return myStation as IEnumerable<BusLineStationBO>;
 
             }
 
+
+       
 
 
 

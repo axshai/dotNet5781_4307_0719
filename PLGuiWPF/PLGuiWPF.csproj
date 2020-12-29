@@ -58,6 +58,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AddLineStationWindow.xaml.cs">
+      <DependentUpon>AddLineStationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddLineWindow.xaml.cs">
+      <DependentUpon>AddLineWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters.cs" />
     <Compile Include="FrequencyWindow.xaml.cs">
       <DependentUpon>FrequencyWindow.xaml</DependentUpon>
@@ -77,6 +83,14 @@
     <Compile Include="ShowStationWindow.xaml.cs">
       <DependentUpon>ShowStationWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="AddLineStationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AddLineWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FrequencyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

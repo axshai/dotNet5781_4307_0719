@@ -182,9 +182,9 @@ namespace Dal
                    select station.Clone();
         }
 
-        public void UpdateLineStation(int key, Action<LineStationDO> toUpdate) //method that knows to updt specific fields in station
+        public void UpdateLineStation(int lineKey, int stationKey, Action<LineStationDO> toUpdate) //method that knows to updt specific fields in station
         {
-            LineStationDO station1 = DataSource.LineStations.Find(station => station.StationKey == key && station.IsExist == true);
+            LineStationDO station1 = DataSource.LineStations.Find(station => station.StationKey == stationKey && station.LineId== lineKey && station.IsExist == true);
             if (station1 != null)
                 toUpdate(station1);
             else
@@ -199,15 +199,22 @@ namespace Dal
             DataSource.LineStations.Add(toAdd);
         }
 
+        public void DeleteLineStation(int lineKey, int stationKey)
+        {
+            LineStationDO toDelete = DataSource.LineStations.Find(station => station.StationKey == stationKey && station.LineId == lineKey && station.IsExist == true);
+            if (toDelete != null)
+                toDelete.IsExist = false;
+            else
+                throw new Exception("This user was not found!");
+        }
+            #endregion
 
-        #endregion
 
 
 
 
-
-        #region ConsecutiveStations functions
-        public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
+            #region ConsecutiveStations functions
+            public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
         {
             ConsecutiveStationsDO c1 = DataSource.AllConsecutiveStations.Find(c2 => c2.Station1Key == stationKey1 && c2.Station2Key == stationKey2);
             if (c1 != null)

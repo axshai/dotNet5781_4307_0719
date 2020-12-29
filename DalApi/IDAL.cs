@@ -33,8 +33,9 @@ namespace DalApi
 
         #region LineStation
         IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate);
-        void UpdateLineStation(int key, Action<LineStationDO> toUpdate);
+        void UpdateLineStation(int lineKey, int stationKey, Action<LineStationDO> toUpdate);
         void AddLineStation(LineStationDO station);
+        void DeleteLineStation(int lineKey, int stationKey);
         #endregion
 
         #region BusStation

@@ -114,8 +114,6 @@
             </Button.Style>
             </Button>
             <Button  x:Name="schedAddButton" Content="add new schedule" Grid.Row="3" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="schedAddButton_Click"/>
-
-            <ComboBox Name="cbAddStat" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol" DisplayMemberPath=" StationName" SelectedValue="StationKey" Visibility="Hidden" SelectionChanged="cbAddStat_SelectionChanged"  DropDownClosed="cbAddStat_DropDownClosed" ItemsSource="{Binding restStationList}"/>
             <ComboBox Name="cbDelStat" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol"  DisplayMemberPath="StationKey" Visibility="Hidden" SelectionChanged="cbDelStat_SelectionChanged"  DropDownClosed="cbDelStat_DropDownClosed" ItemsSource="{Binding StationList}"/>
             <TextBox x:Name="tbxRename" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol"  Visibility="Hidden"  KeyDown="tbxRename_KeyDown" LostKeyboardFocus="tbxRename_LostKeyboardFocus" />
         </Grid>
