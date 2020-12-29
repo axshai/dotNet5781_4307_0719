@@ -358,7 +358,7 @@ namespace BL
                 {
                     addConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey, (double)PrevDistance, (TimeSpan)PrevTime);
                 }
-            }
+            } 
 
             foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))
             {
