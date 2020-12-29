@@ -44,9 +44,9 @@ namespace DS
 
         private static void InitBusLines()
         {
-            BusLines.Add(new BusLineDO
+            BusLines.Add(new BusLineDO 
             {
-                LineNumber = 66.ToString(),
+                LineNumber = 66.ToString(),  
                 FirstStationKey = 123,
                 LastStationKey = 456,
                 LineArea = Area.CENTER,
