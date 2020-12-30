@@ -49,4 +49,18 @@ namespace PLGuiWPF
             throw new NotImplementedException();
         }
     }
+
+    public class ListOfStationsToBoolean : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            List<BusLineStationBO> stations = (value as IEnumerable<BusLineStationBO>).ToList();
+            return stations.Count() > 2;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

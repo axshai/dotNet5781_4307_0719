@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="ShowLineDetails" Height="600" Width="700" >
     <Window.Resources>
+        <local:ListOfStationsToBoolean
+             x:Key="ListOfStationsToBoolean"/>
         <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#FF99EDF1" />
             <Setter Property="BorderBrush" Value="Black"/>
@@ -22,6 +24,7 @@
             <Setter  Property="FontSize" Value="18"/>
             <Setter  Property="ColumnWidth" Value="auto"/>
         </Style>
+        
     </Window.Resources>
 
     <Grid Background="#FFE5F5F9" HorizontalAlignment="Stretch"   VerticalAlignment="Stretch">
@@ -67,7 +70,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-       
+
         <Label Content="schedules:" Grid.Row="0" VerticalAlignment="Bottom" FontSize="22" Margin="30,0" />
         <Label Content="stations:" Grid.Row="0" VerticalAlignment="Top" FontSize="22" Margin="30,0" />
         <Grid Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="30,0" Height="210" Width="172">
@@ -78,16 +81,16 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Button  x:Name="renameButton" Content="rename the line" Grid.Row="0" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="renameButton_Click">
-            <Button.Style>
-                <Style>
-                    <Style.Triggers>
+                <Button.Style>
+                    <Style>
+                        <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=tbxRename, Path=IsVisible}" Value="true">
-                            <Setter Property="Button.Visibility" Value="Hidden">
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
+                                <Setter Property="Button.Visibility" Value="Hidden">
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>
             <Button x:Name="stationAddButton" Content="add new station" Grid.Row="1" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="stationAddButton_Click">
                 <Button.Style>
@@ -101,17 +104,17 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button  x:Name="stationDelButton" Content="delete station" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="stationDelButton_Click" >
+            <Button  x:Name="stationDelButton" Content="delete station" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="stationDelButton_Click" IsEnabled="{Binding StationList,Converter={StaticResource ListOfStationsToBoolean}}" >
                 <Button.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=cbDelStat, Path=IsVisible}" Value="true">
-                            <Setter Property="Button.Visibility" Value="Hidden">
-                            </Setter>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=cbDelStat, Path=IsVisible}" Value="true">
+                                <Setter Property="Button.Visibility" Value="Hidden">
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>
             <Button  x:Name="schedAddButton" Content="add new schedule" Grid.Row="3" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFA1A4E2" FontSize="18" FontFamily="Segoe UI Symbol" Click="schedAddButton_Click"/>
             <ComboBox Name="cbDelStat" Grid.Row="2" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Stretch"  Background="#FFC5C7F6" FontSize="18" FontFamily="Segoe UI Symbol"  DisplayMemberPath="StationKey" Visibility="Hidden" SelectionChanged="cbDelStat_SelectionChanged"  DropDownClosed="cbDelStat_DropDownClosed" ItemsSource="{Binding StationList}"/>
@@ -119,5 +122,5 @@
         </Grid>
     </Grid>
 
-    
+
 </Window>

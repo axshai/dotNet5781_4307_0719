@@ -62,9 +62,10 @@ namespace Dal
         public void UpdateLine(int id, Action<BusLineDO> toUpdate) //method that knows to updt specific fields in Line
         {
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
-            if (line != null)
-                toUpdate(line);
-            throw new Exception("This Line was not found!");
+            if (line == null)
+                throw new Exception("This Line was not found!");
+            toUpdate(line);
+
         }
 
         public void DeleteLine(int id)
@@ -184,7 +185,7 @@ namespace Dal
 
         public void UpdateLineStation(int lineKey, int stationKey, Action<LineStationDO> toUpdate) //method that knows to updt specific fields in station
         {
-            LineStationDO station1 = DataSource.LineStations.Find(station => station.StationKey == stationKey && station.LineId== lineKey && station.IsExist == true);
+            LineStationDO station1 = DataSource.LineStations.Find(station => station.StationKey == stationKey && station.LineId == lineKey && station.IsExist == true);
             if (station1 != null)
                 toUpdate(station1);
             else
@@ -207,14 +208,24 @@ namespace Dal
             else
                 throw new Exception("This user was not found!");
         }
-            #endregion
+
+        public LineStationDO GetLineStation(int stationKey, int lineId)
+        {
+            LineStationDO station = DataSource.LineStations.Find(station1=>station1.StationKey == stationKey && station1.LineId == lineId && station1.IsExist == true);
+            if (station != null)
+                return station.Clone();
+            throw new Exception("This line station was not found!");
+        }
+
+
+        #endregion
 
 
 
 
 
-            #region ConsecutiveStations functions
-            public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
+        #region ConsecutiveStations functions
+        public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
         {
             ConsecutiveStationsDO c1 = DataSource.AllConsecutiveStations.Find(c2 => c2.Station1Key == stationKey1 && c2.Station2Key == stationKey2);
             if (c1 != null)
@@ -289,7 +300,6 @@ namespace Dal
                 throw new Exception("There is already such a Schedule for the line the system!");
             DataSource.BusLineSchedules.Add(toadd.Clone());
         }
-
 
         #endregion
     }
