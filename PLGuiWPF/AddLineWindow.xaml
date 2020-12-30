@@ -1,0 +1,41 @@
+﻿<Window x:Class="PLGuiWPF.AddLineWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLGuiWPF"
+        mc:Ignorable="d"
+        Title="AddLineWindow" Height="450" Width="600">
+    <Window.Resources>
+        <Style x:Key="textboxStyle" TargetType="TextBox">
+            <Setter Property="Width" Value="130" />
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+    </Window.Resources>
+        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10"  Grid.Row="0" TextWrapping="Wrap" Text="enter the line number:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="1" TextWrapping="Wrap" Text="enter the key of his first station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="2" TextWrapping="Wrap" Text="enter the key of his Destination station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="3" TextWrapping="Wrap" Text="enter Area of ​​activity:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
+        <TextBox x:Name="tbNum" Grid.Row="0" Grid.Column="1" Style="{StaticResource textboxStyle}" />
+        <TextBox x:Name="tbfirst" Grid.Row="1" Grid.Column="1"  Style="{StaticResource textboxStyle}"/>
+        <TextBox x:Name="tblast" Grid.Row="2" Grid.Column="1"  Style="{StaticResource textboxStyle}"/>
+        <TextBox x:Name="tbArea" Grid.Row="3" Grid.Column="1"  Style="{StaticResource textboxStyle}"/>
+        <Button x:Name="addButton" Content="ADD" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Grid.ColumnSpan="2"  Width="130" Height="40" FontSize="20" Margin="15" FontFamily="Verdana" Background="#FFA3BF60" Click="addButton_Click"/>
+    </Grid>
+</Window>

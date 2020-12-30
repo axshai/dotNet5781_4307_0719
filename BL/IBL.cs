@@ -13,6 +13,7 @@ namespace BLApi
         IEnumerable<BusLineBO> GetAllLines();
         void DeleteLine(int id);
         BusLineBO GetLine(int id);
+        void updateLine(int id, string name);
         #endregion
 
         #region Schedules functions
@@ -26,7 +27,8 @@ namespace BLApi
         #endregion
 
         #region BusLineStation function
-        void AddLineStation(int lineId, int stationKey, int? prevStationKey = null, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null);
+        void AddLineStation(int lineId, int stationKey, int index, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null);
+        void DeleteLineStation(BusLineBO line, int stationKey,double? distance = null, TimeSpan? time = null);
         #endregion
 
     }

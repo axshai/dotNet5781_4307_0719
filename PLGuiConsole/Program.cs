@@ -12,18 +12,9 @@ namespace PLGuiConsole
         static void Main(string[] args)
         {
             IBL mybl = BLFactory.GetBL("1");
-
-            Console.WriteLine(mybl.GetLine(1));
-
-            //try
-           // {
-                mybl.AddLineStation(1, 789, prevStationKey: 123, PrevDistance:10,PrevTime:TimeSpan.FromMinutes(10),NextTime: TimeSpan.FromMinutes(10),nextDistance:10);
-                Console.WriteLine(mybl.GetLine(1));
-          //  }
-            //catch(Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
+            
+            Console.WriteLine(mybl.GetLine(2));
+           
 
         }
     }

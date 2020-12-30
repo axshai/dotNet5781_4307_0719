@@ -249,11 +249,23 @@ namespace BL
         /// <param name="id">>the id of the wanted line</param>
         public void DeleteLine(int id)
         {
-            try { myDal.DeleteLine(id); }
-
-            catch (Exception ex)
+            try
             {
-                throw new Exception(ex.Message, ex);
+                BusLineBO doDel = GetLine(id);
+                foreach (var item in doDel.StationList)
+                {
+                    myDal.DeleteLineStation(id, item.StationKey);
+                }
+
+                foreach (var item in doDel.ScheduleList)
+                {
+                    myDal.DeleteSchedule(id, item.StartActivity);
+                }
+                myDal.DeleteLine(id);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Deletion failed", ex);
             }
 
         }
@@ -285,13 +297,13 @@ namespace BL
             }
         }
 
-        public void AddLineStation(int lineId, int stationKey, int? prevStationKey = null, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null)
+        public void AddLineStation(int lineId, int stationKey, int index, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null)
         {
             BusLineBO line = GetLine(lineId);
-            int index;
-            if (prevStationKey == null)//if we want to add first station
+           
+            if (index == 1)//if we want to add first station
             {
-                index = 1;
+               
                 if (nextDistance == null)//if we dont  received details about time and distance between the stations
                     try
                     {
@@ -308,9 +320,9 @@ namespace BL
                 }
             }
 
-            else if (line.StationList.ElementAt(line.StationList.Count() - 1).StationKey == prevStationKey)//if he wants to add last station
+            else if (line.StationList.Count()+1==index)//if he wants to add last station
             {
-                index = line.StationList.Count()+1;
+                
                 if (PrevDistance == null)//if we dont  received details about tome and distance between the stations
                     try
                     {
@@ -329,7 +341,7 @@ namespace BL
 
             else
             {
-                index = line.StationList.ToList().FindIndex(state => state.StationKey == prevStationKey)+2;
+                
                 if (nextDistance == null)//if we dont  received details about time and distance between the stations
                     try
                     {
@@ -362,7 +374,7 @@ namespace BL
 
             foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))
             {
-                myDal.UpdateLineStation(item.StationKey, station => station.Serial++);
+                myDal.UpdateLineStation(item.LineId,item.StationKey,station1 => station1.Serial++);
             }
 
             myDal.AddLineStation(new LineStationDO { IsExist = true, StationKey = stationKey, Serial = index, LineId = lineId });
@@ -392,41 +404,64 @@ namespace BL
                 }
             }
 
-            //BusStationBO tempstation = new BusStationBO();
-            //List<BusStationBO> myBusstation = new List<BusStationBO>();
-            //foreach(var station1 in myStation)  
-            //{
-                
-            //    tempstation.StationName = station1.StationName;
-            //    tempstation.StationKey = station1.StationKey;
-            //    double longi = myDal.GetAllStations().ToList().Find(station3 => station3.StationKey == station.StationKey).Longitude;
-            //    tempstation.Longitude = longi;
-
-            //    double lati = myDal.GetAllStations().ToList().Find(station3 => station3.StationKey == station.StationKey).Latitude;
-
-            //    tempstation.ListOfLines = getLinesOfStations(station.StationKey);
-                
-
-
-
             return myStation as IEnumerable<BusLineStationBO>;
 
             }
 
-         
+        public void updateLine(int id, string name)
+        {
+           IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == name);
+            if(name.Length>3)
+                throw new Exception("Line name must be up to three characters!");
+            if (sameName.Count() > 1)
+                throw new Exception("There are already two lines with the same name!");
+            if (sameName.Any(line => line.LineArea != myDal.GetLine(id).LineArea))
+                throw new Exception("Lines with the same name must be in the same area!");
+            myDal.UpdateLine(id, line => line.LineNumber = name);
 
 
+        }
 
+        public void DeleteLineStation(BusLineBO line, int stationKey, double? distance = null, TimeSpan? time = null)
+        {
+            
+            int place= myDal.GetLineStation(stationKey,line.Id).Serial;
+           // int index = line.StationList.ToList().FindIndex(state => state.StationKey == stationKey);
 
+            if (place != 1 && place != line.StationList.Count())//if he wants do delete station in the midle of the rout
+            {
+                if (distance == null)
+                {
+                    try
+                    {
+                        myDal.GetConsecutiveStations(line.StationList.ElementAt(place - 2).StationKey, line.StationList.ElementAt(place).StationKey);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("No details on time and distance between this stations end previous station", ex);
+                    }
+                }
+                else 
+                {
+                    addConsecutiveStations(line.StationList.ElementAt(place - 2).StationKey, line.StationList.ElementAt(place).StationKey, (double)distance, (TimeSpan)time);
+                }
 
+            }
 
+            foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= myDal.GetLineStation(stationKey, line.Id).Serial))
+            {
+                myDal.UpdateLineStation(item.LineId, item.StationKey, station1 => station1.Serial--);
+            }
+
+            myDal.DeleteLineStation(line.Id, stationKey);
+        }
     }
 
 
 
 
 
-
+    
 }
 
 
