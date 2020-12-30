@@ -398,7 +398,7 @@ namespace BL
             foreach(var line1 in lists)  
             {
                 index = line1.StationList.ToList().FindIndex(station1 => station1.StationKey == StationKey);
-                if (index< line1.StationList.ToList().Count()-1)
+                if ((index< line1.StationList.ToList().Count()-1) && !myStation.Exists(station1=>line1.StationList.ToList()[index + 1].StationKey==station1.StationKey))
                 {
                     myStation.Add(line1.StationList.ToList()[index + 1]);
                 }

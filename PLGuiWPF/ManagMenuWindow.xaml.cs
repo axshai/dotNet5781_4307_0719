@@ -28,9 +28,7 @@ namespace PLGuiWPF
         { 
             InitializeComponent();
             lines = new ObservableCollection<BusLineBO>(myBL.GetAllLines());
-            lbLines.ItemsSource = lines;
-            lbLines.Visibility = Visibility.Collapsed;
-            closeButton.Visibility = Visibility.Collapsed;
+          
 
 
         }
@@ -39,16 +37,10 @@ namespace PLGuiWPF
         {
             (new ShowLinesWindow()).Show();
 
-            lbLines.Visibility = Visibility.Visible;
-            closeButton.Visibility = Visibility.Visible;
+         
         }
 
-        private void Buttoncloseline_Click(object sender, RoutedEventArgs e)
-        {
-            lbLines.Visibility = Visibility.Collapsed;
-            closeButton.Visibility = Visibility.Collapsed;
-
-        }
+     
 
         private void ButtonshowStation_Click(object sender, RoutedEventArgs e)
         {
