@@ -202,10 +202,6 @@ namespace Dal
 
         #endregion
 
-
-
-
-
         #region ConsecutiveStations functions
         public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
         {
