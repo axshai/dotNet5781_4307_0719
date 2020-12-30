@@ -54,7 +54,7 @@
                 <DataGridTextColumn Header=" start: " Binding="{Binding StartActivity}" />
                 <DataGridTextColumn Header=" end: " Binding="{Binding EndActivity}" />
                 <DataGridTextColumn Header=" frequency " Binding="{Binding frequency}" />
-                <DataGridTemplateColumn Width="*">
+                <DataGridTemplateColumn Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button x:Name="updateSchelButton" Content="change" Margin="5" Background="#FFCDE4B0" Click="updateSchelButton_Click" />
