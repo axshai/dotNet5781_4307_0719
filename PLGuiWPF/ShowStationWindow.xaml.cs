@@ -29,7 +29,7 @@ namespace PLGuiWPF
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
             stations = blObject.GetAllStation().ToList();
-             dgStations.ItemsSource = stations;
+            dgStations.ItemsSource = stations;
 
         }
 

@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button  x:Name="managButton" Content="Log in as manager" Margin="28,29,635.6,0" VerticalAlignment="Top" Height="68" Click="managButton_Click"/>
-        <Button Content="Log in as passenger" HorizontalAlignment="Left" VerticalAlignment="Top" Width="136" RenderTransformOrigin="2.886,2.11" Margin="183,29,0,0" Height="68" Click="Button_Click" />
+    <Grid  Background="#FFC2DFA2">
+        <Button  x:Name="managButton" Background="Bisque" Content="Log in as manager" Margin="49,145,474.6,0" VerticalAlignment="Top" Height="120" Click="managButton_Click"/>
+        <Button Content="Log in as passenger"  Background="AntiqueWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Width="263" RenderTransformOrigin="2.886,2.11" Margin="383,145,0,0" Height="120" Click="Button_Click" />
+        <Label Content="                    Welcome"  HorizontalAlignment="Left" Margin="0,0,-0.4,0" VerticalAlignment="Top" Height="121" Width="794" Cursor="Pen" Background="#FF88AD87" FontSize="48" FontFamily="Rockwell Extra Bold"/>
 
     </Grid>
 </Window>

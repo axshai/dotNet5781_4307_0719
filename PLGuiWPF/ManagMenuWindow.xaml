@@ -6,11 +6,9 @@
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
         Title="ManagMenuWindow" Height="450" Width="800">
-    <Grid>
-        <Button  x:Name="Buttonshowline" Content="Show All Lines" HorizontalAlignment="Left" Height="53" Margin="29,62,0,0" VerticalAlignment="Top" Width="144"  Click="Buttonshowline_Click"  />
-        <ListBox x:Name="lbLines"  HorizontalAlignment="Left" Height="271" Margin="0,149,0,0" VerticalAlignment="Top" Width="322"/>
-        <Button  x:Name="closeButton" Content="Close the lines view" HorizontalAlignment="Left" Margin="201,62,0,0" VerticalAlignment="Top" Width="75" Height="53" Click="Buttoncloseline_Click"/>
+    <Grid Background="#FFAE6767">
+        <Button  x:Name="Buttonshowline" Content="Show All Lines" HorizontalAlignment="Left" Height="110" Margin="37,90,0,0" VerticalAlignment="Top" Width="211"  Click="Buttonshowline_Click" FontSize="20" FontFamily="Franklin Gothic Heavy" Background="#FFED7474"  />
         <TextBlock Text="{Binding BusLineBO}" Margin="452,120,136.6,106"/>
-        <Button   x:Name="ButtonshowStation"  Content="Show All BusStations" HorizontalAlignment="Left" Margin="316,62,0,0" VerticalAlignment="Top" Width="98" Height="53"  Click="ButtonshowStation_Click"/>
+        <Button   x:Name="ButtonshowStation"  Content="Show All BusStations" HorizontalAlignment="Left" Margin="285,90,0,0" VerticalAlignment="Top" Width="209" Height="110"  Click="ButtonshowStation_Click" FontSize="20" FontFamily="Impact" Background="#FFED6969"/>
     </Grid>
 </Window>
