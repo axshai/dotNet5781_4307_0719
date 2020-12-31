@@ -71,6 +71,11 @@ namespace PLGuiWPF
         {
             try
             {
+                if (cbStations.SelectedItem == null)
+                {
+                    MessageBox.Show("No station selected");
+                    return;
+                }
                 bl.AddLineStation(current.Id, (cbStations.SelectedItem as BusStationBO).StationKey, (int)cbIndex.SelectedItem);
                 this.Close();
             }

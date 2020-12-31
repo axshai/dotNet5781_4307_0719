@@ -47,5 +47,12 @@ namespace PLGuiWPF
             ws1.ShowDialog();
             dgLines.ItemsSource = blObject.GetAllLines().ToList();
         }
+
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddLineWindow wnd = new AddLineWindow();
+            wnd.ShowDialog();
+            dgLines.ItemsSource = blObject.GetAllLines().ToList();
+        }
     }
 }

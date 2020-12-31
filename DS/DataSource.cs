@@ -47,8 +47,7 @@ namespace DS
             BusLines.Add(new BusLineDO 
             {
                 LineNumber = 66.ToString(),  
-                FirstStationKey = 123,
-                LastStationKey = 456,
+                
                 LineArea = Area.CENTER,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -60,8 +59,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 82.ToString(),
-                FirstStationKey = 456,
-                LastStationKey = 789,
+               
                 LineArea = Area.CENTER,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -71,8 +69,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 83.ToString(),
-                FirstStationKey = 111213,
-                LastStationKey = 141516,
+               
                 LineArea = Area.CENTER,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -82,8 +79,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 838.ToString(),
-                FirstStationKey = 171819,
-                LastStationKey = 202122,
+              
                 LineArea = Area.JERUSALEM,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -93,8 +89,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 12.ToString(),
-                FirstStationKey = 232425,
-                LastStationKey = 262728,
+               
                 LineArea = Area.SHFELA,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -104,8 +99,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 212.ToString(),
-                FirstStationKey = 293031,
-                LastStationKey = 323334,
+              
                 LineArea = Area.SHFELA,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -114,8 +108,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 319.ToString(),
-                FirstStationKey = 353637,
-                LastStationKey = 383940,
+            
                 LineArea = Area.NORTH,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -125,8 +118,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 434.ToString(),
-                FirstStationKey = 414243,
-                LastStationKey = 444546,
+             
                 LineArea = Area.SOUTH,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -135,8 +127,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 512.ToString(),
-                FirstStationKey = 474849,
-                LastStationKey = 505152,
+            
                 LineArea = Area.WESTBANK,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true
@@ -145,8 +136,7 @@ namespace DS
             BusLines.Add(new BusLineDO
             {
                 LineNumber = 516.ToString(),
-                FirstStationKey = 535455,
-                LastStationKey = 565758,
+              
                 LineArea = Area.WESTBANK,
                 Id = DSConfig.BusLineCounter,
                 IsExists = true

@@ -8,7 +8,7 @@ namespace BO
 {
     public class BusStationBO
     {
-        public IEnumerable<BusLineBO> ListOfLines { get; set; }
+        public IEnumerable<LineInStationBO> ListOfLines { get; set; }
         public IEnumerable<BusLineStationBO> ListOfConsecutiveLineStations { get; set; }
 
         public string StationName { get; set; }
@@ -17,6 +17,19 @@ namespace BO
         public double Longitude { get; set; }
         public Area Area { get; set; }
         public override string ToString()
-        { return "key: " + StationKey + " name: " + StationName; }
+        {
+            string result ="key" + StationKey+ "arrival:\n";
+            foreach (var item in ListOfLines)
+            {
+                result += item.LineNumber + ":  ";
+                foreach (var item1 in item.ArrivalTimes)
+                {
+                    result += item1 + " ";
+                }
+                result += "\n";
+            }
+            return result;
+
+        } 
     }
 }

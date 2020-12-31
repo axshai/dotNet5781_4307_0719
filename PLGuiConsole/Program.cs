@@ -13,8 +13,9 @@ namespace PLGuiConsole
         {
             IBL mybl = BLFactory.GetBL("1");
             
-            Console.WriteLine(mybl.GetLine(2));
-           
+            
+            Console.WriteLine(mybl.GetAllStation().ElementAt(5));
+            Console.ReadKey();
 
         }
     }

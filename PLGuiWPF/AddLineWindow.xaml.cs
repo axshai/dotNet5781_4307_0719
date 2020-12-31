@@ -11,7 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using BO;
+using BLApi;
 namespace PLGuiWPF
 {
     /// <summary>
@@ -19,14 +20,52 @@ namespace PLGuiWPF
     /// </summary>
     public partial class AddLineWindow : Window
     {
+        IBL blObject;
         public AddLineWindow()
         {
             InitializeComponent();
+            blObject = BLFactory.GetBL("1");
+            cbArea.ItemsSource = Enum.GetValues(typeof(Area));
+            cbfirst.ItemsSource = cblast.ItemsSource = blObject.GetAllStation();
+
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (cbfirst.SelectedItem == null || cblast.SelectedItem == null || cbArea.SelectedItem == null)
+            {
+                MessageBox.Show("Please select stations and area!");
+                return;
+            }
+            try
+            {
+                blObject.AddLine(tbNum.Text, cbfirst.SelectedItem as BusStationBO, cblast.SelectedItem as BusStationBO, (BO.Area)cbArea.SelectedItem);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "No details on time and distance between this 2 station")
+                {
+                    tbNum.Visibility = Visibility.Hidden;
+                    tbTime.Visibility = Visibility.Visible;
+                }
+                else
+                    MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void addButton2_Click(object sender, RoutedEventArgs e)
+        {
+            uint validTime;
+            double validDist;
+            if (!uint.TryParse(tbTime.Text, out validTime) || !double.TryParse(tbdist.Text, out validDist))
+            {
+                MessageBox.Show("Please enter time and distance in the correct format!");
+                tbTime.Text = tbdist.Text = "";
+                return;
+            }
+            blObject.AddLine(tbNum.Text, cbfirst.SelectedItem as BusStationBO, cblast.SelectedItem as BusStationBO, (BO.Area)cbArea.SelectedItem, validDist, TimeSpan.FromMinutes(validTime));
+            this.Close();
         }
     }
 }

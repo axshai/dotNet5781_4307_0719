@@ -31,10 +31,11 @@
     </Window.Resources>
     <Grid Background="#FFE5F5F9">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgLines_MouseDoubleClick"  >
+        <Button x:Name="addButton" Content="add new line" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Width="140" Height="35" FontFamily="Sitka Text" FontSize="20" Background="#FF8ABDE7" Click="addButton_Click"  />
+            <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgLines_MouseDoubleClick"  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="*" />
                 <DataGridTextColumn Header="from" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToFirst}}" Width="*"/>

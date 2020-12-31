@@ -24,7 +24,7 @@ namespace DalApi
         public void DeleteLine(int id);
         void UpdateLine(int id, Action<BusLineDO> toUpdate);
         void UpdateLine(BusLineDO line);
-        void AddLine(BusLineDO line);
+        int AddLine(BusLineDO line);
         IEnumerable<BusLineDO> GetAllLinesBy(Predicate<BusLineDO> predicate);
 
 
@@ -42,11 +42,15 @@ namespace DalApi
         #region BusStation
         IEnumerable<BusStationDO> GetAllStations();
         BusStationDO GetBusStation(int key);
+        void DeleteBusStation(int key);
+        void UpdateBusStation(BusStationDO station);
+
         #endregion
-        
+
         #region ConsecutiveStations
         ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2);
         void AddConsecutiveStations(ConsecutiveStationsDO stations);
+        void UpdateConsecutiveStations(int stationKey1, int stationKey2, Action<ConsecutiveStationsDO> toUpdate);
         #endregion
 
         #region BusLineSchedule

@@ -28,6 +28,21 @@ namespace BL
         #endregion
 
         IDAL myDal = DLFactory.GetDL();
+
+
+        /// <summary>
+        /// The function receives a line and a station and returns the arrival times of the line to the station
+        /// </summary>
+        /// <param name="line">line id</param>
+        /// <param name="stationKey">station key</param>
+        /// <returns></returns>
+        private IEnumerable<TimeSpan> lineArrivalTimes(BusLineBO line,int stationKey)
+        {
+            return from sched in line.ScheduleList
+                   select sched.StartActivity.Add(TimeSpan.FromMinutes(line.StationList.Where(state=>myDal.GetLineStation(state.StationKey,line.Id).Serial<= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.Minutes).Sum()));
+
+        }
+
         private void addConsecutiveStations(int stateKey1, int stateKey2, double distance, TimeSpan time)
         {
             if (distance <= 0 || time <= TimeSpan.Zero)
@@ -42,11 +57,11 @@ namespace BL
         /// </summary>
         /// <param name="stateKey">station key of the wnted station</param>
         /// <returns></returns>
-        private IEnumerable<BusLineBO> getLinesOfStations(int stateKey)
+        private IEnumerable<LineInStationBO> getLinesOfStations(int stateKey)
         {
-            IEnumerable<BusLineBO> result = from line in GetAllLines()
+            IEnumerable<LineInStationBO> result = from line in GetAllLines()
                                             where line.StationList.Any(station => station.StationKey == stateKey)
-                                            select line;
+                                            select new LineInStationBO { Id=line.Id, LineNumber=line.LineNumber, Destination=line.StationList.Last().StationName, ArrivalTimes = lineArrivalTimes(line, stateKey) };
             return result;
         }
 
@@ -454,6 +469,37 @@ namespace BL
             }
 
             myDal.DeleteLineStation(line.Id, stationKey);
+        }
+
+        public void AddLine(string number,BusStationBO first, BusStationBO last,BO.Area area, double? distance = null, TimeSpan? time = null)
+        {
+            IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == number);
+            if (number.Length > 3|| number.Length<1)
+                throw new Exception("Line name must be up to three characters and not less from one!");
+            if (sameName.Count() > 1)
+                throw new Exception("There are already two lines with the same name!");
+            if (sameName.Any(line => (int)line.LineArea!= (int)area))
+                throw new Exception("Lines with the same name must be in the same area!");
+            if((first.Area != area|| last.Area!= area)&&BO.Area.GENERAL!=area)
+                throw new Exception("The stations do not match the line area!");
+            if (first.StationKey == last.StationKey)
+                throw new Exception("The stations Must be different!");
+            if (distance != null)
+                addConsecutiveStations(first.StationKey, last.StationKey, (double)distance, (TimeSpan)time);
+           
+            try
+            {
+                myDal.GetConsecutiveStations(first.StationKey,last.StationKey);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("No details on time and distance between this 2 station", ex);
+            }
+
+           int id= myDal.AddLine(new BusLineDO { IsExists = true, LineArea = (DO.Area)((int)area), LineNumber = number });
+            myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 1, StationKey = first.StationKey, LineId = id });
+            myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 2, StationKey = last.StationKey, LineId = id });
+
         }
     }
 

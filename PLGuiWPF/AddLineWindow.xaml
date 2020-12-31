@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="AddLineWindow" Height="450" Width="600">
     <Window.Resources>
-        <Style x:Key="textboxStyle" TargetType="TextBox">
+        <Style x:Key="controlStyle" TargetType="Control">
             <Setter Property="Width" Value="130" />
             <Setter Property="Height" Value="35"/>
             <Setter Property="Margin" Value="10"/>
@@ -28,14 +28,20 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10"  Grid.Row="0" TextWrapping="Wrap" Text="enter the line number:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
-        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="1" TextWrapping="Wrap" Text="enter the key of his first station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
-        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="2" TextWrapping="Wrap" Text="enter the key of his Destination station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
-        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="3" TextWrapping="Wrap" Text="enter Area of ​​activity:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
-        <TextBox x:Name="tbNum" Grid.Row="0" Grid.Column="1" Style="{StaticResource textboxStyle}" />
-        <TextBox x:Name="tbfirst" Grid.Row="1" Grid.Column="1"  Style="{StaticResource textboxStyle}"/>
-        <TextBox x:Name="tblast" Grid.Row="2" Grid.Column="1"  Style="{StaticResource textboxStyle}"/>
-        <TextBox x:Name="tbArea" Grid.Row="3" Grid.Column="1"  Style="{StaticResource textboxStyle}"/>
-        <Button x:Name="addButton" Content="ADD" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Grid.ColumnSpan="2"  Width="130" Height="40" FontSize="20" Margin="15" FontFamily="Verdana" Background="#FFA3BF60" Click="addButton_Click"/>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10"  Grid.Row="0" TextWrapping="Wrap" Text="enter the line number:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19" Visibility="{Binding ElementName=tbNum, Path=Visibility}"/>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="1" TextWrapping="Wrap" Text="enter the key of his first station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19" Visibility="{Binding ElementName=tbNum, Path=Visibility}"/>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="2" TextWrapping="Wrap" Text="enter the key of his Destination station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19" Visibility="{Binding ElementName=tbNum, Path=Visibility}"/>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="3" TextWrapping="Wrap" Text="enter Area of ​​activity:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19" Visibility="{Binding ElementName=tbNum, Path=Visibility}"/>
+        <TextBox x:Name="tbNum" Grid.Row="0" Grid.Column="1" Style="{StaticResource controlStyle}" />
+        <ComboBox x:Name="cbfirst" Grid.Row="1" Grid.Column="1"  Style="{StaticResource controlStyle}" Visibility="{Binding ElementName=tbNum, Path=Visibility}" DisplayMemberPath="StationName"/>
+        <ComboBox x:Name="cblast" Grid.Row="2" Grid.Column="1"  Style="{StaticResource controlStyle}" Visibility="{Binding ElementName=tbNum, Path=Visibility}" DisplayMemberPath="StationName"/>
+        <ComboBox x:Name="cbArea" Grid.Row="3" Grid.Column="1"  Style="{StaticResource controlStyle}" Visibility="{Binding ElementName=tbNum, Path=Visibility}"/>
+        <Button x:Name="addButton" Content="ADD" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Grid.ColumnSpan="2"  Width="130" Height="40" FontSize="20" Margin="15" FontFamily="Verdana" Background="#FFA3BF60" Click="addButton_Click" Visibility="{Binding ElementName=tbNum, Path=Visibility}"/>
+
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10"  Grid.Row="0" TextWrapping="Wrap" Text="Enter time (in minutes) from previous station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19" Visibility="{Binding ElementName=tbTime, Path=Visibility}"/>
+        <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="1" TextWrapping="Wrap" Text="Enter distance (in KM) from previous station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"  Visibility="{Binding ElementName=tbTime, Path=Visibility}"/>
+        <TextBox x:Name="tbTime" Grid.Row="0" Grid.Column="1" Style="{StaticResource controlStyle}" Visibility="Hidden" />
+        <TextBox x:Name="tbdist" Grid.Row="1" Grid.Column="1" Style="{StaticResource controlStyle}"  Visibility="{Binding ElementName=tbTime, Path=Visibility}"/>
+        <Button x:Name="addButton2" Content="ADD" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Grid.ColumnSpan="2"  Width="130" Height="40" FontSize="20" Margin="15" FontFamily="Verdana" Background="#FFA3BF60" Visibility="{Binding ElementName=tbTime, Path=Visibility}" Click="addButton2_Click"/>
     </Grid>
 </Window>

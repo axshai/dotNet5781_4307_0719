@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using BO;
 namespace BLApi
 {
-    public interface IBL 
+    public interface IBL
     {
         #region lines functions
         IEnumerable<BusLineBO> GetAllLines();
+        void AddLine(string number, BusStationBO first, BusStationBO last, BO.Area area, double? distance = null, TimeSpan? time = null);
         void DeleteLine(int id);
         BusLineBO GetLine(int id);
         void updateLine(int id, string name);
@@ -28,7 +29,7 @@ namespace BLApi
 
         #region BusLineStation function
         void AddLineStation(int lineId, int stationKey, int index, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null);
-        void DeleteLineStation(BusLineBO line, int stationKey,double? distance = null, TimeSpan? time = null);
+        void DeleteLineStation(BusLineBO line, int stationKey, double? distance = null, TimeSpan? time = null);
         #endregion
 
     }

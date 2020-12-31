@@ -41,13 +41,12 @@ namespace Dal
             throw new Exception("This line was not found!");
         }
 
-        public void AddLine(BusLineDO line)
+        public int AddLine(BusLineDO line)
         {
             BusLineDO line1_toadd = line.Clone();
-            if (DataSource.BusLines.Exists(line2 => line2.Id == line1_toadd.Id))
-                throw new Exception("There is already such a line with the same id in the system!");
-
+            line1_toadd.Id = DSConfig.BusLineCounter;
             DataSource.BusLines.Add(line1_toadd);
+            return line1_toadd.Id;
         }
 
 
@@ -211,7 +210,7 @@ namespace Dal
 
         public LineStationDO GetLineStation(int stationKey, int lineId)
         {
-            LineStationDO station = DataSource.LineStations.Find(station1=>station1.StationKey == stationKey && station1.LineId == lineId && station1.IsExist == true);
+            LineStationDO station = DataSource.LineStations.Find(station1 => station1.StationKey == stationKey && station1.LineId == lineId && station1.IsExist == true);
             if (station != null)
                 return station.Clone();
             throw new Exception("This line station was not found!");
@@ -237,6 +236,14 @@ namespace Dal
             DataSource.AllConsecutiveStations.Add(toAdd);
         }
 
+        public void UpdateConsecutiveStations(int stationKey1, int stationKey2, Action<ConsecutiveStationsDO> toUpdate)
+        {
+            ConsecutiveStationsDO c1 = DataSource.AllConsecutiveStations.Find(c2 => c2.Station1Key == stationKey1 && c2.Station2Key == stationKey2);
+            if (c1 == null)
+                throw new Exception("These stations were not found as  Consecutive!");
+            toUpdate(c1);
+        }
+
         #endregion
 
         #region BusStation functions
@@ -256,6 +263,30 @@ namespace Dal
                 return station.Clone();
             throw new Exception("This station was not found!");
         }
+
+
+        public void DeleteBusStation(int key)
+        {
+            BusStationDO station = DataSource.BusStations.Find(station1 => station1.StationKey == key && station1.IsExists == true);
+            if (station == null)
+            {
+                throw new Exception("This station was not found!");
+            }
+            station.IsExists = false;
+
+        }
+
+
+        public void UpdateBusStation(BusStationDO station)
+        {
+            int index = DataSource.BusStations.FindIndex(station1 => station1.StationKey == station.StationKey && station1.IsExists == true);
+            if (index == -1)
+                throw new Exception("This station was not found!");
+            DataSource.BusStations[index] = station.Clone();
+        }
+
+
+
         #endregion
 
         #region BusLineSchedule functions
