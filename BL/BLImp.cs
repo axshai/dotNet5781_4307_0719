@@ -40,28 +40,12 @@ namespace BL
         {
             int sum = line.StationList.Where(state => myDal.GetLineStation(state.StationKey, line.Id).Serial <= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.Minutes).Sum();
             IEnumerable<TimeSpan> result = from sched in line.ScheduleList.ToList()
-                                           let x = Enumerable.Range(0, (int)((sched.EndActivity - sched.StartActivity).TotalMinutes - 1)/ sched.frequency + 1)
+                                           let x = Enumerable.Range(0, (int)((sched.EndActivity - sched.StartActivity).TotalMinutes - 1) / sched.frequency + 1)
                                            from mult in x
                                            select sched.StartActivity.Add(TimeSpan.FromMinutes(sum + sched.frequency * mult));
             return result;
-            // return Enumerable.Range(1, stations.Count() + 1);
+
         }
-
-        //private IEnumerable<TimeSpan> lineArrivalTimes(BusLineBO line,int stationKey)
-        //{
-        //    List<TimeSpan> result = new List<TimeSpan>();
-        //    IEnumerable<TimeSpan> times = from sched in line.ScheduleList
-        //                                   select sched.StartActivity.Add(TimeSpan.FromMinutes(line.StationList.Where(state => myDal.GetLineStation(state.StationKey, line.Id).Serial <= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.Minutes).Sum()));
-        //    for (int i = 0; i < times.Count(); i++)
-        //    {
-        //       BusLineScheduleBO item = line.ScheduleList.ElementAt(i);
-
-
-        //        for (int j = 0; j < (item.EndActivity - item.StartActivity).TotalMinutes; j += item.frequency)
-        //            result.Add(times.ElementAt(i).Add(TimeSpan.FromMinutes(j)));
-        //    }
-        //    return result;
-        //}
 
         private void addConsecutiveStations(int stateKey1, int stateKey2, double distance, TimeSpan time)
         {
@@ -443,6 +427,20 @@ namespace BL
 
         }
 
+        public IEnumerable<ConsecutiveStationBO> GetConsecutiveStations(int StationKey)//***
+        {
+            List<ConsecutiveStationBO> result=new List<ConsecutiveStationBO>();
+            IEnumerable<ConsecutiveStationBO> temp = (from line in GetAllLines()
+                                                      where line.StationList.ToList().Exists(line2 => line2.StationKey == StationKey)
+                                                      let index = line.StationList.ToList().FindIndex(station2 => station2.StationKey == StationKey)
+                                                      where (index < line.StationList.Count() - 1) && (!result.Exists(station1 => line.StationList.ElementAt(index + 1).StationKey == station1.StationKey))
+                                                      select new ConsecutiveStationBO { DistanceFromPrev = line.StationList.ElementAt(index + 1).DistanceFromPrev, PrevStationKey = StationKey, StationKey = line.StationList.ElementAt(index + 1).StationKey, StationName = line.StationList.ElementAt(index + 1).StationName, TimeFromPrev = line.StationList.ElementAt(index + 1).TimeFromPrev };
+            return from station in temp.ToList()
+                   where temp.ToList().FindAll(station1 => station1.StationKey == station.StationKey).Count() < 2
+                   select station;
+
+        }
+
         public void updateLine(int id, string name)
         {
             IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == name);
@@ -461,7 +459,6 @@ namespace BL
         {
 
             int place = myDal.GetLineStation(stationKey, line.Id).Serial;
-            // int index = line.StationList.ToList().FindIndex(state => state.StationKey == stationKey);
 
             if (place != 1 && place != line.StationList.Count())//if he wants do delete station in the midle of the rout
             {
@@ -520,6 +517,12 @@ namespace BL
             myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 1, StationKey = first.StationKey, LineId = id });
             myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 2, StationKey = last.StationKey, LineId = id });
 
+        }
+
+        public void UpdateConsecutiveStation(int stationKey1, int stationKey2, double distance, TimeSpan time)
+        {
+            myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.Distance = distance);
+            myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
         }
     }
 

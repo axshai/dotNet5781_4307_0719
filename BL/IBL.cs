@@ -32,5 +32,8 @@ namespace BLApi
         void DeleteLineStation(BusLineBO line, int stationKey, double? distance = null, TimeSpan? time = null);
         #endregion
 
+        #region ConsecutiveStations functions
+        void UpdateConsecutiveStation(int stationKey1, int stationKey2, double distance, TimeSpan time);
+       #endregion
     }
 }
