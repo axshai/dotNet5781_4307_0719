@@ -434,7 +434,7 @@ namespace BL
                                                       where line.StationList.ToList().Exists(line2 => line2.StationKey == StationKey)
                                                       let index = line.StationList.ToList().FindIndex(station2 => station2.StationKey == StationKey)
                                                       where (index < line.StationList.Count() - 1) && (!result.Exists(station1 => line.StationList.ElementAt(index + 1).StationKey == station1.StationKey))
-                                                      select new ConsecutiveStationBO { DistanceFromPrev = line.StationList.ElementAt(index + 1).DistanceFromPrev, PrevStationKey = StationKey, StationKey = line.StationList.ElementAt(index + 1).StationKey, StationName = line.StationList.ElementAt(index + 1).StationName, TimeFromPrev = line.StationList.ElementAt(index + 1).TimeFromPrev };
+                                                      select new ConsecutiveStationBO { DistanceFromPrev = line.StationList.ElementAt(index + 1).DistanceFromPrev, PrevStationKey = StationKey, StationKey = line.StationList.ElementAt(index + 1).StationKey, StationName = line.StationList.ElementAt(index + 1).StationName, TimeFromPrev = line.StationList.ElementAt(index + 1).TimeFromPrev });
             return from station in temp.ToList()
                    where temp.ToList().FindAll(station1 => station1.StationKey == station.StationKey).Count() < 2
                    select station;
