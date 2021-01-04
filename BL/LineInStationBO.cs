@@ -8,6 +8,7 @@ namespace BO
 {
     public class LineInStationBO
     {
+        public Area Area{get; set;}
         public string LineNumber { get; set; }
         public int Id { get; set; }
         public string Destination { get; set; }

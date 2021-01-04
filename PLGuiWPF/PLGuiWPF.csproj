@@ -68,6 +68,9 @@
     <Compile Include="DeleteLineStationWindow.xaml.cs">
       <DependentUpon>DeleteLineStationWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditTimeAndDistWindow.xaml.cs">
+      <DependentUpon>EditTimeAndDistWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FrequencyWindow.xaml.cs">
       <DependentUpon>FrequencyWindow.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DeleteLineStationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditTimeAndDistWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
