@@ -1,0 +1,14 @@
+﻿<Window x:Class="PLGuiWPF.LineArrivalTimesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PLGuiWPF"
+        mc:Ignorable="d"
+        Title="LineArrivalTimes" Height="300" Width="360">
+    <Grid Background="AliceBlue">
+        <ListBox Background="BlanchedAlmond" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20,50,20,6" FontSize="18" ItemsSource="{Binding ArrivalTimes}" Width="130"/>
+        <Label Content="Arrival times of the line to the station:" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FFF4F0B6" FontSize="20" Margin="5" />
+
+    </Grid>
+</Window>

@@ -23,13 +23,13 @@ namespace PLGuiWPF
     {
 
         IBL blObject;
-       
+
         public ShowStationsWindow()
         {
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
             dgStations.ItemsSource = blObject.GetAllStation();
-           
+
 
         }
 
@@ -37,12 +37,22 @@ namespace PLGuiWPF
         {
             ShowStationDetails w1 = new ShowStationDetails(dgStations.SelectedItem as BusStationBO);
             w1.ShowDialog();
-           // dgStations.ItemsSource = blObject.GetAllStation();
+            dgStations.ItemsSource = blObject.GetAllStation();
 
 
 
         }
 
-       
+        private void editButton_Click(object sender, RoutedEventArgs e)
+        {
+            try { blObject.DeleteBusStation((sender as Button).DataContext as BusStationBO); dgStations.ItemsSource = blObject.GetAllStation(); }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+        }
+
+      
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

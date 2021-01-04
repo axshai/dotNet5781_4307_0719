@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BO;
+using BLApi;
 namespace PLGuiWPF
 {
     /// <summary>
@@ -19,13 +20,13 @@ namespace PLGuiWPF
     /// </summary>
     public partial class ShowStationDetails : Window
     {
-      
+        IBL bl;
 
         public ShowStationDetails(BusStationBO stationShow)
         {
            
             InitializeComponent();
-
+            bl = BLFactory.GetBL("1");
            
              this.DataContext = stationShow;
            
@@ -35,7 +36,16 @@ namespace PLGuiWPF
 
         private void editTimeDist_Click(object sender, RoutedEventArgs e)
         {
+            ConsecutiveStationBO b1=(sender as Button).DataContext as ConsecutiveStationBO;
+            EditTimeAndDistWindow wnd = new EditTimeAndDistWindow(b1);
+            wnd.ShowDialog();
+            this.DataContext = bl.GetBusStation((this.DataContext as BusStationBO).StationKey);
+        }
 
+        private void dgLines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            LineArrivalTimesWindow wnd1 = new LineArrivalTimesWindow(dgLines.SelectedItem as LineInStationBO);
+            wnd1.ShowDialog();
         }
     }
 }

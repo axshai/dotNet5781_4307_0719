@@ -24,7 +24,7 @@
 
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -33,7 +33,8 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}"  Grid.Column="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="30,50" FontSize="18" ItemsSource="{Binding ListOfLines}" >
+
+        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}"  Grid.Column="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="30,20" FontSize="18" ItemsSource="{Binding ListOfLines}" MouseDoubleClick="dgLines_MouseDoubleClick" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="line ID:" Binding="{Binding Id}" Width="auto" />
                 <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="auto" />
@@ -43,7 +44,9 @@
         </DataGrid>
 
 
-        <DataGrid x:Name="dgconStations" Style="{StaticResource dataGridStyle}"  Grid.Column="1" Grid.Row="1"  VerticalAlignment="Stretch" Height="auto" HorizontalAlignment="Center" Margin="30,50" FontSize="18" ItemsSource="{Binding ListOfConsecutiveLineStations}" >
+        <DataGrid x:Name="dgconStations" Style="{StaticResource dataGridStyle}"  
+                  Grid.Column="1" Grid.Row="1"  VerticalAlignment="Stretch" Height="auto" 
+                  HorizontalAlignment="Center" Margin="30,20" FontSize="18" ItemsSource="{Binding ListOfConsecutiveLineStations}" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Station Key" Binding="{Binding StationKey}" Width="auto" />
                 <DataGridTextColumn Header="station name" Binding="{Binding StationName}" Width="auto" />
@@ -58,6 +61,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-
+        <Label Content="Lines passing through the station:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="15,5" VerticalAlignment="Top" FontSize="20" Background="#FFA9D9C5"/>
+        <Label Content="Consecutive stations:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="15,5" VerticalAlignment="Top" FontSize="20" Background="#FFA9D9C5"/>
     </Grid>
 </Window>

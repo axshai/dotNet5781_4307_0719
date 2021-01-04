@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowStationsWindow" Height="auto" Width="800">
+        Title="ShowStationsWindow" Height="Auto" Width="AUTO">
     <Window.Resources>
         <local:ListOfStationsToFirst 
              x:Key="ListOfStationsToFirst"/>
@@ -28,20 +28,34 @@
         </Style>
 
     </Window.Resources>
-    <Grid Background="#FFE5F5F9">
+    <Grid Background="#FFE5F5F9" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dgStations" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgStations_MouseDoubleClick">
+        <DataGrid x:Name="dgStations" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgStations_MouseDoubleClick" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="StationName"  Binding="{Binding StationName}" Width="*" />
                 <DataGridTextColumn Header="station key" Binding="{Binding StationKey}" Width="*"/>
                 <DataGridTextColumn Header="Latitude" Binding="{Binding Latitude}"  Width="*"/>
                 <DataGridTextColumn Header="Longitude" Binding="{Binding Longitude}" Width="*"/>
                 <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="*"/>
-
+                <DataGridTemplateColumn Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="editButton" Content="edit" Margin="5" Background="#FFCCB2E4" Click="editButton_Click" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="delButton" Content="delete" Margin="5" Background="#FFD6EBA9" Click="editButton_Click" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Button x:Name="addButton" Content="ADD NEW STATION" HorizontalAlignment="Center" Margin="10" Grid.Row="0" VerticalAlignment="Top" Width="160" Height="30"  Background="#FFE4BABA" FontSize="18" Click="addButton_Click" />
     </Grid>
 </Window>

@@ -159,7 +159,7 @@ namespace BL
                        StationKey = station.StationKey,
                        StationName = station.StationName,
                        ListOfLines = getLinesOfStations(station.StationKey),
-                       ListOfConsecutiveLineStations = GetListOfConsecutiveLineStation(station.StationKey)
+                       ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
                    };
         }
         /// <summary>
@@ -521,7 +521,7 @@ namespace BL
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
         }
 
-        public BusStationBO GetBusStationBO(int stationKey)
+        public BusStationBO GetBusStation(int stationKey)
         {
             BusStationDO station = myDal.GetBusStation(stationKey);
             return new BusStationBO
@@ -532,9 +532,17 @@ namespace BL
                 StationKey = station.StationKey,
                 StationName = station.StationName,
                 ListOfLines = getLinesOfStations(station.StationKey),
-                ListOfConsecutiveLineStations = GetListOfConsecutiveLineStation(station.StationKey)
+                ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
             };
          }
+
+        public void DeleteBusStation(BusStationBO toDel)
+        {
+            if (toDel.ListOfLines.Any())
+                throw new Exception("It is not possible to delete a station that  lines stop in it!");
+            else
+                myDal.DeleteBusStation(toDel.StationKey);
+        }
     }
 
 }

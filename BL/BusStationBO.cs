@@ -9,7 +9,7 @@ namespace BO
     public class BusStationBO
     {
         public IEnumerable<LineInStationBO> ListOfLines { get; set; }
-        public IEnumerable<BusLineStationBO> ListOfConsecutiveLineStations { get; set; }
+        public IEnumerable<ConsecutiveStationBO> ListOfConsecutiveLineStations { get; set; }
 
         public string StationName { get; set; }
         public int StationKey { get; set; }

@@ -25,9 +25,10 @@ namespace PLGuiWPF
         ConsecutiveStationBO currentStation;
         public EditTimeAndDistWindow(BO.ConsecutiveStationBO consecutiveStationBO)
         {
+            
+            InitializeComponent();
             currentStation = consecutiveStationBO;
             mybl = BLFactory.GetBL("1");
-            InitializeComponent();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -35,11 +36,14 @@ namespace PLGuiWPF
             
             int test;
             double test1;
-            
-            if (!(int.TryParse(tbtime.Text, out test) && double.TryParse(tbdist.Text, out test1) &&test>0&&test1>0))
+
+            if (!(int.TryParse(tbtime.Text, out test) && double.TryParse(tbdist.Text, out test1) && test > 0 && test1 > 0))
                 MessageBox.Show("Please enter time and distance in the correct format!");
-            mybl.UpdateConsecutiveStation(currentStation.PrevStationKey, currentStation.StationKey,double.Parse(tbdist.Text),TimeSpan.FromMinutes(test));
-           
+            else
+            {
+                mybl.UpdateConsecutiveStation(currentStation.PrevStationKey, currentStation.StationKey, double.Parse(tbdist.Text), TimeSpan.FromMinutes(test));
+                this.Close();
+            }
         }
     }
 }
