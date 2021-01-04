@@ -150,7 +150,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 123,
-                StationName = "frankfurter",
+                StationName = "frankfurter/haunter",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.CENTER,
@@ -161,7 +161,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 456,
-                StationName = "rotchild",
+                StationName = "rotchild/zev kach",
                 Longitude = 38,
                 Latitude = 36,
                 StationArea = Area.CENTER,
@@ -171,7 +171,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 789,
-                StationName = "herzel",
+                StationName = "herzel/golda meir",
                 Longitude = 37,
                 Latitude = 37,
                 StationArea = Area.CENTER,
@@ -181,7 +181,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 91011,
-                StationName = "hgefen",
+                StationName = "hgefen/bni akiva",
                 Longitude = 32,
                 Latitude = 37,
                 StationArea = Area.CENTER,
@@ -191,7 +191,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 111213,
-                StationName = "eli cohen",
+                StationName = "eli cohen/hava loazki",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.CENTER,
@@ -200,7 +200,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 141516,
-                StationName = "hzra",
+                StationName = "hzra/hapnina ",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.CENTER,
@@ -209,7 +209,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 171819,
-                StationName = "ben lakish",
+                StationName = "ben lakish/yosi ben yoaezr",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.JERUSALEM,
@@ -218,7 +218,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 202122,
-                StationName = "rebi akiva",
+                StationName = "rebi akiva/rav ashiy",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.JERUSALEM,
@@ -228,7 +228,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 232425,
-                StationName = "ben azy",
+                StationName = "ben azy/rbi meir",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.SHFELA,
@@ -238,7 +238,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 262728,
-                StationName = "yona hanvie",
+                StationName = "yona hanvie/zchrya hanvie",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.SHFELA,
@@ -248,7 +248,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 293031,
-                StationName = "yoram gaon",
+                StationName = "yoram gaon/reshut hshidur",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.SHFELA,
@@ -258,7 +258,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 323334,
-                StationName = "arik aynshtein",
+                StationName = "arik aynshtein/bery sahchruf",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.SHFELA,
@@ -268,7 +268,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 353637,
-                StationName = "harv ovdia",
+                StationName = "harv ovdia/harv ychak yosef",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.NORTH,
@@ -277,7 +277,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 383940,
-                StationName = "harv shach",
+                StationName = "harv shach/harv alyashiv",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.NORTH,
@@ -287,7 +287,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 414243,
-                StationName = "harv chaim pinto",
+                StationName = "harv chaim pinto/ baba saliy",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.SOUTH,
@@ -297,7 +297,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 444546,
-                StationName = "harv shtynam",
+                StationName = "harv shtynam/rabi yehusha",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.SOUTH,
@@ -306,7 +306,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 474849,
-                StationName = "ali luzon",
+                StationName = "ali luzon/moshe chogeg",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.WESTBANK,
@@ -315,7 +315,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 505152,
-                StationName = "hpoalim",
+                StationName = "hpoalim/hatnk",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.WESTBANK,
@@ -324,7 +324,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 535455,
-                StationName = "mizrachi",
+                StationName = "mizrachi/hoz 77",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.WESTBANK,
@@ -333,7 +333,7 @@ namespace DS
             BusStations.Add(new BusStationDO
             {
                 StationKey = 565758,
-                StationName = "hamoshava",
+                StationName = "hamoshava/hasidy belz",
                 Longitude = 34,
                 Latitude = 32,
                 StationArea = Area.WESTBANK,
