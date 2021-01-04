@@ -40,6 +40,7 @@ namespace DalApi
         #endregion
 
         #region BusStation
+        void AddBusStation(BusStationDO station);
         IEnumerable<BusStationDO> GetAllStations();
         BusStationDO GetBusStation(int key);
         void DeleteBusStation(int key);

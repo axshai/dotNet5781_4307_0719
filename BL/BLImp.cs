@@ -64,13 +64,19 @@ namespace BL
         {
             IEnumerable<LineInStationBO> result = from line in GetAllLines()
                                                   where line.StationList.Any(station => station.StationKey == stateKey)
-                                                  select new LineInStationBO { Id = line.Id, LineNumber = line.LineNumber, Destination = line.StationList.Last().StationName, ArrivalTimes = lineArrivalTimes(line, stateKey), Area = line.Area
+                                                  select new LineInStationBO
+                                                  {
+                                                      Id = line.Id,
+                                                      LineNumber = line.LineNumber,
+                                                      Destination = line.StationList.Last().StationName,
+                                                      ArrivalTimes = lineArrivalTimes(line, stateKey),
+                                                      Area = line.Area
                                                   };
             return result;
         }
 
 
-         
+
 
 
         /// <summary>
@@ -534,7 +540,7 @@ namespace BL
                 ListOfLines = getLinesOfStations(station.StationKey),
                 ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
             };
-         }
+        }
 
         public void DeleteBusStation(BusStationBO toDel)
         {
@@ -543,9 +549,53 @@ namespace BL
             else
                 myDal.DeleteBusStation(toDel.StationKey);
         }
-    }
 
+        public void AddBusStation(BusStationBO toAdd)
+        {
+            if (toAdd.StationKey > 999999 || (toAdd.StationKey < 0))//The number of station must be 6 digits
+            {
+                throw new Exception("Station number must be between 1 and 6 digits!");
+            }
+            if (toAdd.Latitude < -90 && toAdd.Latitude > 90)//If the latitude is correct
+            {
+                throw new Exception(String.Format("The Latitude must be between <{0},{1}>", -90, 90));
+            }
+
+            if (toAdd.Longitude < -180 && toAdd.Latitude > 180)//If the latitude is correct
+            {
+                throw new Exception(String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
+            }
+            try 
+            {
+                myDal.AddBusStation(new BusStationDO { IsExists = true, StationKey = toAdd.StationKey, Latitude = toAdd.Latitude, Longitude = toAdd.Longitude, StationArea = (DO.Area)((int)toAdd.Area), StationName = toAdd.StationName });
+            }
+            catch(Exception ex) { throw new Exception("FAIL!", ex); }
+
+        }
+
+        public void updateBusStation(BusStationBO toUpdate)
+        {
+            if (toUpdate.Latitude < -90 && toUpdate.Latitude > 90)//If the latitude is correct
+            {
+                throw new Exception(String.Format("The Latitude must be between <{0},{1}>", -90, 90));
+            }
+
+            if (toUpdate.Longitude < -180 && toUpdate.Latitude > 180)//If the latitude is correct
+            {
+                throw new Exception(String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
+            }
+
+            try
+            {
+                myDal.UpdateBusStation(new BusStationDO { IsExists = true, StationKey = toUpdate.StationKey, Latitude = toUpdate.Latitude, Longitude = toUpdate.Longitude, StationArea = (DO.Area)((int)toUpdate.Area), StationName = toUpdate.StationName });
+            }
+            catch (Exception ex) { throw new Exception("FAIL!", ex); }
+        }
+
+    }
 }
+
+
 
 
 

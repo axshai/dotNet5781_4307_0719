@@ -43,16 +43,32 @@ namespace PLGuiWPF
 
         }
 
-        private void editButton_Click(object sender, RoutedEventArgs e)
-        {
-            try { blObject.DeleteBusStation((sender as Button).DataContext as BusStationBO); dgStations.ItemsSource = blObject.GetAllStation(); }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-        }
-
-      
+       
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
+            AddStationWindow wnd = new AddStationWindow();
+            wnd.ShowDialog();
+            dgStations.ItemsSource = blObject.GetAllStation();
+        }
 
+        private void editButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddStationWindow wnd = new AddStationWindow((sender as Button).DataContext as BusStationBO);
+            wnd.ShowDialog();
+            dgStations.ItemsSource = blObject.GetAllStation();
+        }
+
+        private void delButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                blObject.DeleteBusStation((sender as Button).DataContext as BusStationBO);
+                dgStations.ItemsSource = blObject.GetAllStation();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

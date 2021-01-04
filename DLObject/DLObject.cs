@@ -248,6 +248,15 @@ namespace Dal
 
 
         #region BusStation functions
+
+        public void AddBusStation(BusStationDO station)
+        {
+            BusStationDO toAdd = station.Clone();
+            if (DataSource.BusStations.Exists(station1 => station1.StationKey == station.StationKey && station1.IsExists == true))
+                throw new BadBusStationKeyException(station.StationKey,"There is already station with the same key in the system!");
+            DataSource.BusStations.Add(toAdd);
+        }
+
         public IEnumerable<BusStationDO> GetAllStations()
         {
 
