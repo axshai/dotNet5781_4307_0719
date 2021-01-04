@@ -38,7 +38,7 @@ namespace Dal
             BusLineDO line1 = DataSource.BusLines.Find(line => line.Id == id && line.IsExists == true);
             if (line1 != null)
                 return line1.Clone();
-            throw new Exception("This line was not found!");
+            throw new BadLineIdException(id,"This line was not found!");
         }
 
         public int AddLine(BusLineDO line)
@@ -54,7 +54,7 @@ namespace Dal
         {
             int index = DataSource.BusLines.FindIndex(line1 => line1.Id == line.Id && line.IsExists == true);
             if (index == -1)
-                throw new Exception("This Line was not found!");
+                throw new BadLineIdException(line.Id,"This Line was not found!");
             DataSource.BusLines[index] = line.Clone();
         }
 
@@ -62,7 +62,7 @@ namespace Dal
         {
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
             if (line == null)
-                throw new Exception("This Line was not found!");
+                throw new BadLineIdException(id,"This Line was not found!");
             toUpdate(line);
 
         }
@@ -72,13 +72,13 @@ namespace Dal
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
             if (line == null)
             {
-                throw new Exception("This Line was not found!");
+                throw new BadLineIdException(id,"This Line was not found!");
             }
             line.IsExists = false;
 
         }
         #endregion
-
+        //---------------------
         #region User functions
         public IEnumerable<UserDO> GetAllUsers()
         {
@@ -173,7 +173,7 @@ namespace Dal
             throw new NotImplementedException();
         }
         #endregion
-
+        //---------------------
         #region LineStation functions
         public IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate)
         {
@@ -188,14 +188,14 @@ namespace Dal
             if (station1 != null)
                 toUpdate(station1);
             else
-                throw new Exception("This station was not found!");
+                throw new BadLineStationKeyLineIDException(stationKey, lineKey,"This station was not found!");
         }
 
         public void AddLineStation(LineStationDO station)
         {
             LineStationDO toAdd = station.Clone();
             if (DataSource.LineStations.Exists(station1 => station1.LineId == station.LineId && station1.StationKey == station.StationKey && station1.IsExist == true))
-                throw new Exception("There is already such a LineStation with the same key in the system!");
+                throw new BadLineStationKeyLineIDException(station.StationKey,station.LineId,"There is already such a LineStation with the same key in the system!");
             DataSource.LineStations.Add(toAdd);
         }
 
@@ -205,7 +205,7 @@ namespace Dal
             if (toDelete != null)
                 toDelete.IsExist = false;
             else
-                throw new Exception("This LineStation was not found!");
+                throw new BadLineStationKeyLineIDException(stationKey, lineKey, "This line station was not found!");
         }
 
         public LineStationDO GetLineStation(int stationKey, int lineId)
@@ -213,7 +213,7 @@ namespace Dal
             LineStationDO station = DataSource.LineStations.Find(station1 => station1.StationKey == stationKey && station1.LineId == lineId && station1.IsExist == true);
             if (station != null)
                 return station.Clone();
-            throw new Exception("This line station was not found!");
+            throw new BadLineStationKeyLineIDException(stationKey, lineId, "This line station was not found!");
         }
 
 
@@ -225,14 +225,14 @@ namespace Dal
             ConsecutiveStationsDO c1 = DataSource.AllConsecutiveStations.Find(c2 => c2.Station1Key == stationKey1 && c2.Station2Key == stationKey2);
             if (c1 != null)
                 return c1.Clone();
-            throw new Exception("These stations were not found as  Consecutive!");
+            throw new BadConsecutiveStationsKeysException(stationKey1, stationKey2,"These stations were not found as  Consecutive!");
         }
 
         public void AddConsecutiveStations(ConsecutiveStationsDO stations)
         {
             ConsecutiveStationsDO toAdd = stations.Clone();
             if (DataSource.AllConsecutiveStations.Exists(stations1 => stations1.Station1Key == stations.Station1Key && stations1.Station2Key == stations.Station2Key))
-                throw new Exception("There is already such ConsecutiveStations in the system!");
+                throw new BadConsecutiveStationsKeysException(stations.Station1Key, stations.Station2Key, "There is already such ConsecutiveStations in the system!");
             DataSource.AllConsecutiveStations.Add(toAdd);
         }
 
@@ -240,11 +240,12 @@ namespace Dal
         {
             ConsecutiveStationsDO c1 = DataSource.AllConsecutiveStations.Find(c2 => c2.Station1Key == stationKey1 && c2.Station2Key == stationKey2);
             if (c1 == null)
-                throw new Exception("These stations were not found as  Consecutive!");
+                throw new BadConsecutiveStationsKeysException(stationKey1, stationKey2, "These stations were not found as  Consecutive!");
             toUpdate(c1);
         }
 
         #endregion
+
 
         #region BusStation functions
         public IEnumerable<BusStationDO> GetAllStations()
@@ -261,7 +262,7 @@ namespace Dal
             BusStationDO station = DataSource.BusStations.Find(station1 => station1.StationKey == key && station1.IsExists == true);
             if (station != null)
                 return station.Clone();
-            throw new Exception("This station was not found!");
+            throw new BadBusStationKeyException(key,"This station was not found!");
         }
 
 
@@ -270,7 +271,7 @@ namespace Dal
             BusStationDO station = DataSource.BusStations.Find(station1 => station1.StationKey == key && station1.IsExists == true);
             if (station == null)
             {
-                throw new Exception("This station was not found!");
+                throw new BadBusStationKeyException(key, "This station was not found!");
             }
             station.IsExists = false;
 
@@ -281,7 +282,7 @@ namespace Dal
         {
             int index = DataSource.BusStations.FindIndex(station1 => station1.StationKey == station.StationKey && station1.IsExists == true);
             if (index == -1)
-                throw new Exception("This station was not found!");
+                throw new BadBusStationKeyException(station.StationKey, "This station was not found!");
             DataSource.BusStations[index] = station.Clone();
         }
 
@@ -305,28 +306,26 @@ namespace Dal
             if (Sched != null)
                 Sched.IsExists = false;
             else
-                throw new Exception("This Schedule was not found!");
+                throw new BadBusLineScheduleException(start, lineId, "This Schedule was not found!");
         }
 
-        public void UpdateSchedule(int lineId, TimeSpan start, int newFreq, TimeSpan? begin = null, TimeSpan? end = null)
+        public void UpdateSchedule(int lineId, TimeSpan start, Action<BusLineScheduleDO> toUpdate) //method that knows to updt specific fields in Person
         {
             BusLineScheduleDO Sched = DataSource.BusLineSchedules.Find(Sched1 => Sched1.LineId == lineId && Sched1.StartActivity == start && Sched1.IsExists == true);
-            if (Sched == null)
-                throw new Exception("This Schedule was not found!");
-            Sched.frequency = newFreq;
-            if (begin != null)
-                Sched.StartActivity = (TimeSpan)begin;
-            if (end != null)
-                Sched.EndActivity = (TimeSpan)end;
+            if (Sched != null)
+                toUpdate(Sched);
+            else
+                throw new BadBusLineScheduleException(start, lineId, "There is already such a Schedule for the line the system!");
         }
 
         public void AddSchedule(BusLineScheduleDO toadd)
         {
 
             if (DataSource.BusLineSchedules.Exists(sched => sched.LineId == toadd.LineId && sched.StartActivity == toadd.StartActivity))
-                throw new Exception("There is already such a Schedule for the line the system!");
+                throw new BadBusLineScheduleException(toadd.StartActivity,toadd.LineId,"There is already such a Schedule for the line the system!");
             DataSource.BusLineSchedules.Add(toadd.Clone());
         }
+
 
         #endregion
     }
