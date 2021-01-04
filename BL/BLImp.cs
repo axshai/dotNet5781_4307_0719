@@ -199,27 +199,27 @@ namespace BL
         /// <param name="freq">frequency</param>
         public void AddSchedule(int lineId, TimeSpan begin1, TimeSpan end1, int freq)
         {
-            if (begin1 > end1)
+            if (begin1 >= end1)
                 throw new Exception("Start time must be before end!");
             if ((end1 - begin1).TotalMinutes < freq)
                 throw new Exception("The frequency is higher than the maximum possible in this time frame!");
             // Find and update / delete schedules that are affected by the new
             IEnumerable<BusLineScheduleBO> toChange = from sched in getSchedulesOfLine(lineId)
-                                                      where (sched.StartActivity > begin1 && sched.StartActivity < end1) || (sched.EndActivity > begin1 && sched.EndActivity < end1) || (sched.StartActivity < begin1 && sched.EndActivity > end1)
+                                                      where (sched.StartActivity >= begin1 && sched.StartActivity <= end1) || (sched.EndActivity >= begin1 && sched.EndActivity <= end1) || (sched.StartActivity <= begin1 && sched.EndActivity >= end1)
                                                       select sched;
 
             foreach (BusLineScheduleBO item in toChange)
             {
-                if (item.StartActivity > begin1 && item.EndActivity < end1)//אם החדש בולע אותו
+                if (item.StartActivity >= begin1 && item.EndActivity <= end1)//אם החדש בולע אותו
                 {
                     DeleteSchedule(item);
                     continue;
                 }
 
-                if (item.StartActivity > begin1)//אם הוא מתחיל בתוך החדש
+                if (item.StartActivity >= begin1)//אם הוא מתחיל בתוך החדש
                     myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.StartActivity = end1); //עשה שיתחיל אחריו
 
-                else if (item.EndActivity < end1)//אם נגמר בתוך החדש
+                else if (item.EndActivity <= end1)//אם נגמר בתוך החדש
                     myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);//עשה שיגמר לפניו
                 else
                 {

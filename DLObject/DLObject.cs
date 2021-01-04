@@ -321,7 +321,7 @@ namespace Dal
         public void AddSchedule(BusLineScheduleDO toadd)
         {
 
-            if (DataSource.BusLineSchedules.Exists(sched => sched.LineId == toadd.LineId && sched.StartActivity == toadd.StartActivity))
+            if (DataSource.BusLineSchedules.Exists(sched => sched.LineId == toadd.LineId && sched.StartActivity == toadd.StartActivity && sched.IsExists==true))
                 throw new BadBusLineScheduleException(toadd.StartActivity,toadd.LineId,"There is already such a Schedule for the line the system!");
             DataSource.BusLineSchedules.Add(toadd.Clone());
         }

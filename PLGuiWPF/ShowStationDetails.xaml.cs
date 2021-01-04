@@ -19,15 +19,15 @@ namespace PLGuiWPF
     /// </summary>
     public partial class ShowStationDetails : Window
     {
-        BusStationBO displaydStation;
+      
 
         public ShowStationDetails(BusStationBO stationShow)
         {
            
             InitializeComponent();
 
-            displaydStation = stationShow;
-             this.DataContext = displaydStation;
+           
+             this.DataContext = stationShow;
            
             
 
