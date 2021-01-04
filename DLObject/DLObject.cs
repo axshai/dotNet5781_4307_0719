@@ -205,7 +205,7 @@ namespace Dal
             if (toDelete != null)
                 toDelete.IsExist = false;
             else
-                throw new Exception("This user was not found!");
+                throw new Exception("This LineStation was not found!");
         }
 
         public LineStationDO GetLineStation(int stationKey, int lineId)

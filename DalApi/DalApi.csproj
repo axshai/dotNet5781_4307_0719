@@ -51,6 +51,7 @@
     <Compile Include="DLConfig.cs" />
     <Compile Include="DLFactory.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="IDAL.cs" />
     <Compile Include="LineStationDO.cs" />
     <Compile Include="PassengerTravelDO.cs" />

@@ -23,9 +23,18 @@ namespace PLGuiWPF
 
         public ShowStationDetails(BusStationBO stationShow)
         {
+           
             InitializeComponent();
-            displaydStation = stationShow;
 
+            displaydStation = stationShow;
+             this.DataContext = displaydStation;
+           
+            
+
+        }
+
+        private void editTimeDist_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

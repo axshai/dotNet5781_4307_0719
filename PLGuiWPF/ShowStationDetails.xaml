@@ -5,8 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowStationDetails" Height="450" Width="800">
+        Title="ShowStationDetails" Height="450" Width="auto">
+    <Window.Resources>
+        <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#FF99EDF1" />
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+
+        </Style>
+        <Style x:Key="dataGridStyle"  TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource HeaderStyle}"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Background" Value="#FF99D3F1"/>
+            <Setter  Property="AutoGenerateColumns" Value="False"/>
+            <Setter  Property="FontSize" Value="18"/>
+            <Setter  Property="ColumnWidth" Value="auto"/>
+
+        </Style>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}"  Grid.Column="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="30,50" FontSize="18" ItemsSource="{Binding ListOfLines}" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="line ID:" Binding="{Binding Id}" Width="auto" />
+                <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="auto" />
+                <DataGridTextColumn Header=" to" Binding="{Binding Destination}" Width="auto"/>
+                <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="auto"/>
+                </DataGrid.Columns>
+        </DataGrid>
+
+
+        <DataGrid x:Name="dgconStations" Style="{StaticResource dataGridStyle}"  Grid.Column="1" Grid.Row="1"  VerticalAlignment="Stretch" Height="auto" HorizontalAlignment="Center" Margin="30,50" FontSize="18" ItemsSource="{Binding ListOfConsecutiveLineStations}" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Station Key" Binding="{Binding StationKey}" Width="auto" />
+                <DataGridTextColumn Header="station name" Binding="{Binding StationName}" Width="auto" />
+                <DataGridTextColumn Header=" Distance " Binding="{Binding DistanceFromPrev}" Width="auto"/>
+                <DataGridTextColumn Header=" traval Time " Binding="{Binding TimeFromPrev}"  Width="auto"/>
+                <DataGridTemplateColumn Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button x:Name="editTimeDist" Content="edit" Margin="5" Background="#FFCCB2E4" Click="editTimeDist_Click" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
 </Window>

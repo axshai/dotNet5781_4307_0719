@@ -19,27 +19,30 @@ namespace PLGuiWPF
     /// <summary>
     /// Interaction logic for ShowStationWindow.xaml
     /// </summary>
-    public partial class ShowStationWindow : Window
+    public partial class ShowStationsWindow : Window
     {
 
         IBL blObject;
-        List<BusStationBO> stations;
-        public ShowStationWindow()
+       
+        public ShowStationsWindow()
         {
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
-            stations = blObject.GetAllStation().ToList();
-            dgStations.ItemsSource = stations;
+            dgStations.ItemsSource = blObject.GetAllStation();
+           
 
         }
 
         private void dgStations_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BusStationBO Station = dgStations.SelectedItem as BusStationBO;
-            ShowStationDetails show = new ShowStationDetails(Station);
+            ShowStationDetails w1 = new ShowStationDetails(dgStations.SelectedItem as BusStationBO);
+            w1.ShowDialog();
+           // dgStations.ItemsSource = blObject.GetAllStation();
 
 
 
         }
+
+       
     }
 }

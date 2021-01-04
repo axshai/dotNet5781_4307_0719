@@ -44,7 +44,7 @@ namespace PLGuiWPF
 
         private void ButtonshowStation_Click(object sender, RoutedEventArgs e)
         {
-            ShowStationWindow ShowStation = new ShowStationWindow();
+            ShowStationsWindow ShowStation = new ShowStationsWindow();
             ShowStation.Show();
         }
     }

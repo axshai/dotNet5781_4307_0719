@@ -16,10 +16,10 @@ namespace PLGuiConsole
             BusLineBO b1 = mybl.GetLine(1);
             //BusLineScheduleBO sched = b1.ScheduleList.First();
 
-            mybl.GetAllStation().ElementAt(5);
+           BusStationBO B4= mybl.GetAllStation().ElementAt(5);
+            Console.WriteLine(B4.ListOfLines.ElementAt(0));
+            Console.WriteLine(B4.ListOfLines.ElementAt(1));
 
-            Console.WriteLine(mybl.GetAllStation().ElementAt(5));
-            Console.ReadLine();
 
 
 

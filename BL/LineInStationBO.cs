@@ -12,5 +12,9 @@ namespace BO
         public int Id { get; set; }
         public string Destination { get; set; }
         public IEnumerable<TimeSpan> ArrivalTimes { get; set; }
+        public override string ToString()
+        {
+            return "i am" + LineNumber + " Id  ";
+        }
     }
 }
