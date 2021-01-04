@@ -64,7 +64,8 @@ namespace BL
         {
             IEnumerable<LineInStationBO> result = from line in GetAllLines()
                                                   where line.StationList.Any(station => station.StationKey == stateKey)
-                                                  select new LineInStationBO { Id = line.Id, LineNumber = line.LineNumber, Destination = line.StationList.Last().StationName, ArrivalTimes = lineArrivalTimes(line, stateKey) };
+                                                  select new LineInStationBO { Id = line.Id, LineNumber = line.LineNumber, Destination = line.StationList.Last().StationName, ArrivalTimes = lineArrivalTimes(line, stateKey), Area = line.Area
+                                                  };
             return result;
         }
 
@@ -180,7 +181,7 @@ namespace BL
                 throw new Exception("The frequency is higher than the maximum possible in this time frame!");
             try
             {
-                myDal.UpdateSchedule(toUpdate.LineId, toUpdate.StartActivity,sched=> sched.frequency= newFreq);
+                myDal.UpdateSchedule(toUpdate.LineId, toUpdate.StartActivity, sched => sched.frequency = newFreq);
             }
             catch (Exception ex)
             {
@@ -518,12 +519,22 @@ namespace BL
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.Distance = distance);
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
         }
+
+        public BusStationBO GetBusStationBO(int stationKey)
+        {
+            BusStationDO station = myDal.GetBusStation(stationKey);
+            return new BusStationBO
+            {
+                Area = (BO.Area)((int)station.StationArea),
+                Latitude = station.Latitude,
+                Longitude = station.Longitude,
+                StationKey = station.StationKey,
+                StationName = station.StationName,
+                ListOfLines = getLinesOfStations(station.StationKey),
+                ListOfConsecutiveLineStations = GetListOfConsecutiveLineStation(station.StationKey)
+            };
+         }
     }
-
-
-
-
-
 
 }
 
