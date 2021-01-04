@@ -390,7 +390,6 @@ namespace BL
                     addConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey, (double)PrevDistance, (TimeSpan)PrevTime);
                 }
             }
-
             foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))
             {
                 myDal.UpdateLineStation(item.LineId, item.StationKey, station1 => station1.Serial++);
