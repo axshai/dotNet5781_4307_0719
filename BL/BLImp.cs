@@ -28,7 +28,7 @@ namespace BL
         #endregion
 
         IDAL myDal = DLFactory.GetDL();
-
+        #region private functions-help to the IBLS functions
 
         /// <summary>
         /// The function receives a line and a station and returns the arrival times of the line to the station
@@ -55,7 +55,6 @@ namespace BL
             myDal.AddConsecutiveStations(new ConsecutiveStationsDO { Distance = distance, TravelTime = time, Station1Key = stateKey1, Station2Key = stateKey2 });
         }
 
-        #region private functions-help to the IBLS functions
         /// <summary>
         /// The function receives a station key and returns a list of all lines that have a stop in this station
         /// </summary>
@@ -167,12 +166,7 @@ namespace BL
         /// <param name="toDelete">the schedule to delete</param>
         public void DeleteSchedule(BusLineScheduleBO toDelete)
         {
-
-            try { myDal.DeleteSchedule(toDelete.LineId, toDelete.StartActivity); }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            myDal.DeleteSchedule(toDelete.LineId, toDelete.StartActivity);
         }
 
         /// <summary>
@@ -186,7 +180,7 @@ namespace BL
                 throw new Exception("The frequency is higher than the maximum possible in this time frame!");
             try
             {
-                myDal.UpdateSchedule(toUpdate.LineId, toUpdate.StartActivity, newFreq);
+                myDal.UpdateSchedule(toUpdate.LineId, toUpdate.StartActivity,sched=> sched.frequency= newFreq);
             }
             catch (Exception ex)
             {
@@ -221,14 +215,15 @@ namespace BL
                 }
 
                 if (item.StartActivity > begin1)//אם הוא מתחיל בתוך החדש
-                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, begin: end1);//עשה שיתחיל אחריו
+                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.StartActivity = end1); //עשה שיתחיל אחריו
+
                 else if (item.EndActivity < end1)//אם נגמר בתוך החדש
-                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, end: begin1);//עשה שיגמר לפניו
+                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);//עשה שיגמר לפניו
                 else
                 {
                     myDal.AddSchedule(new BusLineScheduleDO//אם הוא בולע את החדש
                     { IsExists = true, StartActivity = end1, EndActivity = item.EndActivity, frequency = item.frequency, LineId = lineId });
-                    myDal.UpdateSchedule(lineId: item.LineId, start: item.StartActivity, newFreq: item.frequency, end: begin1);
+                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);
 
                 }
             }
@@ -429,7 +424,7 @@ namespace BL
 
         public IEnumerable<ConsecutiveStationBO> GetConsecutiveStations(int StationKey)//***
         {
-            List<ConsecutiveStationBO> result=new List<ConsecutiveStationBO>();
+            List<ConsecutiveStationBO> result = new List<ConsecutiveStationBO>();
             IEnumerable<ConsecutiveStationBO> temp = (from line in GetAllLines()
                                                       where line.StationList.ToList().Exists(line2 => line2.StationKey == StationKey)
                                                       let index = line.StationList.ToList().FindIndex(station2 => station2.StationKey == StationKey)

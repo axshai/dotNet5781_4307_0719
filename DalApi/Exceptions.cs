@@ -20,14 +20,14 @@ namespace DO
     }
 
     [Serializable]
-    public class BadLineStationKeyLinrIDException : Exception
+    public class BadLineStationKeyLineIDException : Exception
     {
         public int LineID;
         public int StationKey;
-        public BadLineStationKeyLinrIDException(int Key, int ID) : base() { LineID = ID; StationKey = Key; }
-        public BadLineStationKeyLinrIDException(int Key, int ID, string message) :
+        public BadLineStationKeyLineIDException(int Key, int ID) : base() { LineID = ID; StationKey = Key; }
+        public BadLineStationKeyLineIDException(int Key, int ID, string message) :
             base(message){ LineID = ID; StationKey = Key; }
-        public BadLineStationKeyLinrIDException(int Key, int ID, string message, Exception innerException) :
+        public BadLineStationKeyLineIDException(int Key, int ID, string message, Exception innerException) :
             base(message, innerException){ LineID = ID; StationKey = Key; }
 
         public override string ToString() => base.ToString() + $", bad line id: {LineID} and station key: {StationKey}";
@@ -49,5 +49,30 @@ namespace DO
         public override string ToString() => base.ToString() + $", bad station1 key {Station1key} and station2 key: {Station2key}";
     }
 
+    [Serializable]
+    public class BadBusStationKeyException : Exception
+    {
+        public int Key;
+        public BadBusStationKeyException(int key) : base() => Key = key;
+        public BadBusStationKeyException(int key, string message) :
+            base(message) => Key = key;
+        public BadBusStationKeyException(int key, string message, Exception innerException) :
+            base(message, innerException) => Key = key;
 
+        public override string ToString() => base.ToString() + $", bad station Key: {Key}";
+    }
+
+    [Serializable]
+    public class BadBusLineScheduleException : Exception
+    {
+        public int LineID;
+        public TimeSpan Start;
+        public BadBusLineScheduleException(TimeSpan start, int ID) : base() {LineID=ID; Start = start; }
+        public BadBusLineScheduleException(TimeSpan start, int ID, string message) :
+            base(message) {LineID=ID; Start = start; }
+        public BadBusLineScheduleException(TimeSpan start, int ID, string message, Exception innerException) :
+            base(message, innerException){LineID=ID; Start = start; }
+
+        public override string ToString() => base.ToString() + $", bad Line id: {LineID} and start time: {Start}";
+    }
 }

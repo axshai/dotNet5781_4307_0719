@@ -55,7 +55,7 @@ namespace DalApi
 
         #region BusLineSchedule
         IEnumerable<BusLineScheduleDO> GetAllSchedulesBy(Predicate<BusLineScheduleDO> predicate);
-        void UpdateSchedule(int lineId, TimeSpan start,int newFreq, TimeSpan? begin=null, TimeSpan? end=null);
+        void UpdateSchedule(int lineId, TimeSpan start, Action<BusLineScheduleDO> toUpdate);
         void DeleteSchedule(int lineId, TimeSpan start);
         void AddSchedule(BusLineScheduleDO toadd);
         #endregion

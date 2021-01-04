@@ -44,6 +44,7 @@
     <Compile Include="BLFactory.cs" />
     <Compile Include="BLImp.cs" />
     <Compile Include="ConsecutiveStationBO.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="LineInStationBO.cs" />
     <Compile Include="BusLineScheduleBO.cs" />
     <Compile Include="BusLineStationBO.cs" />
