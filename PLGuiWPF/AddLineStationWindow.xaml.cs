@@ -61,7 +61,7 @@ namespace PLGuiWPF
                 bl.AddLineStation(current.Id, (cbStations.SelectedItem as BusStationBO).StationKey, (int)cbIndex.SelectedItem, NextTime: TimeSpan.Parse(tbntime.Text), nextDistance: double.Parse(tbndist.Text));
                 this.Close();
             }
-            catch (Exception ex)
+            catch (BadConsecutiveStationsKeysException)
             {
                 showPrev();
             }
@@ -80,35 +80,34 @@ namespace PLGuiWPF
                 this.Close();
             }
 
-            catch (Exception ex)
+            catch (BadConsecutiveStationsKeysException ex)
             {
-                switch (ex.Message)
+                if (ex.Station1key == (cbStations.SelectedItem as BusStationBO).StationKey)
                 {
-                    case "No details on time and distance between this stations end next station":
-                        showNext();
-                        break;
-                    default:
-                        showPrev();
-                        break;
+                    showNext();
                 }
+                else
+                    showPrev();
 
             }
 
         }
 
-        private void showNext()
-        {
-            m1.Visibility = m2.Visibility = cbIndex.Visibility = cbStations.Visibility = firstButton.Visibility = Visibility.Hidden;
-            n1.Visibility = n2.Visibility = tbndist.Visibility = tbntime.Visibility = nextButton.Visibility = Visibility.Visible;
-        }
+    
 
-        private void showPrev()
-        {
-            m1.Visibility = m2.Visibility = cbIndex.Visibility = cbStations.Visibility = firstButton.Visibility = Visibility.Hidden;
-            n1.Visibility = n2.Visibility = tbndist.Visibility = tbntime.Visibility = nextButton.Visibility = Visibility.Hidden;
-            p1.Visibility = p2.Visibility = tbpdist.Visibility = tbptime.Visibility = prevButton.Visibility = Visibility.Visible;
-        }
-
-
+    private void showNext()
+    {
+        m1.Visibility = m2.Visibility = cbIndex.Visibility = cbStations.Visibility = firstButton.Visibility = Visibility.Hidden;
+        n1.Visibility = n2.Visibility = tbndist.Visibility = tbntime.Visibility = nextButton.Visibility = Visibility.Visible;
     }
+
+    private void showPrev()
+    {
+        m1.Visibility = m2.Visibility = cbIndex.Visibility = cbStations.Visibility = firstButton.Visibility = Visibility.Hidden;
+        n1.Visibility = n2.Visibility = tbndist.Visibility = tbntime.Visibility = nextButton.Visibility = Visibility.Hidden;
+        p1.Visibility = p2.Visibility = tbpdist.Visibility = tbptime.Visibility = prevButton.Visibility = Visibility.Visible;
+    }
+
+
+}
 }

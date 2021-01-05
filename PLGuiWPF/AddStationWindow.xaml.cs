@@ -73,17 +73,14 @@ namespace PLGuiWPF
                 bl.AddBusStation(new BusStationBO { Area = (BO.Area)cbArea.SelectedItem, Latitude = double.Parse(tblat.Text), Longitude = double.Parse(tblong.Text), StationKey = int.Parse(tbKey.Text), StationName = tbName.Text });
                 this.Close();
             }
-            catch (Exception ex)
+            catch (BadBusStationException ex)
             {
-                if (ex.InnerException != null)
-                    MessageBox.Show(ex.InnerException.Message);
-                else
-                    MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
         private void edit()
         {
-           
+
             double testd;
 
             if (tbName.Text == "")
@@ -98,18 +95,15 @@ namespace PLGuiWPF
             }
             try
             {
-                bl.updateBusStation(new BusStationBO { Area = current.Area, Latitude = double.Parse(tblat.Text), Longitude = double.Parse(tblong.Text), StationKey = current.StationKey, StationName = tbName.Text } );
+                bl.updateBusStation(new BusStationBO { Area = current.Area, Latitude = double.Parse(tblat.Text), Longitude = double.Parse(tblong.Text), StationKey = current.StationKey, StationName = tbName.Text });
                 this.Close();
             }
-            catch (Exception ex)
+            catch (BadBusStationException ex)
             {
-                if (ex.InnerException != null)
-                    MessageBox.Show(ex.InnerException.Message);
-                else
-                    MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
-        }
 
+        }
     }
 }
 

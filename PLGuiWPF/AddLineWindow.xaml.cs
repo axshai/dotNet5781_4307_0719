@@ -42,15 +42,16 @@ namespace PLGuiWPF
                 blObject.AddLine(tbNum.Text, cbfirst.SelectedItem as BusStationBO, cblast.SelectedItem as BusStationBO, (BO.Area)cbArea.SelectedItem);
                 this.Close();
             }
+            catch (BadConsecutiveStationsKeysException)
+            {
+
+                tbNum.Visibility = Visibility.Hidden;
+                tbTime.Visibility = Visibility.Visible;
+            }
+
             catch (Exception ex)
             {
-                if (ex.Message == "No details on time and distance between this 2 station")
-                {
-                    tbNum.Visibility = Visibility.Hidden;
-                    tbTime.Visibility = Visibility.Visible;
-                }
-                else
-                    MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 

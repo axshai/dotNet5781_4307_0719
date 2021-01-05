@@ -29,6 +29,7 @@ namespace PLGuiWPF
             bl = BLFactory.GetBL("1");
             current = station;
             currentLine = line;
+            tbheader.Text = line.StationList.ToList()[line.StationList.ToList().IndexOf(station) + 1].StationKey.ToString();
         }
 
         private void delButton_Click(object sender, RoutedEventArgs e)

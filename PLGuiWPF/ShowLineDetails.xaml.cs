@@ -46,7 +46,7 @@ namespace PLGuiWPF
             {
                 b1.DeleteLineStation(showedLine, todel.StationKey);
             }
-            catch(Exception ex)
+            catch(BadConsecutiveStationsKeysException ex)
             {
                 DeleteLineStationWindow wnd = new DeleteLineStationWindow(todel, showedLine);
                 wnd.ShowDialog();
@@ -102,7 +102,7 @@ namespace PLGuiWPF
                     this.DataContext = b1.GetLine(showedLine.Id);
                     showedLine = this.DataContext as BusLineBO;
                 }
-                catch (Exception ex)
+                catch (BadLineException ex)
                 {
                     MessageBox.Show(ex.Message);
                 }

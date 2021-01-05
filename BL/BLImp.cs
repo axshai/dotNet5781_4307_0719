@@ -50,7 +50,7 @@ namespace BL
         private void addConsecutiveStations(int stateKey1, int stateKey2, double distance, TimeSpan time)
         {
             if (distance <= 0 || time <= TimeSpan.Zero)
-                throw new Exception("Distance and time  between two different stations must be positive!");
+                throw new BO.BadConsecutiveStationsKeysException(stateKey1, stateKey2, "Distance and time  between two different stations must be positive!");
 
             myDal.AddConsecutiveStations(new ConsecutiveStationsDO { Distance = distance, TravelTime = time, Station1Key = stateKey1, Station2Key = stateKey2 });
         }
@@ -185,15 +185,9 @@ namespace BL
         public void UpdateSchedule(BusLineScheduleBO toUpdate, int newFreq)
         {
             if ((toUpdate.EndActivity - toUpdate.StartActivity).TotalMinutes < newFreq)
-                throw new Exception("The frequency is higher than the maximum possible in this time frame!");
-            try
-            {
+                throw new BO.BadBusLineScheduleException(toUpdate.StartActivity, toUpdate.LineId,"The frequency is higher than the maximum possible in this time frame!");
+           
                 myDal.UpdateSchedule(toUpdate.LineId, toUpdate.StartActivity, sched => sched.frequency = newFreq);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
 
         /// <summary>
@@ -205,7 +199,7 @@ namespace BL
         /// <param name="freq">frequency</param>
         public void AddSchedule(int lineId, TimeSpan begin1, TimeSpan end1, int freq)
         {
-            if (begin1 >= end1)
+            if (begin1 > end1)
                 throw new Exception("Start time must be before end!");
             if ((end1 - begin1).TotalMinutes < freq)
                 throw new Exception("The frequency is higher than the maximum possible in this time frame!");
@@ -285,9 +279,13 @@ namespace BL
                 }
                 myDal.DeleteLine(id);
             }
-            catch (Exception ex)
+            catch (DO.BadLineStationKeyLineIDException ex)
             {
-                throw new Exception("Deletion failed", ex);
+                throw new BO.BadLineException("Deletion failed", ex);
+            }
+            catch (DO.BadBusLineScheduleException ex)
+            {
+                throw new BO.BadLineException("Deletion failed", ex);
             }
 
         }
@@ -299,25 +297,19 @@ namespace BL
         /// <returns></returns>
         public BusLineBO GetLine(int id)
         {
-            try
-            {
-                BusLineDO line = myDal.GetLine(id);
+            BusLineDO line = myDal.GetLine(id);
 
-                return new BusLineBO
-                {
-                    Id = line.Id,
-                    Area = (BO.Area)((int)line.LineArea),
-                    StationList = getStationsOfLine(line.Id),
-                    ScheduleList = getSchedulesOfLine(line.Id),
-                    LineNumber = line.LineNumber,
-                    restStationList = getRestStations(line.Id)
-                };
-            }
-            catch (Exception ex)
+            return new BusLineBO
             {
-                throw new Exception(ex.Message, ex);
-            }
+                Id = line.Id,
+                Area = (BO.Area)((int)line.LineArea),
+                StationList = getStationsOfLine(line.Id),
+                ScheduleList = getSchedulesOfLine(line.Id),
+                LineNumber = line.LineNumber,
+                restStationList = getRestStations(line.Id)
+            };
         }
+
 
         public void AddLineStation(int lineId, int stationKey, int index, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null)
         {
@@ -331,9 +323,9 @@ namespace BL
                     {
                         myDal.GetConsecutiveStations(stationKey, line.StationList.ElementAt(0).StationKey);
                     }
-                    catch (Exception ex)
+                    catch (DO.BadConsecutiveStationsKeysException ex)
                     {
-                        throw new Exception("No details on time and distance between this stations end next station", ex);
+                        throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this stations end next station", ex);
                     }
 
                 else//if we need to add ConsecutiveStation
@@ -350,9 +342,9 @@ namespace BL
                     {
                         myDal.GetConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey);
                     }
-                    catch (Exception ex)
+                    catch (DO.BadConsecutiveStationsKeysException ex)
                     {
-                        throw new Exception("No details on time and distance between this stations end previous station", ex);
+                        throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this stations end previous station", ex);
                     }
                 else//if we need to add ConsecutiveStation
                 {
@@ -369,9 +361,9 @@ namespace BL
                     {
                         myDal.GetConsecutiveStations(stationKey, line.StationList.ElementAt(index - 1).StationKey);
                     }
-                    catch (Exception ex)
+                    catch (DO.BadConsecutiveStationsKeysException ex)
                     {
-                        throw new Exception("No details on time and distance between this stations end next station", ex);
+                        throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this stations end next station", ex);
                     }
 
                 else//if we need to add ConsecutiveStation
@@ -384,9 +376,9 @@ namespace BL
                     {
                         myDal.GetConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey);
                     }
-                    catch (Exception ex)
+                    catch (DO.BadConsecutiveStationsKeysException ex)
                     {
-                        throw new Exception("No details on time and distance between this stations end previous station", ex);
+                        throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this stations end previous station", ex);
                     }
                 else//if we need to add ConsecutiveStation
                 {
@@ -425,7 +417,7 @@ namespace BL
                 }
             }
 
-            return myStation as IEnumerable<BusLineStationBO>;
+            return myStation;
 
         }
 
@@ -447,11 +439,11 @@ namespace BL
         {
             IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == name);
             if (name.Length > 3)
-                throw new Exception("Line name must be up to three characters!");
+                throw new BadLineException("Line name must be up to three characters!",id);
             if (sameName.Count() > 1)
-                throw new Exception("There are already two lines with the same name!");
+                throw new BadLineException("There are already two lines with the same name!", id);
             if (sameName.Any(line => line.LineArea != myDal.GetLine(id).LineArea))
-                throw new Exception("Lines with the same name must be in the same area!");
+                throw new BadLineException("Lines with the same name must be in the same area!", id);
             myDal.UpdateLine(id, line => line.LineNumber = name);
 
 
@@ -470,9 +462,9 @@ namespace BL
                     {
                         myDal.GetConsecutiveStations(line.StationList.ElementAt(place - 2).StationKey, line.StationList.ElementAt(place).StationKey);
                     }
-                    catch (Exception ex)
+                    catch (DO.BadConsecutiveStationsKeysException ex)
                     {
-                        throw new Exception("No details on time and distance between this stations end previous station", ex);
+                        throw   new BO.BadConsecutiveStationsKeysException("No details on time and distance between this stations end previous station", ex);
                     }
                 }
                 else
@@ -494,15 +486,15 @@ namespace BL
         {
             IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == number);
             if (number.Length > 3 || number.Length < 1)
-                throw new Exception("Line name must be up to three characters and not less from one!");
+                throw new BadLineException("Line name must be up to three characters and not less from one!");
             if (sameName.Count() > 1)
-                throw new Exception("There are already two lines with the same name!");
+                throw new BadLineException("There are already two lines with the same name!");
             if (sameName.Any(line => (int)line.LineArea != (int)area))
-                throw new Exception("Lines with the same name must be in the same area!");
+                throw new BadLineException("Lines with the same name must be in the same area!");
             if ((first.Area != area || last.Area != area) && BO.Area.GENERAL != area)
-                throw new Exception("The stations do not match the line area!");
+                throw new BadLineException("The stations do not match the line area!");
             if (first.StationKey == last.StationKey)
-                throw new Exception("The stations Must be different!");
+                throw new BadLineException("The stations Must be different!");
             if (distance != null)
                 addConsecutiveStations(first.StationKey, last.StationKey, (double)distance, (TimeSpan)time);
 
@@ -510,9 +502,9 @@ namespace BL
             {
                 myDal.GetConsecutiveStations(first.StationKey, last.StationKey);
             }
-            catch (Exception ex)
+            catch (DO.BadConsecutiveStationsKeysException ex)
             {
-                throw new Exception("No details on time and distance between this 2 station", ex);
+                throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this 2 station", ex);
             }
 
             int id = myDal.AddLine(new BusLineDO { IsExists = true, LineArea = (DO.Area)((int)area), LineNumber = number });
@@ -541,55 +533,60 @@ namespace BL
                 ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
             };
         }
-
+        /// <summary>
+        /// The function receives a station and delete it to the database
+        /// </summary>
+        /// <param name="toDel">the station to delete</param>
         public void DeleteBusStation(BusStationBO toDel)
         {
             if (toDel.ListOfLines.Any())
-                throw new Exception("It is not possible to delete a station that  lines stop in it!");
+                throw new BadBusStationException(toDel.StationKey,"It is not possible to delete a station that  lines stop in it!");
             else
                 myDal.DeleteBusStation(toDel.StationKey);
         }
-
+        /// <summary>
+        ///The function receives a station and adds it to the database
+        /// </summary>
+        /// <param name="toAdd">the new station</param>
         public void AddBusStation(BusStationBO toAdd)
         {
             if (toAdd.StationKey > 999999 || (toAdd.StationKey < 0))//The number of station must be 6 digits
             {
-                throw new Exception("Station number must be between 1 and 6 digits!");
+                throw new BadBusStationException(toAdd.StationKey,"Station number must be between 1 and 6 digits!");
             }
-            if (toAdd.Latitude < -90 && toAdd.Latitude > 90)//If the latitude is correct
+            if (toAdd.Latitude < -90 || toAdd.Latitude > 90)//If the latitude is incorrect
             {
-                throw new Exception(String.Format("The Latitude must be between <{0},{1}>", -90, 90));
+                throw new BadBusStationException(toAdd.StationKey, String.Format("The Latitude must be between <{0},{1}>", -90, 90));
             }
 
-            if (toAdd.Longitude < -180 && toAdd.Latitude > 180)//If the latitude is correct
+            if (toAdd.Longitude < -180 || toAdd.Latitude > 180)//If the latitude is incorrect
             {
-                throw new Exception(String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
+                throw new BadBusStationException(toAdd.StationKey, String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
             }
-            try 
+            try
             {
                 myDal.AddBusStation(new BusStationDO { IsExists = true, StationKey = toAdd.StationKey, Latitude = toAdd.Latitude, Longitude = toAdd.Longitude, StationArea = (DO.Area)((int)toAdd.Area), StationName = toAdd.StationName });
             }
-            catch(Exception ex) { throw new Exception("FAIL!", ex); }
+            catch (DO.BadBusStationKeyException ex) { throw new BadBusStationException(toAdd.StationKey,ex.Message, ex); }
 
         }
-
+        /// <summary>
+        /// The function receives a station and update its Fields
+        /// </summary>
+        /// <param name="toUpdate">station to update</param>
         public void updateBusStation(BusStationBO toUpdate)
         {
-            if (toUpdate.Latitude < -90 && toUpdate.Latitude > 90)//If the latitude is correct
+            if (toUpdate.Latitude < -90 || toUpdate.Latitude > 90)//If the latitude is incorrect
             {
-                throw new Exception(String.Format("The Latitude must be between <{0},{1}>", -90, 90));
+                throw new BadBusStationKeyException(toUpdate.StationKey, String.Format("The Latitude must be between <{0},{1}>", -90, 90));
             }
 
-            if (toUpdate.Longitude < -180 && toUpdate.Latitude > 180)//If the latitude is correct
+            if (toUpdate.Longitude < -180 || toUpdate.Longitude > 180)//If the latitude is incorrect
             {
-                throw new Exception(String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
+                throw new BadBusStationKeyException(toUpdate.StationKey, String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
             }
+            myDal.UpdateBusStation(new BusStationDO { IsExists = true, StationKey = toUpdate.StationKey, Latitude = toUpdate.Latitude, Longitude = toUpdate.Longitude, StationArea = (DO.Area)((int)toUpdate.Area), StationName = toUpdate.StationName });
 
-            try
-            {
-                myDal.UpdateBusStation(new BusStationDO { IsExists = true, StationKey = toUpdate.StationKey, Latitude = toUpdate.Latitude, Longitude = toUpdate.Longitude, StationArea = (DO.Area)((int)toUpdate.Area), StationName = toUpdate.StationName });
-            }
-            catch (Exception ex) { throw new Exception("FAIL!", ex); }
         }
 
     }

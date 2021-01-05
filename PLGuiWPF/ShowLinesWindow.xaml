@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowLinesWindow" Height="auto" Width="800">
+        Title="ShowLinesWindow" Height="auto" Width="850">
     <Window.Resources>
         <local:ListOfStationsToFirst 
              x:Key="ListOfStationsToFirst"/>
@@ -37,10 +37,10 @@
         <Button x:Name="addButton" Content="add new line" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Width="140" Height="35" FontFamily="Sitka Text" FontSize="20" Background="#FF8ABDE7" Click="addButton_Click"  />
             <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgLines_MouseDoubleClick"  >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="*" />
-                <DataGridTextColumn Header="from" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToFirst}}" Width="*"/>
-                <DataGridTextColumn Header="to" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToLast}}" Width="*"/>
-                <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="*"/>
+                <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="auto" />
+                <DataGridTextColumn Header="from" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToFirst}}" Width="auto"/>
+                <DataGridTextColumn Header="to" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToLast}}" Width="auto"/>
+                <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="auto"/>
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -50,6 +50,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+       
     </Grid>
 
 </Window>

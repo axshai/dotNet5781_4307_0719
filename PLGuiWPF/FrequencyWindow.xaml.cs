@@ -49,7 +49,7 @@ namespace PLGuiWPF
                     b1.UpdateSchedule(current, int.Parse(tbFreq.Text));
                     this.Close();
                 }
-                catch (Exception ex)
+                catch (BadBusLineScheduleException)
                 {
                     MessageBox.Show("A bus does not leave the station more than once a minute!");
                     tbFreq.Text = "";

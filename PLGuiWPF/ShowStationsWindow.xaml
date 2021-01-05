@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowStationsWindow" Height="Auto" Width="AUTO">
+        Title="ShowStationsWindow" Height="900 
+        " Width="AUTO">
     <Window.Resources>
         <local:ListOfStationsToFirst 
              x:Key="ListOfStationsToFirst"/>

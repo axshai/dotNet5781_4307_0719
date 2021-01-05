@@ -65,7 +65,7 @@ namespace PLGuiWPF
                 blObject.DeleteBusStation((sender as Button).DataContext as BusStationBO);
                 dgStations.ItemsSource = blObject.GetAllStation();
             }
-            catch (Exception ex)
+            catch (BadBusStationException ex)
             {
                 MessageBox.Show(ex.Message);
             }

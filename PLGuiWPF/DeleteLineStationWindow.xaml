@@ -18,6 +18,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Label Content="Enter details for station:" FontSize="24" Foreground="#FF10603F" HorizontalAlignment="Right"/>
+        <TextBlock x:Name="tbheader" Grid.Column="1" Grid.Row="0" Width="150" Height="40" Margin="10" FontSize="18" />
         <TextBlock Text="{Binding StationKey}" DataContext="station" FontSize="24" Foreground="#FF10603F"/>
         <TextBlock x:Name="p1" Text="Enter time from previous station:" Foreground="#FF70911F" FontWeight="Bold" FontSize="20" Grid.Column="0" Grid.Row="1"  Margin="10"/>
         <TextBox x:Name="tbtime" Grid.Column="1" Grid.Row="1" Width="150" Height="40" Margin="10" />
