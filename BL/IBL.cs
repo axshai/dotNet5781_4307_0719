@@ -7,10 +7,15 @@ using System.Threading.Tasks;
 using BO;
 namespace BLApi
 {
+    /// <summary>
+    ///BL interface
+    /// </summary>
     public interface IBL
     {
+        //Documentation of the functions is found in "BLImp"
         #region lines functions
         IEnumerable<BusLineBO> GetAllLines();
+        IEnumerable<BusLineBO> GetAllLinesBy(Predicate<BusLineBO> predicate);
         void AddLine(string number, BusStationBO first, BusStationBO last, BO.Area area, double? distance = null, TimeSpan? time = null);
         void DeleteLine(int id);
         BusLineBO GetLine(int id);
@@ -26,8 +31,8 @@ namespace BLApi
         #region BusStation functions
         void AddBusStation(BusStationBO toAdd);
         IEnumerable<BusStationBO> GetAllStation();
-        BusStationBO GetBusStation(int stationKey); 
-        void DeleteBusStation (BusStationBO toDel);
+        BusStationBO GetBusStation(int stationKey);
+        void DeleteBusStation(BusStationBO toDel);
         void updateBusStation(BusStationBO toUpdate);
         #endregion
 
@@ -38,6 +43,6 @@ namespace BLApi
 
         #region ConsecutiveStations functions
         void UpdateConsecutiveStation(int stationKey1, int stationKey2, double distance, TimeSpan time);
-       #endregion
+        #endregion
     }
 }

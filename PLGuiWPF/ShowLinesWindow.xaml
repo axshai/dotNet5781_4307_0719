@@ -35,7 +35,7 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Button x:Name="addButton" Content="add new line" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Width="140" Height="35" FontFamily="Sitka Text" FontSize="20" Background="#FF8ABDE7" Click="addButton_Click"  />
-            <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgLines_MouseDoubleClick"  >
+        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgLines_MouseDoubleClick"  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="auto" />
                 <DataGridTextColumn Header="from" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToFirst}}" Width="auto"/>
@@ -50,7 +50,9 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-       
+        <Image HorizontalAlignment="Left" Grid.Row="0" Width="30" Height="30"  VerticalAlignment="Top" Source="zcucit magdelet.jpg"/>
+        <TextBox x:Name="tbsearch" HorizontalAlignment="Left" Height="28" Margin="30,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" FontSize="18" TextChanged="tbsearch_TextChanged" />
+
     </Grid>
 
 </Window>

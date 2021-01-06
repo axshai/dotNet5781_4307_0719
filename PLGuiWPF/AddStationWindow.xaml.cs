@@ -33,6 +33,7 @@ namespace PLGuiWPF
                 tblname.Text = "station key:";
                 tbKey.Text = current.StationKey.ToString(); ;
                 tbKey.IsReadOnly = true;
+                tbKey.BorderThickness = new Thickness(0,0,0,0);
                 tblarea.Visibility = cbArea.Visibility = Visibility.Hidden;
                 addButton.Content = "EDIT";
 

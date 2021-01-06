@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BO
 {
+    //Exceptions that the bl layer throws 
     [Serializable]
     public class BadBusLineScheduleException : Exception
     {

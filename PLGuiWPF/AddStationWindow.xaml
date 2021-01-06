@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="AddStationWindowWindow" Height="450" Width="800">
+        Title="AddStationWindowWindow" Height="450" Width="600">
     <Window.Resources>
         <Style x:Key="controlStyle" TargetType="Control">
             <Setter Property="Width" Value="130" />
@@ -35,7 +35,8 @@
         <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="2" TextWrapping="Wrap" Text="enter Latitude" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19" />
         <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="3" TextWrapping="Wrap" Text="enter Longitude:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19"/>
         <TextBlock x:Name="tblarea" Grid.Column="0" HorizontalAlignment="Center" Margin="10" Grid.Row="4" TextWrapping="Wrap" Text="enter Area of ​​the station:" VerticalAlignment="Center" FontSize="20" Foreground="#FF909A19" />
-        <TextBox x:Name="tbKey" Grid.Row="0" Grid.Column="1" Style="{StaticResource controlStyle}" />
+        <TextBox x:Name="tbKey" HorizontalContentAlignment="Center" Grid.Row="0" Grid.Column="1" Style="{StaticResource controlStyle}" />
+
         <TextBox x:Name="tbName" Grid.Row="1" Grid.Column="1"  Style="{StaticResource controlStyle}"/>
         <TextBox x:Name="tblat" Grid.Row="2" Grid.Column="1"  Style="{StaticResource controlStyle}" />
         <TextBox x:Name="tblong" Grid.Row="3" Grid.Column="1"  Style="{StaticResource controlStyle}" />

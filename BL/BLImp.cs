@@ -11,6 +11,9 @@ using System.ComponentModel;
 
 namespace BL
 {
+    /// <summary>
+    /// Execution of the ibl interfenc-contract
+    /// </summary>
     internal class BLImp : IBL
     {
         #region singelton
@@ -28,6 +31,7 @@ namespace BL
         #endregion
 
         IDAL myDal = DLFactory.GetDL();
+
         #region private functions-help to the IBLS functions
 
         /// <summary>
@@ -35,7 +39,7 @@ namespace BL
         /// </summary>
         /// <param name="line">line id</param>
         /// <param name="stationKey">station key</param>
-        /// <returns></returns>
+        /// <returns>IEnumerable of TimeSpan-arrival times to the station</returns>
         private IEnumerable<TimeSpan> lineArrivalTimes(BusLineBO line, int stationKey)
         {
             int sum = line.StationList.Where(state => myDal.GetLineStation(state.StationKey, line.Id).Serial <= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.Minutes).Sum();
@@ -46,7 +50,13 @@ namespace BL
             return result;
 
         }
-
+        /// <summary>
+        /// The function receives information about a pair of consecutive stations and adds an appropriate entity to the system
+        /// </summary>
+        /// <param name="stateKey1">first station key</param>
+        /// <param name="stateKey2">second station key</param>
+        /// <param name="distance">distance between the stations</param>
+        /// <param name="time">travel time between the stations</param>
         private void addConsecutiveStations(int stateKey1, int stateKey2, double distance, TimeSpan time)
         {
             if (distance <= 0 || time <= TimeSpan.Zero)
@@ -59,7 +69,7 @@ namespace BL
         /// The function receives a station key and returns a list of all lines that have a stop in this station
         /// </summary>
         /// <param name="stateKey">station key of the wnted station</param>
-        /// <returns></returns>
+        /// <returns>IEnumerable with all the lines that have a stop in this station</returns>
         private IEnumerable<LineInStationBO> getLinesOfStations(int stateKey)
         {
             IEnumerable<LineInStationBO> result = from line in GetAllLines()
@@ -74,10 +84,6 @@ namespace BL
                                                   };
             return result;
         }
-
-
-
-
 
         /// <summary>
         /// The function receives a line number and returns a list of all its stations
@@ -127,8 +133,6 @@ namespace BL
 
         #endregion
 
-
-
         /// <summary>
         /// The function returns all the lines that exist in the system — with their stations and schedules
         /// </summary>
@@ -150,6 +154,18 @@ namespace BL
         }
 
         /// <summary>
+        /// The function returns all line that Answers on condition
+        /// </summary>
+        /// <param name="predicate">the condition</param>
+        /// <returns>IEnumerable of the lines</returns>
+        public IEnumerable<BusLineBO> GetAllLinesBy(Predicate<BusLineBO> predicate)
+        {
+            return from line in GetAllLines()
+                   where predicate(line)
+                   select line;
+        }
+
+        /// <summary>
         /// The function returns all the stations that exist in the system — with the lines that pass in this stataion
         /// </summary>
         /// <returns></returns>
@@ -168,6 +184,7 @@ namespace BL
                        ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
                    };
         }
+        
         /// <summary>
         /// The function receives a line schedule and removes it from the system
         /// </summary>
@@ -208,22 +225,23 @@ namespace BL
                                                       where (sched.StartActivity >= begin1 && sched.StartActivity <= end1) || (sched.EndActivity >= begin1 && sched.EndActivity <= end1) || (sched.StartActivity <= begin1 && sched.EndActivity >= end1)
                                                       select sched;
 
-            foreach (BusLineScheduleBO item in toChange)
+            foreach (BusLineScheduleBO item in toChange)//foreach old Schedule
             {
-                if (item.StartActivity >= begin1 && item.EndActivity <= end1)//אם החדש בולע אותו
+                if (item.StartActivity >= begin1 && item.EndActivity <= end1)//if the new Swallows the old
                 {
                     DeleteSchedule(item);
                     continue;
                 }
 
-                if (item.StartActivity >= begin1)//אם הוא מתחיל בתוך החדש
-                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.StartActivity = end1); //עשה שיתחיל אחריו
+                if (item.StartActivity >= begin1)//If the old begins within the new
+                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.StartActivity = end1); //Made him start after the new
 
-                else if (item.EndActivity <= end1)//אם נגמר בתוך החדש
-                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);//עשה שיגמר לפניו
-                else
+                else if (item.EndActivity <= end1)////If the old ends within the new
+                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);////Made him end before the new
+               
+                else//if the old Swallows the new
                 {
-                    myDal.AddSchedule(new BusLineScheduleDO//אם הוא בולע את החדש
+                    myDal.AddSchedule(new BusLineScheduleDO//Split the old
                     { IsExists = true, StartActivity = end1, EndActivity = item.EndActivity, frequency = item.frequency, LineId = lineId });
                     myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);
 
@@ -258,7 +276,6 @@ namespace BL
                    };
         }
 
-
         /// <summary>
         ///The function receives a line id and delete it from the data source 
         /// </summary>
@@ -268,12 +285,12 @@ namespace BL
             try
             {
                 BusLineBO doDel = GetLine(id);
-                foreach (var item in doDel.StationList)
+                foreach (var item in doDel.StationList)//delete all his linestations
                 {
                     myDal.DeleteLineStation(id, item.StationKey);
                 }
 
-                foreach (var item in doDel.ScheduleList)
+                foreach (var item in doDel.ScheduleList)//delete all his Schedules
                 {
                     myDal.DeleteSchedule(id, item.StartActivity);
                 }
@@ -310,7 +327,16 @@ namespace BL
             };
         }
 
-
+        /// <summary>
+        /// The function receives details about a line station and adds it to the system
+        /// </summary>
+        /// <param name="lineId">the line id</param>
+        /// <param name="stationKey">key of the station</param>
+        /// <param name="index">place in the rout</param>
+        /// <param name="PrevDistance">Distance from prev station-null in the first call to the function-when we hope that this data already exixst in the system </param>
+        /// <param name="PrevTime">time from prev station-null in the first call to the function-when we hope that this data already exixst in the system </param>
+        /// <param name="nextDistance">Distance from next station-null in the first call to the function-when we hope that this data already exixst in the system</param>
+        /// <param name="NextTime">time from next station-null in the first call to the function-when we hope that this data already exixst in the system</param>
         public void AddLineStation(int lineId, int stationKey, int index, double? PrevDistance = null, TimeSpan? PrevTime = null, double? nextDistance = null, TimeSpan? NextTime = null)
         {
             BusLineBO line = GetLine(lineId);
@@ -318,7 +344,7 @@ namespace BL
             if (index == 1)//if we want to add first station
             {
 
-                if (nextDistance == null)//if we dont  received details about time and distance between the stations
+                if (nextDistance == null)//if we dont  received details about time and distance between the stations-so we hope that this data already exixst in the system
                     try
                     {
                         myDal.GetConsecutiveStations(stationKey, line.StationList.ElementAt(0).StationKey);
@@ -337,7 +363,7 @@ namespace BL
             else if (line.StationList.Count() + 1 == index)//if he wants to add last station
             {
 
-                if (PrevDistance == null)//if we dont  received details about tome and distance between the stations
+                if (PrevDistance == null)//if we dont  received details about tome and distance between the stations-so we hope that this data already exixst in the system
                     try
                     {
                         myDal.GetConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey);
@@ -353,10 +379,10 @@ namespace BL
 
             }
 
-            else
+            else//if he wants to add station in the middle of the rout
             {
 
-                if (nextDistance == null)//if we dont  received details about time and distance between the stations
+                if (nextDistance == null)//if we dont  received details about time and distance between the stations-so we hope that this data already exixst in the system
                     try
                     {
                         myDal.GetConsecutiveStations(stationKey, line.StationList.ElementAt(index - 1).StationKey);
@@ -371,7 +397,7 @@ namespace BL
                     addConsecutiveStations(stationKey, line.StationList.ElementAt(index - 1).StationKey, (double)nextDistance, (TimeSpan)NextTime);
                 }
 
-                if (PrevDistance == null)//if we dont  received details about tome and distance between the stations
+                if (PrevDistance == null)//if we dont  received details about tome and distance between the stations-so we hope that this data already exixst in the system
                     try
                     {
                         myDal.GetConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey);
@@ -385,7 +411,8 @@ namespace BL
                     addConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey, (double)PrevDistance, (TimeSpan)PrevTime);
                 }
             }
-            foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))
+           
+            foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))//
             {
                 myDal.UpdateLineStation(item.LineId, item.StationKey, station1 => station1.Serial++);
             }
@@ -393,35 +420,12 @@ namespace BL
             myDal.AddLineStation(new LineStationDO { IsExist = true, StationKey = stationKey, Serial = index, LineId = lineId });
         }
 
-
-        public IEnumerable<BusLineStationBO> GetListOfConsecutiveLineStation(int StationKey)
-        {
-            List<BusLineBO> lists = new List<BusLineBO>();
-            List<BusLineStationBO> myStation = new List<BusLineStationBO>();
-
-            foreach (var line1 in GetAllLines())
-            {
-                if (line1.StationList.ToList().Find(line2 => line2.StationKey == StationKey) != null)
-                {
-                    lists.Add(line1);
-                }
-            }
-
-            int index = 0;
-            foreach (var line1 in lists)
-            {
-                index = line1.StationList.ToList().FindIndex(station1 => station1.StationKey == StationKey);
-                if ((index < line1.StationList.ToList().Count() - 1) && !myStation.Exists(station1 => line1.StationList.ToList()[index + 1].StationKey == station1.StationKey))
-                {
-                    myStation.Add(line1.StationList.ToList()[index + 1]);
-                }
-            }
-
-            return myStation;
-
-        }
-
-        public IEnumerable<ConsecutiveStationBO> GetConsecutiveStations(int StationKey)//***
+        /// <summary>
+        /// The function receives a station number and returns all its subsequent stations 
+        /// </summary>
+        /// <param name="StationKey">the key of the station</param>
+        /// <returns>IEnumerable of ConsecutiveStationBO-all its consecutive Stations</returns>
+        public IEnumerable<ConsecutiveStationBO> GetConsecutiveStations(int StationKey)
         {
             List<ConsecutiveStationBO> result = new List<ConsecutiveStationBO>();
             IEnumerable<ConsecutiveStationBO> temp = (from line in GetAllLines()
@@ -435,6 +439,11 @@ namespace BL
 
         }
 
+        /// <summary>
+        /// The function updates a name for a line
+        /// </summary>
+        /// <param name="id">the line id</param>
+        /// <param name="name">name of the kine</param>
         public void updateLine(int id, string name)
         {
             IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == name);
@@ -449,6 +458,13 @@ namespace BL
 
         }
 
+        /// <summary>
+        /// The function deletes from the system line station 
+        /// </summary>
+        /// <param name="line">the  line</param>
+        /// <param name="stationKey">the station key</param>
+        /// <param name="distance">Distance between the two stations that have become consecutive as a result of the deletion-if does not yet exist in the system</param>
+        /// <param name="time">time between the two stations that have become consecutive as a result of the deletion-if does not yet exist in the system</param>
         public void DeleteLineStation(BusLineBO line, int stationKey, double? distance = null, TimeSpan? time = null)
         {
 
@@ -456,7 +472,7 @@ namespace BL
 
             if (place != 1 && place != line.StationList.Count())//if he wants do delete station in the midle of the rout
             {
-                if (distance == null)
+                if (distance == null)//we hope that this data about stations that have become consecutive as a result of the deletion already exixst in the system
                 {
                     try
                     {
@@ -467,7 +483,8 @@ namespace BL
                         throw   new BO.BadConsecutiveStationsKeysException("No details on time and distance between this stations end previous station", ex);
                     }
                 }
-                else
+
+                else//if we got the data about time and distance-We understand that the information does not yet exist in the system
                 {
                     addConsecutiveStations(line.StationList.ElementAt(place - 2).StationKey, line.StationList.ElementAt(place).StationKey, (double)distance, (TimeSpan)time);
                 }
@@ -482,6 +499,15 @@ namespace BL
             myDal.DeleteLineStation(line.Id, stationKey);
         }
 
+        /// <summary>
+        /// Function adds a new line to the system
+        /// </summary>
+        /// <param name="number">line number</param>
+        /// <param name="first">his first station</param>
+        /// <param name="last">his last station</param>
+        /// <param name="area">his area</param>
+        /// <param name="distance">Distance between these stations - if not present in the system</param>
+        /// <param name="time">time between these stations - if not present in the system</param>
         public void AddLine(string number, BusStationBO first, BusStationBO last, BO.Area area, double? distance = null, TimeSpan? time = null)
         {
             IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == number);
@@ -513,12 +539,24 @@ namespace BL
 
         }
 
+        /// <summary>
+        /// The function updates time and distance between consecutive stations
+        /// </summary>
+        /// <param name="stationKey1">the first station key</param>
+        /// <param name="stationKey2">the second station key</param>
+        /// <param name="distance">new distance</param>
+        /// <param name="time">new time</param>
         public void UpdateConsecutiveStation(int stationKey1, int stationKey2, double distance, TimeSpan time)
         {
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.Distance = distance);
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
         }
 
+        /// <summary>
+        /// The function returns a desired bus station
+        /// </summary>
+        /// <param name="stationKey">the key of the wandet station</param>
+        /// <returns></returns>
         public BusStationBO GetBusStation(int stationKey)
         {
             BusStationDO station = myDal.GetBusStation(stationKey);
@@ -533,6 +571,7 @@ namespace BL
                 ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
             };
         }
+      
         /// <summary>
         /// The function receives a station and delete it to the database
         /// </summary>
@@ -544,6 +583,7 @@ namespace BL
             else
                 myDal.DeleteBusStation(toDel.StationKey);
         }
+       
         /// <summary>
         ///The function receives a station and adds it to the database
         /// </summary>
@@ -570,6 +610,7 @@ namespace BL
             catch (DO.BadBusStationKeyException ex) { throw new BadBusStationException(toAdd.StationKey,ex.Message, ex); }
 
         }
+      
         /// <summary>
         /// The function receives a station and update its Fields
         /// </summary>

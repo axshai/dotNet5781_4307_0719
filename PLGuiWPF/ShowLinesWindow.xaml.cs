@@ -36,7 +36,7 @@ namespace PLGuiWPF
         {
             BusLineBO line = dgLines.SelectedItem as BusLineBO;
             blObject.DeleteLine(line.Id);
-            dgLines.ItemsSource = blObject.GetAllLines().ToList();
+            dgLines.ItemsSource = blObject.GetAllLinesBy(line1=>line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
 
 
@@ -45,14 +45,19 @@ namespace PLGuiWPF
             BusLineBO line = dgLines.SelectedItem as BusLineBO;
             ShowLineDetails ws1 = new ShowLineDetails(line);
             ws1.ShowDialog();
-            dgLines.ItemsSource = blObject.GetAllLines().ToList();
+            dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
             AddLineWindow wnd = new AddLineWindow();
             wnd.ShowDialog();
-            dgLines.ItemsSource = blObject.GetAllLines().ToList();
+            dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
+        }
+
+        private void tbsearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
     }
 }

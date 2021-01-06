@@ -197,5 +197,11 @@
       <Name>BL</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bus.jpg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="zcucit magdelet.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,7 +10,7 @@ namespace BO
     {
         public int LineId { get; set; }
         public string LineNumber { get; set; }
-        public TimeSpan StartActivity { get; set; }//לא קשור לתאריך מסוים
+        public TimeSpan StartActivity { get; set; }
         public TimeSpan EndActivity { get; set; }
         public int frequency { get; set; }
         public override string ToString()

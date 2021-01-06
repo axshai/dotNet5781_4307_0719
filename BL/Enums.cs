@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace BO
 {
-  
-    public enum Area//Areas for bus lines
+    /// <summary>
+    /// Areas for bus lines and stations
+    /// </summary>
+    public enum Area
     {
         GENERAL, NORTH, SOUTH, CENTER, JERUSALEM, SHFELA, WESTBANK
     }
