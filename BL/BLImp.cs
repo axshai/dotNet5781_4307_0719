@@ -154,7 +154,7 @@ namespace BL
         }
 
         /// <summary>
-        /// The function returns all line that Answers on condition
+        /// The function returns all lines that Answers on condition
         /// </summary>
         /// <param name="predicate">the condition</param>
         /// <returns>IEnumerable of the lines</returns>
@@ -184,7 +184,19 @@ namespace BL
                        ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
                    };
         }
-        
+
+        /// <summary>
+        /// The function returns all stations that Answers on condition
+        /// </summary>
+        /// <param name="predicate">the condition</param>
+        /// <returns>IEnumerable of the stations</returns>
+        public IEnumerable<BusStationBO> GetAllStationBy(Predicate<BusStationBO> predicate)
+        {
+            return from station in GetAllStation()
+                   where predicate(station)
+                   select station;
+        }
+
         /// <summary>
         /// The function receives a line schedule and removes it from the system
         /// </summary>

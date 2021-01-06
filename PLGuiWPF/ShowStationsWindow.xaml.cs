@@ -37,7 +37,7 @@ namespace PLGuiWPF
         {
             ShowStationDetails w1 = new ShowStationDetails(dgStations.SelectedItem as BusStationBO);
             w1.ShowDialog();
-            dgStations.ItemsSource = blObject.GetAllStation();
+            dgStations.ItemsSource = blObject.GetAllStationBy(station1=>station1.StationKey.ToString().StartsWith(tbsearch.Text));
 
 
 
@@ -48,14 +48,14 @@ namespace PLGuiWPF
         {
             AddStationWindow wnd = new AddStationWindow();
             wnd.ShowDialog();
-            dgStations.ItemsSource = blObject.GetAllStation();
+            dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
 
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
             AddStationWindow wnd = new AddStationWindow((sender as Button).DataContext as BusStationBO);
             wnd.ShowDialog();
-            dgStations.ItemsSource = blObject.GetAllStation();
+            dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
 
         private void delButton_Click(object sender, RoutedEventArgs e)
@@ -63,12 +63,17 @@ namespace PLGuiWPF
             try
             {
                 blObject.DeleteBusStation((sender as Button).DataContext as BusStationBO);
-                dgStations.ItemsSource = blObject.GetAllStation();
+                dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
             }
             catch (BadBusStationException ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void tbsearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
     }
 }

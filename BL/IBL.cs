@@ -31,6 +31,7 @@ namespace BLApi
         #region BusStation functions
         void AddBusStation(BusStationBO toAdd);
         IEnumerable<BusStationBO> GetAllStation();
+        IEnumerable<BusStationBO> GetAllStationBy(Predicate<BusStationBO> predicate);
         BusStationBO GetBusStation(int stationKey);
         void DeleteBusStation(BusStationBO toDel);
         void updateBusStation(BusStationBO toUpdate);

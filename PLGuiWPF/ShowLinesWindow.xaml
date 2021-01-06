@@ -50,7 +50,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Image HorizontalAlignment="Left" Grid.Row="0" Width="30" Height="30"  VerticalAlignment="Top" Source="zcucit magdelet.jpg"/>
+        <Image HorizontalAlignment="Left" Grid.Row="0" Width="30" Height="30"  VerticalAlignment="Top" Source="search.jpg"/>
         <TextBox x:Name="tbsearch" HorizontalAlignment="Left" Height="28" Margin="30,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" FontSize="18" TextChanged="tbsearch_TextChanged" />
 
     </Grid>
