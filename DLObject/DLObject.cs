@@ -9,6 +9,8 @@ using DS;
 namespace Dal
 {
 
+     
+
     sealed class DLObject : IDAL
     {
         #region singelton
