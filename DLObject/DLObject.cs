@@ -19,6 +19,10 @@ namespace Dal
         #endregion
 
         #region Line functions
+        /// <summary>
+        /// The function returns all existing lines
+        /// </summary>
+        /// <returns>A collection(IEnumerable) of lines</returns>
         public IEnumerable<BusLineDO> GetAllLines()
         {
             return from line in DataSource.BusLines
@@ -26,13 +30,23 @@ namespace Dal
                    select line.Clone();
         }
 
+        /// <summary>
+        /// The function returns all lines that Answers on condition
+        /// </summary>
+        /// <param name="predicate">the condition</param>
+        /// <returns>A collection(IEnumerable) of lines</returns>
         public IEnumerable<BusLineDO> GetAllLinesBy(Predicate<BusLineDO> predicate)
         {
             return from line in DataSource.BusLines
                    where predicate(line) && line.IsExists == true
                    select line.Clone();
         }
-
+        
+        /// <summary>
+        /// The function receives a line id and returns the appropriate BusLineDO
+        /// </summary>
+        /// <param name="id">ID of the wandet line</param>
+        /// <returns>BusLineDO-the wanted line</returns>
         public BusLineDO GetLine(int id)
         {
             BusLineDO line1 = DataSource.BusLines.Find(line => line.Id == id && line.IsExists == true);
@@ -40,7 +54,12 @@ namespace Dal
                 return line1.Clone();
             throw new BadLineIdException(id,"This line was not found!");
         }
-
+       
+        /// <summary>
+        /// A function adds a line to the system
+        /// </summary>
+        /// <param name="line">the line to add</param>
+        /// <returns>id of the new line</returns>
         public int AddLine(BusLineDO line)
         {
             BusLineDO line1_toadd = line.Clone();
@@ -49,7 +68,10 @@ namespace Dal
             return line1_toadd.Id;
         }
 
-
+        /// <summary>
+        /// The function updates an existing line in the system
+        /// </summary>
+        /// <param name="line">The updated line</param>
         public void UpdateLine(BusLineDO line)
         {
             int index = DataSource.BusLines.FindIndex(line1 => line1.Id == line.Id && line.IsExists == true);
@@ -57,8 +79,13 @@ namespace Dal
                 throw new BadLineIdException(line.Id,"This Line was not found!");
             DataSource.BusLines[index] = line.Clone();
         }
-
-        public void UpdateLine(int id, Action<BusLineDO> toUpdate) //method that knows to updt specific fields in Line
+       
+        /// <summary>
+        /// The function updates Specific fields in existing line in the system
+        /// </summary>
+        /// <param name="id">the id of the line to update</param>
+        /// <param name="toUpdate">Update operation</param>
+        public void UpdateLine(int id, Action<BusLineDO> toUpdate)
         {
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
             if (line == null)
@@ -66,7 +93,10 @@ namespace Dal
             toUpdate(line);
 
         }
-
+        /// <summary>
+        /// The function deletes a line from the system
+        /// </summary>
+        /// <param name="id">the id of the line to delete</param>
         public void DeleteLine(int id)
         {
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
@@ -78,102 +108,7 @@ namespace Dal
 
         }
         #endregion
-        //---------------------
-        #region User functions
-        public IEnumerable<UserDO> GetAllUsers()
-        {
-            return from user in DataSource.Users
-                   where user.IsExists == true
-                   select user.Clone();
-        }
-
-        public IEnumerable<UserDO> GetAllUsersBy(Predicate<UserDO> predicate)
-        {
-            return from user in DataSource.Users
-                   where predicate(user) && user.IsExists == true
-                   select user.Clone();
-
-        }
-        public UserDO GetUser(string name)
-        {
-            UserDO user1 = DataSource.Users.Find(user => user.Name == name && user.IsExists == true);
-            if (user1 != null)
-                return user1.Clone();
-            throw new Exception("This user was not found!");
-        }
-
-        public void AddUser(UserDO user)//לא ניתן לתת שם גם של משתמש ישן!
-        {
-            UserDO toAdd = user.Clone();
-            if (DataSource.Users.Exists(user1 => user1.Name == toAdd.Name))
-                throw new Exception("There is already such a user with the same name in the system!");
-            DataSource.Users.Add(toAdd);
-        }
-
-        public void UpdateUser(UserDO user)
-        {
-            int index = DataSource.Users.FindIndex(user1 => user1.Name == user.Name && user1.IsExists == true);
-            if (index == -1)
-                throw new Exception("This user was not found!");
-            DataSource.Users[index] = user.Clone();
-        }
-
-        public void UpdateUser(string name, Action<UserDO> toUpdate) //method that knows to updt specific fields in Person
-        {
-            UserDO user1 = DataSource.Users.Find(user => user.Name == name && user.IsExists == true);
-            if (user1 != null)
-                toUpdate(user1);
-            else
-                throw new Exception("This user was not found!");
-        }
-
-        public void DeleteUser(string name)
-        {
-            UserDO user1 = DataSource.Users.Find(user => user.Name == name && user.IsExists == true);
-            if (user1 != null)
-                user1.IsExists = false;
-            else
-                throw new Exception("This user was not found!");
-        }
-        #endregion
-
-        #region Bus functions
-        public IEnumerable<BusDO> GetAllBuses()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<BusDO> GetAllBusesBy(Predicate<BusDO> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public BusDO GetBus(int licenseNum)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddBus(BusDO bus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateBus(BusDO bus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateBus(int id, Action<BusDO> toUpdate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteBus(int licenseNum)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-        //---------------------
+      
         #region LineStation functions
         public IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate)
         {
@@ -245,7 +180,6 @@ namespace Dal
         }
 
         #endregion
-
 
         #region BusStation functions
 
@@ -338,6 +272,4 @@ namespace Dal
 
         #endregion
     }
-
-
 }

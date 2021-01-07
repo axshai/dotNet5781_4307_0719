@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowLinesWindow" Height="auto" Width="850">
+        Title="ShowLinesWindow" Height="570" Width="850">
     <Window.Resources>
         <local:ListOfStationsToFirst 
              x:Key="ListOfStationsToFirst"/>
@@ -26,16 +26,17 @@
             <Setter  Property="AutoGenerateColumns" Value="False"/>
             <Setter  Property="FontSize" Value="18"/>
             <Setter  Property="ColumnWidth" Value="auto"/>
+            <Setter  Property="CanUserAddRows" Value="False"/>
         </Style>
 
     </Window.Resources>
     <Grid Background="#FFE5F5F9">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
         </Grid.RowDefinitions>
-        <Button x:Name="addButton" Content="add new line" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Width="140" Height="35" FontFamily="Sitka Text" FontSize="20" Background="#FF8ABDE7" Click="addButton_Click"  />
-        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1" Margin="30" MouseDoubleClick="dgLines_MouseDoubleClick"  >
+        <Button x:Name="addButton" Content="add new line" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="20" Width="140" Height="35" FontFamily="Sitka Text" FontSize="20" Background="#FF8ABDE7" Click="addButton_Click"  />
+        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1"  Margin="30"   MouseDoubleClick="dgLines_MouseDoubleClick"  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="auto" />
                 <DataGridTextColumn Header="from" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToFirst}}" Width="auto"/>

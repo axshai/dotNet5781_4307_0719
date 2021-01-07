@@ -16,22 +16,28 @@ using BLApi;
 namespace PLGuiWPF
 {
     /// <summary>
-    /// Interaction logic for ShowLinesWindow.xaml
+    /// Interaction logic for ShowLinesWindow.xaml-show all lines in system
     /// </summary>
     public partial class ShowLinesWindow : Window
     {
         IBL blObject;
-        List<BusLineBO> lines;
+       
+        /// <summary>
+        /// CTOR
+        /// </summary>
         public ShowLinesWindow()
         {
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
-            lines = blObject.GetAllLines().ToList();
-            dgLines.ItemsSource = lines;
-
-            //DataContext = this;
+            dgLines.ItemsSource = blObject.GetAllLines();
         }
 
+        #region events
+        /// <summary>
+        /// Clicking the delete Line button-to delete a line
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void delButton_Click(object sender, RoutedEventArgs e)
         {
             BusLineBO line = dgLines.SelectedItem as BusLineBO;
@@ -39,7 +45,11 @@ namespace PLGuiWPF
             dgLines.ItemsSource = blObject.GetAllLinesBy(line1=>line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
 
-
+        /// <summary>
+        /// Clicking on specific line/row in the datagrid-to see the line deatails
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dgLines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             BusLineBO line = dgLines.SelectedItem as BusLineBO;
@@ -47,17 +57,28 @@ namespace PLGuiWPF
             ws1.ShowDialog();
             dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
-
+       
+        /// <summary>
+        ///  Clicking the add Line button-to add new line
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
             AddLineWindow wnd = new AddLineWindow();
             wnd.ShowDialog();
             dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
-
+       
+        /// <summary>
+        /// text box TextChanged-when searchimg after line
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tbsearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
+        #endregion
     }
 }
