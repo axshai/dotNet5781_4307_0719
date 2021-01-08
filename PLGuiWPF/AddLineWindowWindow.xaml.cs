@@ -16,11 +16,14 @@ using BLApi;
 namespace PLGuiWPF
 {
     /// <summary>
-    /// Interaction logic for AddLineWindow.xaml
+    /// Interaction logic for AddLineWindow.xaml-to add new line to the system
     /// </summary>
     public partial class AddLineWindow : Window
     {
         IBL blObject;
+        /// <summary>
+        /// ctor
+        /// </summary>
         public AddLineWindow()
         {
             InitializeComponent();
@@ -30,6 +33,12 @@ namespace PLGuiWPF
 
         }
 
+        #region events
+        /// <summary>
+        /// event when the user press on the add buttom-his first try to add the new line
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
             if (cbfirst.SelectedItem == null || cblast.SelectedItem == null || cbArea.SelectedItem == null)
@@ -42,7 +51,7 @@ namespace PLGuiWPF
                 blObject.AddLine(tbNum.Text, cbfirst.SelectedItem as BusStationBO, cblast.SelectedItem as BusStationBO, (BO.Area)cbArea.SelectedItem);
                 this.Close();
             }
-            catch (BadConsecutiveStationsKeysException)
+            catch (BadConsecutiveStationsKeysException)//it we have no details about the time and distance between the 2 stations of the new line
             {
 
                 tbNum.Visibility = Visibility.Hidden;
@@ -55,6 +64,11 @@ namespace PLGuiWPF
             }
         }
 
+        /// <summary>
+        ///event when the user press on the add buttom2- the second try of the user to add the line-when we got details about the time and distance between the 2 stations of the new line
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton2_Click(object sender, RoutedEventArgs e)
         {
             uint validTime;
@@ -68,5 +82,6 @@ namespace PLGuiWPF
             blObject.AddLine(tbNum.Text, cbfirst.SelectedItem as BusStationBO, cblast.SelectedItem as BusStationBO, (BO.Area)cbArea.SelectedItem, validDist, TimeSpan.FromMinutes(validTime));
             this.Close();
         }
+        #endregion
     }
 }

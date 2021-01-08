@@ -7,9 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Icon="bus.jpg.ico">
     <Grid  Background="#FFC2DFA2">
-        <Button  x:Name="managButton" Background="Bisque" Content="Log in as manager" Margin="49,145,474.6,0" VerticalAlignment="Top" Height="120" Click="managButton_Click"/>
-        <Button Content="Log in as passenger"  Background="AntiqueWhite" HorizontalAlignment="Left" VerticalAlignment="Top" Width="263" RenderTransformOrigin="2.886,2.11" Margin="383,145,0,0" Height="120" Click="Button_Click" />
-        <Label Content="Welcome" HorizontalContentAlignment="Center" Height="121" Width="794" Cursor="Pen" Background="#FF88AD87" FontSize="48" FontFamily="Rockwell Extra Bold" VerticalAlignment="Top"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button  x:Name="managButton" Background="Bisque" Content="Log in as manager" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="120" FontSize="24" Width="263" Click="managButton_Click"/>
+        <Button Content="Log in as passenger"  Background="Bisque"  Width="263" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Height="120" FontSize="24" Click="Button_Click" />
+        <Label Content="Welcome" HorizontalContentAlignment="Center" Height="121" Width="794"  Background="#FF88AD87" FontSize="48" FontFamily="Rockwell Extra Bold" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>
