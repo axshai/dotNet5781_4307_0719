@@ -39,5 +39,12 @@ namespace PLGuiWPF
         {
           
         }
+
+        private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            //(sender as MediaElement).Visibility = Visibility.Hidden;
+        }
+
+      
     }
 }

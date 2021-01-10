@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowLineDetails" Height="600" Width="700" >
+        Title="ShowLineDetails" Height="800" Width="700" >
     <Window.Resources>
         <local:ListOfStationsToBoolean
              x:Key="ListOfStationsToBoolean"/>

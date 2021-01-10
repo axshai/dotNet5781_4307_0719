@@ -35,6 +35,26 @@ namespace BL
         #region private functions-help to the IBLS functions
 
         /// <summary>
+        /// The function receives a station number and returns all its subsequent stations 
+        /// </summary>
+        /// <param name="StationKey">the key of the station</param>
+        /// <returns>IEnumerable of ConsecutiveStationBO-all its consecutive Stations</returns>
+        private IEnumerable<ConsecutiveStationBO> GetConsecutiveStations(int StationKey)
+        {
+            List<ConsecutiveStationBO> result = new List<ConsecutiveStationBO>();
+            IEnumerable<ConsecutiveStationBO> temp = (from line in GetAllLines()
+                                                      where line.StationList.ToList().Exists(line2 => line2.StationKey == StationKey)
+                                                      let index = line.StationList.ToList().FindIndex(station2 => station2.StationKey == StationKey)
+                                                      where (index < line.StationList.Count() - 1) && (!result.Exists(station1 => line.StationList.ElementAt(index + 1).StationKey == station1.StationKey))
+                                                      select new ConsecutiveStationBO { DistanceFromPrev = line.StationList.ElementAt(index + 1).DistanceFromPrev, PrevStationKey = StationKey, StationKey = line.StationList.ElementAt(index + 1).StationKey, StationName = line.StationList.ElementAt(index + 1).StationName, TimeFromPrev = line.StationList.ElementAt(index + 1).TimeFromPrev });
+            return from station in temp.ToList()
+                   where temp.ToList().FindAll(station1 => station1.StationKey == station.StationKey).Count() < 2
+                   select station;
+
+        }
+
+
+        /// <summary>
         /// The function receives a line and a station and returns the arrival times of the line to the station
         /// </summary>
         /// <param name="line">line id</param>
@@ -50,6 +70,7 @@ namespace BL
             return result;
 
         }
+       
         /// <summary>
         /// The function receives information about a pair of consecutive stations and adds an appropriate entity to the system
         /// </summary>
@@ -131,6 +152,28 @@ namespace BL
                    };
         }
 
+        /// <summary>
+        /// The function receives a line id and returns a list of stations that can be added to the line
+        /// </summary>
+        /// <param name="lineId">the id of the wanted line</param>
+        /// <returns></returns>
+        private IEnumerable<BusStationBO> getRestStations(int lineId)
+        {
+            BusLineDO line = myDal.GetLine(lineId);
+            return from station in myDal.GetAllStations()
+                   where !myDal.GetAllLineStationsBy(stat => stat.LineId == lineId).Any(state1 => state1.StationKey == station.StationKey) && (line.LineArea == DO.Area.GENERAL || line.LineArea == station.StationArea)
+                   select new BusStationBO
+                   {
+                       Area = (BO.Area)(int)station.StationArea,
+                       StationKey = station.StationKey,
+                       StationName = station.StationName,
+                       ListOfLines = getLinesOfStations(station.StationKey),
+                       Latitude = station.Latitude,
+                       Longitude = station.Longitude
+
+                   };
+        }
+       
         #endregion
 
         /// <summary>
@@ -166,126 +209,43 @@ namespace BL
         }
 
         /// <summary>
-        /// The function returns all the stations that exist in the system — with the lines that pass in this stataion
+        /// Function adds a new line to the system
         /// </summary>
-        /// <returns></returns>
-        public IEnumerable<BusStationBO> GetAllStation()
+        /// <param name="number">line number</param>
+        /// <param name="first">his first station</param>
+        /// <param name="last">his last station</param>
+        /// <param name="area">his area</param>
+        /// <param name="distance">Distance between these stations - if not present in the system</param>
+        /// <param name="time">time between these stations - if not present in the system</param>
+        public void AddLine(string number, BusStationBO first, BusStationBO last, BO.Area area, double? distance = null, TimeSpan? time = null)
         {
-            return from station in myDal.GetAllStations()
-                   orderby station.StationArea
-                   select new BusStationBO
-                   {
-                       Area = (BO.Area)((int)station.StationArea),
-                       Latitude = station.Latitude,
-                       Longitude = station.Longitude,
-                       StationKey = station.StationKey,
-                       StationName = station.StationName,
-                       ListOfLines = getLinesOfStations(station.StationKey),
-                       ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
-                   };
-        }
+            IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == number);
+            if (number.Length > 3 || number.Length < 1)
+                throw new BadLineException("Line name must be up to three characters and not less from one!");
+            if (sameName.Count() > 1)
+                throw new BadLineException("There are already two lines with the same name!");
+            if (sameName.Any(line => (int)line.LineArea != (int)area))
+                throw new BadLineException("Lines with the same name must be in the same area!");
+            if ((first.Area != area || last.Area != area) && BO.Area.GENERAL != area)
+                throw new BadLineException("The stations do not match the line area!");
+            if (first.StationKey == last.StationKey)
+                throw new BadLineException("The stations Must be different!");
+            if (distance != null)
+                addConsecutiveStations(first.StationKey, last.StationKey, (double)distance, (TimeSpan)time);
 
-        /// <summary>
-        /// The function returns all stations that Answers on condition
-        /// </summary>
-        /// <param name="predicate">the condition</param>
-        /// <returns>IEnumerable of the stations</returns>
-        public IEnumerable<BusStationBO> GetAllStationBy(Predicate<BusStationBO> predicate)
-        {
-            return from station in GetAllStation()
-                   where predicate(station)
-                   select station;
-        }
-
-        /// <summary>
-        /// The function receives a line schedule and removes it from the system
-        /// </summary>
-        /// <param name="toDelete">the schedule to delete</param>
-        public void DeleteSchedule(BusLineScheduleBO toDelete)
-        {
-            myDal.DeleteSchedule(toDelete.LineId, toDelete.StartActivity);
-        }
-
-        /// <summary>
-        /// The function updates the frequency of a line schedule
-        /// </summary>
-        /// <param name="toUpdate">the schedule to delete update</param>
-        /// <param name="newFreq">the new frequency</param>
-        public void UpdateSchedule(BusLineScheduleBO toUpdate, int newFreq)
-        {
-            if ((toUpdate.EndActivity - toUpdate.StartActivity).TotalMinutes < newFreq)
-                throw new BO.BadBusLineScheduleException(toUpdate.StartActivity, toUpdate.LineId,"The frequency is higher than the maximum possible in this time frame!");
-           
-                myDal.UpdateSchedule(toUpdate.LineId, toUpdate.StartActivity, sched => sched.frequency = newFreq);
-        }
-
-        /// <summary>
-        /// The function adds a line schedule
-        /// </summary>
-        /// <param name="lineId">Line ID</param>
-        /// <param name="begin1">Start time</param>
-        /// <param name="end1">end time</param>
-        /// <param name="freq">frequency</param>
-        public void AddSchedule(int lineId, TimeSpan begin1, TimeSpan end1, int freq)
-        {
-            if (begin1 > end1)
-                throw new Exception("Start time must be before end!");
-            if ((end1 - begin1).TotalMinutes < freq)
-                throw new Exception("The frequency is higher than the maximum possible in this time frame!");
-            // Find and update / delete schedules that are affected by the new
-            IEnumerable<BusLineScheduleBO> toChange = from sched in getSchedulesOfLine(lineId)
-                                                      where (sched.StartActivity >= begin1 && sched.StartActivity <= end1) || (sched.EndActivity >= begin1 && sched.EndActivity <= end1) || (sched.StartActivity <= begin1 && sched.EndActivity >= end1)
-                                                      select sched;
-
-            foreach (BusLineScheduleBO item in toChange)//foreach old Schedule
+            try
             {
-                if (item.StartActivity >= begin1 && item.EndActivity <= end1)//if the new Swallows the old
-                {
-                    DeleteSchedule(item);
-                    continue;
-                }
-
-                if (item.StartActivity >= begin1)//If the old begins within the new
-                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.StartActivity = end1); //Made him start after the new
-
-                else if (item.EndActivity <= end1)////If the old ends within the new
-                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);////Made him end before the new
-               
-                else//if the old Swallows the new
-                {
-                    myDal.AddSchedule(new BusLineScheduleDO//Split the old
-                    { IsExists = true, StartActivity = end1, EndActivity = item.EndActivity, frequency = item.frequency, LineId = lineId });
-                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);
-
-                }
+                myDal.GetConsecutiveStations(first.StationKey, last.StationKey);
             }
-            myDal.AddSchedule(new BusLineScheduleDO
-            { IsExists = true, StartActivity = begin1, EndActivity = end1, frequency = freq, LineId = lineId });
+            catch (DO.BadConsecutiveStationsKeysException ex)
+            {
+                throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this 2 station", ex);
+            }
 
+            int id = myDal.AddLine(new BusLineDO { IsExists = true, LineArea = (DO.Area)((int)area), LineNumber = number });
+            myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 1, StationKey = first.StationKey, LineId = id });
+            myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 2, StationKey = last.StationKey, LineId = id });
 
-
-        }
-
-        /// <summary>
-        /// The function receives a line id and returns a list of stations that can be added to the line
-        /// </summary>
-        /// <param name="lineId">the id of the wanted line</param>
-        /// <returns></returns>
-        public IEnumerable<BusStationBO> getRestStations(int lineId)
-        {
-            BusLineDO line = myDal.GetLine(lineId);
-            return from station in myDal.GetAllStations()
-                   where !myDal.GetAllLineStationsBy(stat => stat.LineId == lineId).Any(state1 => state1.StationKey == station.StationKey) && (line.LineArea == DO.Area.GENERAL || line.LineArea == station.StationArea)
-                   select new BusStationBO
-                   {
-                       Area = (BO.Area)(int)station.StationArea,
-                       StationKey = station.StationKey,
-                       StationName = station.StationName,
-                       ListOfLines = getLinesOfStations(station.StationKey),
-                       Latitude = station.Latitude,
-                       Longitude = station.Longitude
-
-                   };
         }
 
         /// <summary>
@@ -337,6 +297,204 @@ namespace BL
                 LineNumber = line.LineNumber,
                 restStationList = getRestStations(line.Id)
             };
+        }
+
+        /// <summary>
+        /// The function updates a name for a line
+        /// </summary>
+        /// <param name="id">the line id</param>
+        /// <param name="name">name of the kine</param>
+        public void updateLine(int id, string name)
+        {
+            IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == name);
+            if (name.Length > 3)
+                throw new BadLineException("Line name must be up to three characters!", id);
+            if (sameName.Count() > 1)
+                throw new BadLineException("There are already two lines with the same name!", id);
+            if (sameName.Any(line => line.LineArea != myDal.GetLine(id).LineArea))
+                throw new BadLineException("Lines with the same name must be in the same area!", id);
+            myDal.UpdateLine(id, line => line.LineNumber = name);
+
+
+        }
+
+        /// <summary>
+        /// The function receives a line schedule and removes it from the system
+        /// </summary>
+        /// <param name="toDelete">the schedule to delete</param>
+        public void DeleteSchedule(BusLineScheduleBO toDelete)
+        {
+            myDal.DeleteSchedule(toDelete.LineId, toDelete.StartActivity);
+        }
+
+        /// <summary>
+        /// The function updates the frequency of a line schedule
+        /// </summary>
+        /// <param name="toUpdate">the schedule to delete update</param>
+        /// <param name="newFreq">the new frequency</param>
+        public void UpdateSchedule(BusLineScheduleBO toUpdate, int newFreq)
+        {
+            if ((toUpdate.EndActivity - toUpdate.StartActivity).TotalMinutes < newFreq)
+                throw new BO.BadBusLineScheduleException(toUpdate.StartActivity, toUpdate.LineId, "The frequency is higher than the maximum possible in this time frame!");
+
+            myDal.UpdateSchedule(toUpdate.LineId, toUpdate.StartActivity, sched => sched.frequency = newFreq);
+        }
+
+        /// <summary>
+        /// The function adds a line schedule
+        /// </summary>
+        /// <param name="lineId">Line ID</param>
+        /// <param name="begin1">Start time</param>
+        /// <param name="end1">end time</param>
+        /// <param name="freq">frequency</param>
+        public void AddSchedule(int lineId, TimeSpan begin1, TimeSpan end1, int freq)
+        {
+            if (begin1 > end1)
+                throw new Exception("Start time must be before end!");
+            if ((end1 - begin1).TotalMinutes < freq)
+                throw new Exception("The frequency is higher than the maximum possible in this time frame!");
+            // Find and update / delete schedules that are affected by the new
+            IEnumerable<BusLineScheduleBO> toChange = from sched in getSchedulesOfLine(lineId)
+                                                      where (sched.StartActivity >= begin1 && sched.StartActivity <= end1) || (sched.EndActivity >= begin1 && sched.EndActivity <= end1) || (sched.StartActivity <= begin1 && sched.EndActivity >= end1)
+                                                      select sched;
+
+            foreach (BusLineScheduleBO item in toChange)//foreach old Schedule
+            {
+                if (item.StartActivity >= begin1 && item.EndActivity <= end1)//if the new Swallows the old
+                {
+                    DeleteSchedule(item);
+                    continue;
+                }
+
+                if (item.StartActivity >= begin1)//If the old begins within the new
+                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.StartActivity = end1); //Made him start after the new
+
+                else if (item.EndActivity <= end1)////If the old ends within the new
+                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);////Made him end before the new
+
+                else//if the old Swallows the new
+                {
+                    myDal.AddSchedule(new BusLineScheduleDO//Split the old
+                    { IsExists = true, StartActivity = end1, EndActivity = item.EndActivity, frequency = item.frequency, LineId = lineId });
+                    myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);
+
+                }
+            }
+            myDal.AddSchedule(new BusLineScheduleDO
+            { IsExists = true, StartActivity = begin1, EndActivity = end1, frequency = freq, LineId = lineId });
+
+
+
+        }
+
+        /// <summary>
+        /// The function returns all the stations that exist in the system — with the lines that pass in this stataion
+        /// </summary>
+        /// <returns>IEnumerable of the stations</returns>
+        public IEnumerable<BusStationBO> GetAllStation()
+        {
+            return from station in myDal.GetAllStations()
+                   orderby station.StationArea
+                   select new BusStationBO
+                   {
+                       Area = (BO.Area)((int)station.StationArea),
+                       Latitude = station.Latitude,
+                       Longitude = station.Longitude,
+                       StationKey = station.StationKey,
+                       StationName = station.StationName,
+                       ListOfLines = getLinesOfStations(station.StationKey),
+                       ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
+                   };
+        }
+
+        /// <summary>
+        /// The function returns all stations that Answers on condition
+        /// </summary>
+        /// <param name="predicate">the condition</param>
+        /// <returns>IEnumerable of the stations</returns>
+        public IEnumerable<BusStationBO> GetAllStationBy(Predicate<BusStationBO> predicate)
+        {
+            return from station in GetAllStation()
+                   where predicate(station)
+                   select station;
+        }
+
+        /// <summary>
+        /// The function returns a desired bus station
+        /// </summary>
+        /// <param name="stationKey">the key of the wandet station</param>
+        /// <returns> BusStationBO-the wanted station</returns>
+        public BusStationBO GetBusStation(int stationKey)
+        {
+            BusStationDO station = myDal.GetBusStation(stationKey);
+            return new BusStationBO
+            {
+                Area = (BO.Area)((int)station.StationArea),
+                Latitude = station.Latitude,
+                Longitude = station.Longitude,
+                StationKey = station.StationKey,
+                StationName = station.StationName,
+                ListOfLines = getLinesOfStations(station.StationKey),
+                ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
+            };
+        }
+
+        /// <summary>
+        /// The function receives a station and delete it to the database
+        /// </summary>
+        /// <param name="toDel">the station to delete</param>
+        public void DeleteBusStation(BusStationBO toDel)
+        {
+            if (toDel.ListOfLines.Any())
+                throw new BadBusStationException(toDel.StationKey, "It is not possible to delete a station that  lines stop in it!");
+            else
+                myDal.DeleteBusStation(toDel.StationKey);
+        }
+
+        /// <summary>
+        /// The function receives a station and update its Fields
+        /// </summary>
+        /// <param name="toUpdate">station to update</param>
+        public void updateBusStation(BusStationBO toUpdate)
+        {
+            if (toUpdate.Latitude < -90 || toUpdate.Latitude > 90)//If the latitude is incorrect
+            {
+                throw new BadBusStationKeyException(toUpdate.StationKey, String.Format("The Latitude must be between <{0},{1}>", -90, 90));
+            }
+
+            if (toUpdate.Longitude < -180 || toUpdate.Longitude > 180)//If the latitude is incorrect
+            {
+                throw new BadBusStationKeyException(toUpdate.StationKey, String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
+            }
+            myDal.UpdateBusStation(new BusStationDO { IsExists = true, StationKey = toUpdate.StationKey, Latitude = toUpdate.Latitude, Longitude = toUpdate.Longitude, StationArea = (DO.Area)((int)toUpdate.Area), StationName = toUpdate.StationName });
+
+        }
+
+        /// <summary>
+        ///The function receives a station and adds it to the database
+        /// </summary>
+        /// <param name="toAdd">the new station</param>
+        public void AddBusStation(BusStationBO toAdd)
+        {
+            if (toAdd.StationKey > 999999 || (toAdd.StationKey < 0))//The number of station must be 6 digits
+            {
+                throw new BadBusStationException(toAdd.StationKey, "Station number must be between 1 and 6 digits!");
+            }
+            if (toAdd.Latitude < -90 || toAdd.Latitude > 90)//If the latitude is incorrect
+            {
+                throw new BadBusStationException(toAdd.StationKey, String.Format("The Latitude must be between <{0},{1}>", -90, 90));
+            }
+
+            if (toAdd.Longitude < -180 || toAdd.Latitude > 180)//If the latitude is incorrect
+            {
+                throw new BadBusStationException(toAdd.StationKey, String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
+            }
+            try
+            {
+                myDal.AddBusStation(new BusStationDO { IsExists = true, StationKey = toAdd.StationKey, Latitude = toAdd.Latitude, Longitude = toAdd.Longitude, StationArea = (DO.Area)((int)toAdd.Area), StationName = toAdd.StationName });
+            }
+            catch (DO.BadBusStationKeyException ex) { throw new BadBusStationException(toAdd.StationKey, ex.Message, ex); }
+
         }
 
         /// <summary>
@@ -433,44 +591,6 @@ namespace BL
         }
 
         /// <summary>
-        /// The function receives a station number and returns all its subsequent stations 
-        /// </summary>
-        /// <param name="StationKey">the key of the station</param>
-        /// <returns>IEnumerable of ConsecutiveStationBO-all its consecutive Stations</returns>
-        public IEnumerable<ConsecutiveStationBO> GetConsecutiveStations(int StationKey)
-        {
-            List<ConsecutiveStationBO> result = new List<ConsecutiveStationBO>();
-            IEnumerable<ConsecutiveStationBO> temp = (from line in GetAllLines()
-                                                      where line.StationList.ToList().Exists(line2 => line2.StationKey == StationKey)
-                                                      let index = line.StationList.ToList().FindIndex(station2 => station2.StationKey == StationKey)
-                                                      where (index < line.StationList.Count() - 1) && (!result.Exists(station1 => line.StationList.ElementAt(index + 1).StationKey == station1.StationKey))
-                                                      select new ConsecutiveStationBO { DistanceFromPrev = line.StationList.ElementAt(index + 1).DistanceFromPrev, PrevStationKey = StationKey, StationKey = line.StationList.ElementAt(index + 1).StationKey, StationName = line.StationList.ElementAt(index + 1).StationName, TimeFromPrev = line.StationList.ElementAt(index + 1).TimeFromPrev });
-            return from station in temp.ToList()
-                   where temp.ToList().FindAll(station1 => station1.StationKey == station.StationKey).Count() < 2
-                   select station;
-
-        }
-
-        /// <summary>
-        /// The function updates a name for a line
-        /// </summary>
-        /// <param name="id">the line id</param>
-        /// <param name="name">name of the kine</param>
-        public void updateLine(int id, string name)
-        {
-            IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == name);
-            if (name.Length > 3)
-                throw new BadLineException("Line name must be up to three characters!",id);
-            if (sameName.Count() > 1)
-                throw new BadLineException("There are already two lines with the same name!", id);
-            if (sameName.Any(line => line.LineArea != myDal.GetLine(id).LineArea))
-                throw new BadLineException("Lines with the same name must be in the same area!", id);
-            myDal.UpdateLine(id, line => line.LineNumber = name);
-
-
-        }
-
-        /// <summary>
         /// The function deletes from the system line station 
         /// </summary>
         /// <param name="line">the  line</param>
@@ -492,7 +612,7 @@ namespace BL
                     }
                     catch (DO.BadConsecutiveStationsKeysException ex)
                     {
-                        throw   new BO.BadConsecutiveStationsKeysException("No details on time and distance between this stations end previous station", ex);
+                        throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this stations end previous station", ex);
                     }
                 }
 
@@ -512,46 +632,6 @@ namespace BL
         }
 
         /// <summary>
-        /// Function adds a new line to the system
-        /// </summary>
-        /// <param name="number">line number</param>
-        /// <param name="first">his first station</param>
-        /// <param name="last">his last station</param>
-        /// <param name="area">his area</param>
-        /// <param name="distance">Distance between these stations - if not present in the system</param>
-        /// <param name="time">time between these stations - if not present in the system</param>
-        public void AddLine(string number, BusStationBO first, BusStationBO last, BO.Area area, double? distance = null, TimeSpan? time = null)
-        {
-            IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == number);
-            if (number.Length > 3 || number.Length < 1)
-                throw new BadLineException("Line name must be up to three characters and not less from one!");
-            if (sameName.Count() > 1)
-                throw new BadLineException("There are already two lines with the same name!");
-            if (sameName.Any(line => (int)line.LineArea != (int)area))
-                throw new BadLineException("Lines with the same name must be in the same area!");
-            if ((first.Area != area || last.Area != area) && BO.Area.GENERAL != area)
-                throw new BadLineException("The stations do not match the line area!");
-            if (first.StationKey == last.StationKey)
-                throw new BadLineException("The stations Must be different!");
-            if (distance != null)
-                addConsecutiveStations(first.StationKey, last.StationKey, (double)distance, (TimeSpan)time);
-
-            try
-            {
-                myDal.GetConsecutiveStations(first.StationKey, last.StationKey);
-            }
-            catch (DO.BadConsecutiveStationsKeysException ex)
-            {
-                throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this 2 station", ex);
-            }
-
-            int id = myDal.AddLine(new BusLineDO { IsExists = true, LineArea = (DO.Area)((int)area), LineNumber = number });
-            myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 1, StationKey = first.StationKey, LineId = id });
-            myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 2, StationKey = last.StationKey, LineId = id });
-
-        }
-
-        /// <summary>
         /// The function updates time and distance between consecutive stations
         /// </summary>
         /// <param name="stationKey1">the first station key</param>
@@ -562,84 +642,6 @@ namespace BL
         {
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.Distance = distance);
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
-        }
-
-        /// <summary>
-        /// The function returns a desired bus station
-        /// </summary>
-        /// <param name="stationKey">the key of the wandet station</param>
-        /// <returns></returns>
-        public BusStationBO GetBusStation(int stationKey)
-        {
-            BusStationDO station = myDal.GetBusStation(stationKey);
-            return new BusStationBO
-            {
-                Area = (BO.Area)((int)station.StationArea),
-                Latitude = station.Latitude,
-                Longitude = station.Longitude,
-                StationKey = station.StationKey,
-                StationName = station.StationName,
-                ListOfLines = getLinesOfStations(station.StationKey),
-                ListOfConsecutiveLineStations = GetConsecutiveStations(station.StationKey)
-            };
-        }
-      
-        /// <summary>
-        /// The function receives a station and delete it to the database
-        /// </summary>
-        /// <param name="toDel">the station to delete</param>
-        public void DeleteBusStation(BusStationBO toDel)
-        {
-            if (toDel.ListOfLines.Any())
-                throw new BadBusStationException(toDel.StationKey,"It is not possible to delete a station that  lines stop in it!");
-            else
-                myDal.DeleteBusStation(toDel.StationKey);
-        }
-       
-        /// <summary>
-        ///The function receives a station and adds it to the database
-        /// </summary>
-        /// <param name="toAdd">the new station</param>
-        public void AddBusStation(BusStationBO toAdd)
-        {
-            if (toAdd.StationKey > 999999 || (toAdd.StationKey < 0))//The number of station must be 6 digits
-            {
-                throw new BadBusStationException(toAdd.StationKey,"Station number must be between 1 and 6 digits!");
-            }
-            if (toAdd.Latitude < -90 || toAdd.Latitude > 90)//If the latitude is incorrect
-            {
-                throw new BadBusStationException(toAdd.StationKey, String.Format("The Latitude must be between <{0},{1}>", -90, 90));
-            }
-
-            if (toAdd.Longitude < -180 || toAdd.Latitude > 180)//If the latitude is incorrect
-            {
-                throw new BadBusStationException(toAdd.StationKey, String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
-            }
-            try
-            {
-                myDal.AddBusStation(new BusStationDO { IsExists = true, StationKey = toAdd.StationKey, Latitude = toAdd.Latitude, Longitude = toAdd.Longitude, StationArea = (DO.Area)((int)toAdd.Area), StationName = toAdd.StationName });
-            }
-            catch (DO.BadBusStationKeyException ex) { throw new BadBusStationException(toAdd.StationKey,ex.Message, ex); }
-
-        }
-      
-        /// <summary>
-        /// The function receives a station and update its Fields
-        /// </summary>
-        /// <param name="toUpdate">station to update</param>
-        public void updateBusStation(BusStationBO toUpdate)
-        {
-            if (toUpdate.Latitude < -90 || toUpdate.Latitude > 90)//If the latitude is incorrect
-            {
-                throw new BadBusStationKeyException(toUpdate.StationKey, String.Format("The Latitude must be between <{0},{1}>", -90, 90));
-            }
-
-            if (toUpdate.Longitude < -180 || toUpdate.Longitude > 180)//If the latitude is incorrect
-            {
-                throw new BadBusStationKeyException(toUpdate.StationKey, String.Format("The Longitude  must be between <{0},{1}>", -180, 180));
-            }
-            myDal.UpdateBusStation(new BusStationDO { IsExists = true, StationKey = toUpdate.StationKey, Latitude = toUpdate.Latitude, Longitude = toUpdate.Longitude, StationArea = (DO.Area)((int)toUpdate.Area), StationName = toUpdate.StationName });
-
         }
 
     }

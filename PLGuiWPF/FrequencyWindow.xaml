@@ -15,7 +15,7 @@
 
 
 
-        <Label Margin="10" Width="200" VerticalAlignment="Stretch" Grid.Row="0" Content="enter new frequency" FontSize="18" HorizontalAlignment="Center" Background="#FFEDDBDB" Foreground="#FF127436" />
+        <Label Margin="10" Width="200"  HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Grid.Row="0" Content="enter new frequency" FontSize="18" HorizontalAlignment="Center" Background="#FFEDDBDB" Foreground="#FF127436" />
         <TextBox x:Name="tbFreq" HorizontalAlignment="Stretch" Width="100" Height="45"   Margin="10" Grid.Row="1"   VerticalAlignment="Stretch" />
         <Button x:Name="updateButton" Content="update" HorizontalAlignment="Center" Margin="15" Grid.Row="2" VerticalAlignment="Bottom" Width="75" Background="#FFB99292" Click="updateButton_Click"/>
 

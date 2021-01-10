@@ -16,11 +16,15 @@ using BLApi;
 namespace PLGuiWPF
 {
     /// <summary>
-    /// Interaction logic for FrequencyWindow.xaml
+    /// Interaction logic for FrequencyWindow.xaml-to set new frequency to schdule
     /// </summary>
     public partial class FrequencyWindow : Window
     {
         BusLineScheduleBO current;
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="schedule"></param>
         public FrequencyWindow(BusLineScheduleBO schedule)
         {
             InitializeComponent();
@@ -28,27 +32,29 @@ namespace PLGuiWPF
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+      /// <summary>
+      /// when the user press on the update button
+      /// </summary>
+      /// <param name="sender"></param>
+      /// <param name="e"></param>
         private void updateButton_Click(object sender, RoutedEventArgs e)
         {
             IBL b1 = BLFactory.GetBL("1");
             uint toNum;
+            //Check input correctness:
             if (!uint.TryParse(tbFreq.Text, out toNum))
             {
                 MessageBox.Show("Enter digits only!");
                 tbFreq.Text = "";
             }
-            else
+            else//if the input is ok
             {
                 try
                 {
                     b1.UpdateSchedule(current, int.Parse(tbFreq.Text));
                     this.Close();
                 }
+                
                 catch (BadBusLineScheduleException)
                 {
                     MessageBox.Show("A bus does not leave the station more than once a minute!");

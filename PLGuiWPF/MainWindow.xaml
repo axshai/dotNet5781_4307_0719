@@ -13,7 +13,8 @@
         </Grid.ColumnDefinitions>
         <Button  x:Name="managButton" Background="Bisque" Content="Log in as manager" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="120" FontSize="24" Width="263" Click="managButton_Click"/>
         <Button Content="Log in as passenger"  Background="Bisque"  Width="263" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Height="120" FontSize="24" Click="Button_Click" />
-        <Label Content="Welcome" HorizontalContentAlignment="Center" Height="121" Width="794"  Background="#FF88AD87" FontSize="48" FontFamily="Rockwell Extra Bold" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Welcome" HorizontalContentAlignment="Center" Height="121" Width="794"  Background="#FF88AD87" FontSize="48" FontFamily="Rockwell Extra Bold" VerticalAlignment="Top"  Grid.ColumnSpan="2"/>
+        
 
     </Grid>
 </Window>

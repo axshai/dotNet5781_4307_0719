@@ -43,6 +43,8 @@ namespace PLGuiWPF
         /// <param name="e"></param>
         private void dgStations_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (dgStations.SelectedItem == null)
+                return;
             ShowStationDetails w1 = new ShowStationDetails(dgStations.SelectedItem as BusStationBO);
             w1.ShowDialog();
             dgStations.ItemsSource = blObject.GetAllStationBy(station1=>station1.StationKey.ToString().StartsWith(tbsearch.Text));
@@ -55,7 +57,7 @@ namespace PLGuiWPF
         /// <param name="e"></param>
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
-            AddStationWindow wnd = new AddStationWindow();
+            AddOrEditStationWindow wnd = new AddOrEditStationWindow();
             wnd.ShowDialog();
             dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
@@ -66,7 +68,7 @@ namespace PLGuiWPF
         /// <param name="e"></param>
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
-            AddStationWindow wnd = new AddStationWindow((sender as Button).DataContext as BusStationBO);
+            AddOrEditStationWindow wnd = new AddOrEditStationWindow((sender as Button).DataContext as BusStationBO);
             wnd.ShowDialog();
             dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }

@@ -16,24 +16,35 @@ using BLApi;
 namespace PLGuiWPF
 {
     /// <summary>
-    /// Interaction logic for DeleteLineStationWindow.xaml
+    /// Interaction logic for DeleteLineStationWindow.xaml-for update time and distance after delete station from line rout
+    /// (As a result of deleting a station — there are two stations that have now become consecutive stations)
     /// </summary>
     public partial class DeleteLineStationWindow : Window
     {
         BusLineStationBO current;
         BusLineBO currentLine;
         IBL bl;
+       /// <summary>
+       /// ctor
+       /// </summary>
+       /// <param name="station">the station to delete</param>
+       /// <param name="line">The line from which you want to remove the station</param>
         public DeleteLineStationWindow(BusLineStationBO station,BusLineBO line)
         {
             InitializeComponent();
             bl = BLFactory.GetBL("1");
             current = station;
             currentLine = line;
-            tbheader.Text = line.StationList.ToList()[line.StationList.ToList().IndexOf(station) + 1].StationKey.ToString();
+            tbheader.Text = line.StationList.ToList()[line.StationList.ToList().IndexOf(station) + 1].StationKey.ToString();//the station to update time and distance from the privous-one after the deleted station
         }
-
+        /// <summary>
+        /// press on delete button-after that he enter time and distance
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void delButton_Click(object sender, RoutedEventArgs e)
         {
+            //Check input correctness:
             TimeSpan validTime;
             double validDist;
             if (!TimeSpan.TryParse(tbtime.Text, out validTime) || !double.TryParse(tbdist.Text, out validDist))
@@ -42,6 +53,7 @@ namespace PLGuiWPF
                 tbtime.Text = tbdist.Text = "";
                 return;
             }
+           //delete the station from the rout
             bl.DeleteLineStation(currentLine, current.StationKey, double.Parse(tbdist.Text), TimeSpan.Parse(tbtime.Text) );
             this.Close();
         }

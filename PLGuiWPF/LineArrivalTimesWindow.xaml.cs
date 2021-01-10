@@ -15,7 +15,7 @@ using BO;
 namespace PLGuiWPF
 {
     /// <summary>
-    /// Interaction logic for LineArrivalTimes.xaml
+    /// Interaction logic for LineArrivalTimes.xaml-Shows arrival times of a particular line to a particular station
     /// </summary>
     public partial class LineArrivalTimesWindow : Window
     {

@@ -21,7 +21,7 @@ namespace PLGuiWPF
     public partial class ShowLinesWindow : Window
     {
         IBL blObject;
-       
+
         /// <summary>
         /// CTOR
         /// </summary>
@@ -42,7 +42,7 @@ namespace PLGuiWPF
         {
             BusLineBO line = dgLines.SelectedItem as BusLineBO;
             blObject.DeleteLine(line.Id);
-            dgLines.ItemsSource = blObject.GetAllLinesBy(line1=>line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
+            dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
 
         /// <summary>
@@ -52,12 +52,14 @@ namespace PLGuiWPF
         /// <param name="e"></param>
         private void dgLines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (dgLines.SelectedItem == null)
+                return;
             BusLineBO line = dgLines.SelectedItem as BusLineBO;
             ShowLineDetails ws1 = new ShowLineDetails(line);
             ws1.ShowDialog();
             dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
-       
+
         /// <summary>
         ///  Clicking the add Line button-to add new line
         /// </summary>
@@ -69,7 +71,7 @@ namespace PLGuiWPF
             wnd.ShowDialog();
             dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
         }
-       
+
         /// <summary>
         /// text box TextChanged-when searchimg after line
         /// </summary>
