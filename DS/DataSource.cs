@@ -14,15 +14,13 @@ namespace DS
 
         static DataSource()
         {
-            Buses = new List<BusDO>();
+            
             BusesInTravel = new List<BusInTravelDO>();
             BusLines = new List<BusLineDO>();
             BusLineSchedules = new List<BusLineScheduleDO>();
             BusStations = new List<BusStationDO>();
             AllConsecutiveStations = new List<ConsecutiveStationsDO>();
             LineStations = new List<LineStationDO>();
-            PassengerTravels = new List<PassengerTravelDO>();
-            Users = new List<UserDO>();
             InitBusLines();
             InitBusStations();
             InitConsecutiveStations();
