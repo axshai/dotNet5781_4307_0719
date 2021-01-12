@@ -68,6 +68,7 @@ namespace Dal
                 throw new DO.XMLFileLoadCreateException(filePath, $"fail to create xml file: {filePath}", ex);
             }
         }
+       
         public static List<T> LoadListFromXMLSerializer<T>(string filePath)
         {
             try

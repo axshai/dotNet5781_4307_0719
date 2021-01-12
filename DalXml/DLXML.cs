@@ -10,13 +10,13 @@ using DO;
 namespace Dal
 {
 
-    sealed class DLXML : IDAL    
+    sealed class DLXml : IDAL
     {
         #region singelton
-        static readonly DLXML instance = new DLXML();
-        static DLXML() { }// static ctor to ensure instance init is done just before first usage
-        DLXML() { } // default => private
-        public static DLXML Instance { get => instance; }// The public Instance property to use
+        static readonly DLXml instance = new DLXml();
+        static DLXml() { }// static ctor to ensure instance init is done just before first usage
+        DLXml() { } // default => private
+        public static DLXml Instance { get => instance; }// The public Instance property to use
         #endregion
 
         #region DS XML Files
@@ -25,13 +25,13 @@ namespace Dal
         string schedulesPath = @"BusLineSchedulesXml.xml"; //XMLSerializer
         string busStationsPath = @"BusStationsXml.xml"; //XMLSerializer
         string consecutiveStationsPath = @"AllConsecutiveStationsXml.xml"; //XMLSerializer
-        string lineStations = @"LineStationsXml.xml"; //XMLSerializer
+        string lineStationsPath = @"LineStationsXml.xml"; //XMLSerializer
 
 
 
         #endregion
 
-        #region BusLine
+        #region BusLine functions
 
         public IEnumerable<BusLineDO> GetAllLines()
         {
@@ -104,7 +104,7 @@ namespace Dal
         {
             XElement linesRootElem = XMLTools.LoadListFromXMLElement(linesPath);
             XElement line = (from l in linesRootElem.Elements()
-                             where int.Parse(l.Element("Id").Value) == id&& bool.Parse(l.Element("IsExists").Value) == true
+                             where int.Parse(l.Element("Id").Value) == id && bool.Parse(l.Element("IsExists").Value) == true
                              select l).FirstOrDefault();
 
             if (line != null)
@@ -135,7 +135,7 @@ namespace Dal
         {
             XElement linesRootElem = XMLTools.LoadListFromXMLElement(linesPath);
             XElement line1 = (from l in linesRootElem.Elements()
-                              where int.Parse(l.Element("Id").Value) == line.Id&& bool.Parse(l.Element("IsExists").Value) == true
+                              where int.Parse(l.Element("Id").Value) == line.Id && bool.Parse(l.Element("IsExists").Value) == true
                               select l).FirstOrDefault();
 
             if (line1 != null)
@@ -154,286 +154,203 @@ namespace Dal
 
         #endregion BusLine
 
-        #region Student
-        public DO.Student GetStudent(int id)
-        {
-            List<Student> ListStudents = XMLTools.LoadListFromXMLSerializer<Student>(studentsPath);
-
-            DO.Student stu = ListStudents.Find(p => p.ID == id);
-            if (stu != null)
-                return stu; //no need to Clone()
-            else
-                throw new DO.BadPersonIdException(id, $"bad student id: {id}");
-        }
-        public void AddStudent(DO.Student student)
-        {
-            List<Student> ListStudents = XMLTools.LoadListFromXMLSerializer<Student>(studentsPath);
-
-            if (ListStudents.FirstOrDefault(s => s.ID == student.ID) != null)
-                throw new DO.BadPersonIdException(student.ID, "Duplicate student ID");
-
-            if (GetPerson(student.ID) == null)
-                throw new DO.BadPersonIdException(student.ID, "Missing person ID");
-
-            ListStudents.Add(student); //no need to Clone()
-
-            XMLTools.SaveListToXMLSerializer(ListStudents, studentsPath);
-
-        }
-        public IEnumerable<DO.Student> GetAllStudents()
-        {
-            List<Student> ListStudents = XMLTools.LoadListFromXMLSerializer<Student>(studentsPath);
-
-            return from student in ListStudents
-                   select student; //no need to Clone()
-        }
-        public IEnumerable<object> GetStudentFields(Func<int, string, object> generate)
-        {
-            List<Student> ListStudents = XMLTools.LoadListFromXMLSerializer<Student>(studentsPath);
-
-            return from student in ListStudents
-                   select generate(student.ID, GetPerson(student.ID).Name);
-        }
-
-        public IEnumerable<object> GetStudentListWithSelectedFields(Func<DO.Student, object> generate)
-        {
-            List<Student> ListStudents = XMLTools.LoadListFromXMLSerializer<Student>(studentsPath);
-
-            return from student in ListStudents
-                   select generate(student);
-        }
-        public void UpdateStudent(DO.Student student)
-        {
-            List<Student> ListStudents = XMLTools.LoadListFromXMLSerializer<Student>(studentsPath);
-
-            DO.Student stu = ListStudents.Find(p => p.ID == student.ID);
-            if (stu != null)
-            {
-                ListStudents.Remove(stu);
-                ListStudents.Add(student); //no nee to Clone()
-            }
-            else
-                throw new DO.BadPersonIdException(student.ID, $"bad student id: {student.ID}");
-
-            XMLTools.SaveListToXMLSerializer(ListStudents, studentsPath);
-        }
-
-        public void UpdateStudent(int id, Action<DO.Student> update)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteStudent(int id)
-        {
-            List<Student> ListStudents = XMLTools.LoadListFromXMLSerializer<Student>(studentsPath);
-
-            DO.Student stu = ListStudents.Find(p => p.ID == id);
-
-            if (stu != null)
-            {
-                ListStudents.Remove(stu);
-            }
-            else
-                throw new DO.BadPersonIdException(id, $"bad student id: {id}");
-
-            XMLTools.SaveListToXMLSerializer(ListStudents, studentsPath);
-        }
-        #endregion Student
-
-        #region StudentInCourse
-        public IEnumerable<DO.StudentInCourse> GetStudentsInCourseList(Predicate<DO.StudentInCourse> predicate)
-        {
-            List<StudentInCourse> ListStudInCourses = XMLTools.LoadListFromXMLSerializer<StudentInCourse>(studInCoursesPath);
-
-            return from sic in ListStudInCourses
-                   where predicate(sic)
-                   select sic; //no need to Clone()
-        }
-        public void AddStudentInCourse(int perID, int courseID, float grade = 0)
-        {
-            List<StudentInCourse> ListStudInCourses = XMLTools.LoadListFromXMLSerializer<StudentInCourse>(studInCoursesPath);
-
-            if (ListStudInCourses.FirstOrDefault(cis => (cis.PersonId == perID && cis.CourseId == courseID)) != null)
-                throw new DO.BadPersonIdCourseIDException(perID, courseID, "person ID is already registered to course ID");
-
-            DO.StudentInCourse sic = new DO.StudentInCourse() { PersonId = perID, CourseId = courseID, Grade = grade };
-
-            ListStudInCourses.Add(sic);
-
-            XMLTools.SaveListToXMLSerializer(ListStudInCourses, studInCoursesPath);
-        }
-
-        public void UpdateStudentGradeInCourse(int perID, int courseID, float grade)
-        {
-            List<StudentInCourse> ListStudInCourses = XMLTools.LoadListFromXMLSerializer<StudentInCourse>(studInCoursesPath);
-
-            DO.StudentInCourse sic = ListStudInCourses.Find(cis => (cis.PersonId == perID && cis.CourseId == courseID));
-
-            if (sic != null)
-            {
-                sic.Grade = grade;
-            }
-            else
-                throw new DO.BadPersonIdCourseIDException(perID, courseID, "person ID is NOT registered to course ID");
-
-            XMLTools.SaveListToXMLSerializer(ListStudInCourses, studInCoursesPath);
-        }
-
-        public void DeleteStudentInCourse(int perID, int courseID)
-        {
-            List<StudentInCourse> ListStudInCourses = XMLTools.LoadListFromXMLSerializer<StudentInCourse>(studInCoursesPath);
-
-            DO.StudentInCourse sic = ListStudInCourses.Find(cis => (cis.PersonId == perID && cis.CourseId == courseID));
-
-            if (sic != null)
-            {
-                ListStudInCourses.Remove(sic);
-            }
-            else
-                throw new DO.BadPersonIdCourseIDException(perID, courseID, "person ID is NOT registered to course ID");
-
-            XMLTools.SaveListToXMLSerializer(ListStudInCourses, studInCoursesPath);
-
-        }
-        public void DeleteStudentFromAllCourses(int perID)
-        {
-            List<StudentInCourse> ListStudInCourses = XMLTools.LoadListFromXMLSerializer<StudentInCourse>(studInCoursesPath);
-
-            ListStudInCourses.RemoveAll(p => p.PersonId == perID);
-
-            XMLTools.SaveListToXMLSerializer(ListStudInCourses, studInCoursesPath);
-
-        }
-
-        #endregion StudentInCourse
-
-        #region Course
-        public DO.Course GetCourse(int id)
-        {
-            List<Course> ListCourses = XMLTools.LoadListFromXMLSerializer<Course>(coursesPath);
-
-            return ListCourses.Find(c => c.ID == id); //no need to Clone()
-
-            //if not exist throw exception etc.
-        }
-
-        public IEnumerable<DO.Course> GetAllCourses()
-        {
-            List<Course> ListCourses = XMLTools.LoadListFromXMLSerializer<Course>(coursesPath);
-
-            return from course in ListCourses
-                   select course; //no need to Clone()
-        }
-
-        #endregion Course
-
-        #region Lecturer
-        public IEnumerable<DO.LecturerInCourse> GetLecturersInCourseList(Predicate<DO.LecturerInCourse> predicate)
-        {
-            List<LecturerInCourse> ListLectInCourses = XMLTools.LoadListFromXMLSerializer<LecturerInCourse>(lectInCoursesPath);
-
-            return from sic in ListLectInCourses
-                   where predicate(sic)
-                   select sic; //no need to Clone()
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
+        #region LineStation functions
         public IEnumerable<LineStationDO> GetAllLineStationsBy(Predicate<LineStationDO> predicate)
         {
-            throw new NotImplementedException();
+            List<LineStationDO> ListLineStations = XMLTools.LoadListFromXMLSerializer<LineStationDO>(lineStationsPath);
+            return from station in ListLineStations
+                   where predicate(station) && station.IsExist == true
+                   select station;
         }
 
-        public void UpdateLineStation(int lineKey, int stationKey, Action<LineStationDO> toUpdate)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public LineStationDO GetLineStation(int stationKey, int lineId)
         {
-            throw new NotImplementedException();
+            List<LineStationDO> ListLineStations = XMLTools.LoadListFromXMLSerializer<LineStationDO>(lineStationsPath);
+
+            LineStationDO station = ListLineStations.Find(station1 => station1.StationKey == stationKey && station1.LineId == lineId && station1.IsExist == true);
+            if (station != null)
+                return station;
+            throw new BadLineStationKeyLineIDException(stationKey, lineId, "This line station was not found!");
         }
 
         public void AddLineStation(LineStationDO station)
         {
-            throw new NotImplementedException();
+            List<LineStationDO> ListLineStations = XMLTools.LoadListFromXMLSerializer<LineStationDO>(lineStationsPath);
+
+            if (ListLineStations.Exists(station1 => station1.LineId == station.LineId && station1.StationKey == station.StationKey && station1.IsExist == true))
+                throw new BadLineStationKeyLineIDException(station.StationKey, station.LineId, "There is already such a LineStation with the same key in the system!");
+            ListLineStations.Add(station);
+            XMLTools.SaveListToXMLSerializer(ListLineStations, lineStationsPath);
         }
 
         public void DeleteLineStation(int lineKey, int stationKey)
         {
-            throw new NotImplementedException();
+            List<LineStationDO> ListLineStations = XMLTools.LoadListFromXMLSerializer<LineStationDO>(lineStationsPath);
+
+            LineStationDO toDelete = ListLineStations.Find(station => station.StationKey == stationKey && station.LineId == lineKey && station.IsExist == true);
+            if (toDelete != null)
+                toDelete.IsExist = false;
+            else
+                throw new BadLineStationKeyLineIDException(stationKey, lineKey, "This line station was not found!");
+
+            XMLTools.SaveListToXMLSerializer(ListLineStations, lineStationsPath);
         }
 
+
+        public void UpdateLineStation(int lineKey, int stationKey, Action<LineStationDO> toUpdate)
+        {
+            List<LineStationDO> ListLineStations = XMLTools.LoadListFromXMLSerializer<LineStationDO>(lineStationsPath);
+
+            LineStationDO station1 = ListLineStations.Find(station => station.StationKey == stationKey && station.LineId == lineKey && station.IsExist == true);
+            if (station1 != null)
+                toUpdate(station1);
+            else
+                throw new BadLineStationKeyLineIDException(stationKey, lineKey, "This station was not found!");
+            XMLTools.SaveListToXMLSerializer(ListLineStations, lineStationsPath);
+        }
+        #endregion
+
+        #region BusStation
         public void AddBusStation(BusStationDO station)
         {
-            throw new NotImplementedException();
+            List<BusStationDO> ListStations = XMLTools.LoadListFromXMLSerializer<BusStationDO>(busStationsPath);
+
+            if (ListStations.Exists(station1 => station1.StationKey == station.StationKey && station1.IsExists == true))
+                throw new BadBusStationKeyException(station.StationKey, "There is already such a LineStation with the same key in the system!");
+            ListStations.Add(station);
+            XMLTools.SaveListToXMLSerializer(ListStations, busStationsPath);
         }
 
         public IEnumerable<BusStationDO> GetAllStations()
         {
-            throw new NotImplementedException();
+            List<BusStationDO> ListStations = XMLTools.LoadListFromXMLSerializer<BusStationDO>(busStationsPath);
+
+            return from station in ListStations
+                   where station.IsExists == true
+                   select station;
         }
 
         public BusStationDO GetBusStation(int key)
         {
-            throw new NotImplementedException();
+            List<BusStationDO> ListStations = XMLTools.LoadListFromXMLSerializer<BusStationDO>(busStationsPath);
+
+            BusStationDO station = ListStations.Find(station1 => station1.StationKey == key && station1.IsExists == true);
+            if (station != null)
+                return station;
+            throw new BadBusStationKeyException(key, "This station was not found!");
         }
 
         public void DeleteBusStation(int key)
         {
-            throw new NotImplementedException();
+            List<BusStationDO> ListStations = XMLTools.LoadListFromXMLSerializer<BusStationDO>(busStationsPath);
+
+            BusStationDO toDelete = ListStations.Find(station => station.StationKey == key && station.IsExists == true);
+            if (toDelete != null)
+                toDelete.IsExists = false;
+            else
+                throw new BadBusStationKeyException(key, "This station was not found!");
+
+            XMLTools.SaveListToXMLSerializer(ListStations, busStationsPath);
         }
 
         public void UpdateBusStation(BusStationDO station)
         {
-            throw new NotImplementedException();
-        }
+            List<BusStationDO> ListStations = XMLTools.LoadListFromXMLSerializer<BusStationDO>(busStationsPath);
 
+            int index= ListStations.FindIndex(station2 => station2.StationKey == station.StationKey && station2.IsExists == true);
+            if (index == -1)
+                throw new BadBusStationKeyException(station.StationKey, "This station was not found!");
+            ListStations[index] = station;
+
+            XMLTools.SaveListToXMLSerializer(ListStations, busStationsPath);
+        }
+        #endregion
+
+        #region ConsecutiveStations functions
         public ConsecutiveStationsDO GetConsecutiveStations(int stationKey1, int stationKey2)
         {
-            throw new NotImplementedException();
+            List<ConsecutiveStationsDO> ListConsecutStations = XMLTools.LoadListFromXMLSerializer<ConsecutiveStationsDO>(consecutiveStationsPath);
+            ConsecutiveStationsDO c1 = ListConsecutStations.Find(c2 => c2.Station1Key == stationKey1 && c2.Station2Key == stationKey2);
+            if (c1 != null)
+                return c1;
+            throw new BadConsecutiveStationsKeysException(stationKey1, stationKey2, "These stations were not found as  Consecutive!");
         }
 
         public void AddConsecutiveStations(ConsecutiveStationsDO stations)
         {
-            throw new NotImplementedException();
+            List<ConsecutiveStationsDO> ListConsecutStations = XMLTools.LoadListFromXMLSerializer<ConsecutiveStationsDO>(consecutiveStationsPath);
+
+            if (ListConsecutStations.Exists(stations1 => stations1.Station1Key == stations.Station1Key && stations1.Station2Key == stations.Station2Key))
+                throw new BadConsecutiveStationsKeysException(stations.Station1Key, stations.Station2Key, "There is already such ConsecutiveStations in the system!");
+            ListConsecutStations.Add(stations);
+            XMLTools.SaveListToXMLSerializer(ListConsecutStations, consecutiveStationsPath);
+
         }
 
         public void UpdateConsecutiveStations(int stationKey1, int stationKey2, Action<ConsecutiveStationsDO> toUpdate)
         {
-            throw new NotImplementedException();
+            List<ConsecutiveStationsDO> ListConsecutStations = XMLTools.LoadListFromXMLSerializer<ConsecutiveStationsDO>(consecutiveStationsPath);
+
+            ConsecutiveStationsDO c1 = ListConsecutStations.Find(c2 => c2.Station1Key == stationKey1 && c2.Station2Key == stationKey2);
+            if (c1 == null)
+                throw new BadConsecutiveStationsKeysException(stationKey1, stationKey2, "These stations were not found as  Consecutive!");
+            toUpdate(c1);
+
+            XMLTools.SaveListToXMLSerializer(ListConsecutStations, consecutiveStationsPath);
+
         }
+        #endregion
+
 
         public IEnumerable<BusLineScheduleDO> GetAllSchedulesBy(Predicate<BusLineScheduleDO> predicate)
         {
-            throw new NotImplementedException();
+            List<BusLineScheduleDO> ListSchedules = XMLTools.LoadListFromXMLSerializer<BusLineScheduleDO>(schedulesPath);
+
+            return from schedule in ListSchedules
+                   where predicate(schedule) && schedule.IsExists == true
+                   select schedule;
         }
 
         public void UpdateSchedule(int lineId, TimeSpan start, Action<BusLineScheduleDO> toUpdate)
         {
-            throw new NotImplementedException();
+            List<BusLineScheduleDO> ListSchedules = XMLTools.LoadListFromXMLSerializer<BusLineScheduleDO>(schedulesPath);
+            
+            BusLineScheduleDO Sched = ListSchedules.Find(Sched1 => Sched1.LineId == lineId && Sched1.StartActivity == start && Sched1.IsExists == true);
+            if (Sched != null)
+                toUpdate(Sched);
+            else
+                throw new BadBusLineScheduleException(start, lineId, "There is already such a Schedule for the line the system!");
+
+            XMLTools.SaveListToXMLSerializer(ListSchedules, schedulesPath);
         }
 
         public void DeleteSchedule(int lineId, TimeSpan start)
         {
-            throw new NotImplementedException();
+            List<BusLineScheduleDO> ListSchedules = XMLTools.LoadListFromXMLSerializer<BusLineScheduleDO>(schedulesPath);
+            BusLineScheduleDO Sched = ListSchedules.Find(Sched1 => Sched1.LineId == lineId && Sched1.StartActivity == start && Sched1.IsExists == true);
+            if (Sched != null)
+                Sched.IsExists = false;
+            else
+                throw new BadBusLineScheduleException(start, lineId, "This Schedule was not found!");
+
+
+            XMLTools.SaveListToXMLSerializer(ListSchedules, schedulesPath);
+
         }
 
         public void AddSchedule(BusLineScheduleDO toadd)
         {
-            throw new NotImplementedException();
+            List<BusLineScheduleDO> ListSchedules = XMLTools.LoadListFromXMLSerializer<BusLineScheduleDO>(schedulesPath);
+            if (ListSchedules.Exists(sched => sched.LineId == toadd.LineId && sched.StartActivity == toadd.StartActivity && sched.IsExists == true))
+                throw new BadBusLineScheduleException(toadd.StartActivity, toadd.LineId, "There is already such a Schedule for the line the system!");
+            ListSchedules.Add(toadd);
+
+            XMLTools.SaveListToXMLSerializer(ListSchedules, schedulesPath);
+
         }
-        #endregion
+
 
     }
 }
