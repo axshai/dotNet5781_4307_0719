@@ -29,7 +29,8 @@ namespace PLGuiWPF
         public AddOrEditStationWindow(BusStationBO station = null)
         {
             InitializeComponent();
-            cbArea.ItemsSource = Enum.GetValues(typeof(Area));
+            Area[] cbSource= (Area[])Enum.GetValues(typeof(Area));
+            cbArea.ItemsSource = cbSource.ToList().GetRange(1, cbSource.Length - 1);
             bl = BLFactory.GetBL("1");
             current = station;
             if (station != null)//if the user press on "edit station" button in the previous windeow-Adjust the graphics of a window to such an option

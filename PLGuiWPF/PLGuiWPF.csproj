@@ -205,11 +205,5 @@
   <ItemGroup>
     <Resource Include="buses.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="seret.MP4" />
-    <Content Include="video_bus.avi" />
-    <Content Include="Wheels on the Bus _ CoComelon Nursery Rhymes &amp; Kids Songs %281%29.mp4" />
-    <Content Include="Wheels on the Bus _ CoComelon Nursery Rhymes &amp; Kids Songs.mp4" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
