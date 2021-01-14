@@ -45,6 +45,9 @@ namespace PLGuiWPF
             //(sender as MediaElement).Visibility = Visibility.Hidden;
         }
 
-      
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            (new SeetingsWindow()).Show();
+        }
     }
 }

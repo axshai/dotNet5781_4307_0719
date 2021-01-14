@@ -14,8 +14,8 @@ namespace Dal
     {
         #region singelton
         static readonly DLXml instance = new DLXml();
-        static DLXml() { }// static ctor to ensure instance init is done just before first usage
-        DLXml() { } // default => private
+        static DLXml() { } // static ctor to ensure instance init is done just before first usage
+        DLXml() {} // default => private
         public static DLXml Instance { get => instance; }// The public Instance property to use
         #endregion
 

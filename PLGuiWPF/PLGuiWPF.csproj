@@ -83,6 +83,9 @@
     <Compile Include="NewScheduleWindow.xaml.cs">
       <DependentUpon>NewScheduleWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SeetingsWindow.xaml.cs">
+      <DependentUpon>SeetingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShowLinesWindow.xaml.cs">
       <DependentUpon>ShowLinesWindow.xaml</DependentUpon>
     </Compile>
@@ -94,6 +97,9 @@
     </Compile>
     <Compile Include="ShowStationsWindow.xaml.cs">
       <DependentUpon>ShowStationsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TimeControl.xaml.cs">
+      <DependentUpon>TimeControl.xaml</DependentUpon>
     </Compile>
     <Page Include="AddLineStationWindow.xaml">
       <SubType>Designer</SubType>
@@ -143,6 +149,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SeetingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ShowLinesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -156,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ShowStationsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TimeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -204,6 +218,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="buses.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="settings_image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
