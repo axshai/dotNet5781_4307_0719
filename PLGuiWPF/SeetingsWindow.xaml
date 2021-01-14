@@ -18,12 +18,11 @@
         </Grid.ColumnDefinitions>
         <Label Content="select start time:" HorizontalAlignment="Left" 
                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"  VerticalAlignment="Center"  Width="250" Height="60" FontSize="24" />
-        <local:TimeControl Value="{Binding StartTime, Mode=TwoWay, 
-            UpdateSourceTrigger=PropertyChanged}" x:Name="startTime" FontSize="18"  Grid.Column="1" HorizontalAlignment="Left" Height="60" Width="170" IsEnabled="{Binding ElementName=tbspeed, Path=IsEnabled, Mode=TwoWay}"/>
+        <local:TimeControl  x:Name="startTime" FontSize="18"  Grid.Column="1" HorizontalAlignment="Left" Height="60" Width="170" IsEnabled="{Binding ElementName=tbspeed, Path=IsEnabled, Mode=TwoWay}"/>
         <Label Content="select speed:" VerticalAlignment="Top" 
                HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"    Width="250" Height="60" FontSize="24" Grid.Row="1" />
         <TextBox x:Name="tbspeed" MaxLength="3" VerticalAlignment="Top"  
-                 Grid.Row="1" Grid.Column="1" Height="45" Width="70" HorizontalAlignment="Left" Margin="5,5.2,0,0" TextAlignment="Center" FontSize="24" Text="47"/>
+                 Grid.Row="1" Grid.Column="1" Height="45" Width="70" HorizontalAlignment="Left" Margin="5,5.2,0,0" TextAlignment="Center" FontSize="24" />
         <Button x:Name="simulatorButton" Grid.Row="2" Grid.ColumnSpan="2"  Click="simulatorButton_Click" 
                 HorizontalAlignment="Center" Height="45" Width="200" Margin="0,10,80,0"  FontSize="24"  >
             <Button.Style>

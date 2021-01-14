@@ -20,8 +20,8 @@
         <Label Content="Enter details for station:" FontSize="24" Foreground="#FF10603F" HorizontalAlignment="Right"/>
         <TextBlock Text="{Binding StationKey}" DataContext="station" FontSize="24" Foreground="#FF10603F"/>
         <TextBlock x:Name="p1" Text="Enter time from previous station:" Foreground="#FF70911F" FontWeight="Bold" FontSize="20" Grid.Column="0" Grid.Row="1"  Margin="10"/>
-        <TextBox x:Name="tbtime" Grid.Column="1" Grid.Row="1" Width="150" Height="40" Margin="10" />
         <TextBlock  x:Name="p2" Text="Enter distance from previous station:" Foreground="#FF70911F" FontWeight="Bold" FontSize="20" Grid.Column="0" Grid.Row="2"  Margin="10"  />
+        <local:TimeControl x:Name="time" Grid.Column="1" Grid.Row="1" Width="150" Height="40" Margin="10" />
         <TextBox x:Name="tbdist" Grid.Column="1" Grid.Row="2" Width="150" Height="40" Margin="10"  />
         <Button x:Name="AddButton" Content="continue" Margin="20" FontSize="20" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="140" Height="40" Background="#FFD8F3E0" Click="AddButton_Click"/>
     </Grid>

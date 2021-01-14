@@ -22,6 +22,7 @@ namespace PLGuiWPF
     public partial class EditTimeAndDistWindow : Window
     {
         IBL mybl;
+       
         ConsecutiveStationBO currentStation;
         /// <summary>
         /// ctor
@@ -42,15 +43,13 @@ namespace PLGuiWPF
         /// <param name="e"></param>
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            int test;
             double test1;
             //Check input correctness:
-            if (!(int.TryParse(tbtime.Text, out test) && double.TryParse(tbdist.Text, out test1) && test > 0 && test1 > 0))
+            if (!(double.TryParse(tbdist.Text, out test1)  && test1 > 0))
                 MessageBox.Show("Please enter time and distance in the correct format!");
             else
             {
-                mybl.UpdateConsecutiveStation(currentStation.PrevStationKey, currentStation.StationKey, double.Parse(tbdist.Text), TimeSpan.FromMinutes(test));
+                mybl.UpdateConsecutiveStation(currentStation.PrevStationKey, currentStation.StationKey, double.Parse(tbdist.Text), time.Value);
                 this.Close();
             }
         }

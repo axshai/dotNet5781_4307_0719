@@ -19,17 +19,19 @@ namespace PLGuiWPF
     /// </summary>
     public partial class SeetingsWindow : Window
     {
-        TimeSpan StartTime;
+        
         public SeetingsWindow()
         {
-            StartTime = TimeSpan.Zero;
             InitializeComponent();
         }
 
         private void simulatorButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            tbspeed.IsEnabled =false;
+            if (tbspeed.IsEnabled)
+                tbspeed.IsEnabled = false;
+            else
+                tbspeed.IsEnabled = true; ;
+           
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
