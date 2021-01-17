@@ -650,7 +650,7 @@ namespace BL
             where line.ArrivalTimes.ToList().Exists(time => time > now)
             let t = line.ArrivalTimes.Where(time => time > now).FirstOrDefault()
             orderby t
-            select new LineInTripBO{ LineNumber = line.LineNumber, Destination = line.Destination, timing = t - now }).ToList();
+            select new LineInTripBO{ LineNumber = line.LineNumber, Destination = line.Destination, timing = t - now, start=t }).ToList();
             return l1;
 
         }

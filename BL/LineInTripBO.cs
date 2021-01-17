@@ -11,10 +11,10 @@ namespace BO
         public string LineNumber { get; set; }
         public string Destination { get; set; }
         public TimeSpan timing { get; set; }
-
+        public TimeSpan start { get; set; }
         public override string ToString()
         {
-            return "LineNumber" + LineNumber + "Destination" + Destination + "timing" + timing;
+            return " LineNumber " + LineNumber + " Destination " + Destination + " timing " + timing+ " start "+ start;
         }
     }
 }
