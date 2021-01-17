@@ -25,9 +25,9 @@ namespace PLGuiWPF
     /// </summary>
     public partial class ShowStationsWindow : Window
     {
-
-        Stopwatch watch;
         BackgroundWorker timeWorker;
+        public TimeSpan timeNow;
+        int speed;
         bool isTimerRun;
        IBL blObject;
         /// <summary>
@@ -45,15 +45,16 @@ namespace PLGuiWPF
 
         private void TimeWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            startTime.Value = startTime.Value.Add(TimeSpan.FromSeconds((int)e.ProgressPercentage));
+           timeNow = timeNow.Add(TimeSpan.FromSeconds((int)e.ProgressPercentage));
+            LtimeDisplay.Content = timeNow.ToString().Substring(0, 8);
         }
 
         private void TimeWorker_DoWork(object sender, DoWorkEventArgs e)
         {
            while(isTimerRun)
             {
-                timeWorker.ReportProgress((int)e.Argument);
-                Thread.Sleep(1000);
+                timeWorker.ReportProgress(1);
+                Thread.Sleep(1000/ (int)e.Argument);
             }
         }
 
@@ -67,7 +68,7 @@ namespace PLGuiWPF
         {
             if (dgStations.SelectedItem == null)
                 return;
-            ShowStationDetails w1 = new ShowStationDetails(dgStations.SelectedItem as BusStationBO);
+            ShowStationDetails w1 = new ShowStationDetails(dgStations.SelectedItem as BusStationBO, isTimerRun, timeNow, speed);
             w1.ShowDialog();
             dgStations.ItemsSource = blObject.GetAllStationBy(station1=>station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
@@ -129,12 +130,20 @@ namespace PLGuiWPF
         {
             if (!isTimerRun)
             {
-                int speed = int.Parse(tbspeed.Text);
+               if(tbspeed.Text=="")
+                {
+                    tbspeed.BorderBrush = Brushes.Red;
+                    return;
+                }
+                startTime.Visibility = Visibility.Hidden;
+                LtimeDisplay.Visibility = Visibility.Visible;
+                tbspeed.BorderBrush =default;
+                 speed = int.Parse(tbspeed.Text);
                 timeWorker = new BackgroundWorker();
                 timeWorker.DoWork += TimeWorker_DoWork;
                 timeWorker.ProgressChanged += TimeWorker_ProgressChanged;
                 timeWorker.WorkerReportsProgress = true;
-                // watch.Restart();
+                timeNow = startTime.Value;
                 isTimerRun = true;
                 tbspeed.IsEnabled = false;
                 timeWorker.RunWorkerAsync(speed);
@@ -144,6 +153,9 @@ namespace PLGuiWPF
             {
                 isTimerRun = false;
                 tbspeed.IsEnabled = true;
+                startTime.Visibility = Visibility.Visible;
+                LtimeDisplay.Visibility = Visibility.Hidden;
+
             }
         }
 

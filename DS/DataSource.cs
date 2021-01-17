@@ -2295,7 +2295,7 @@ namespace DS
                 StartActivity = TimeSpan.Parse("07:00:00"),
                 EndActivity = TimeSpan.Parse("08:00:00"),
                 LineId = 6,
-                frequency = 1,
+                frequency = 10,
                 IsExists = true
 
             });

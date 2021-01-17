@@ -644,16 +644,15 @@ namespace BL
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
         }
 
-        public void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime)
+        public IEnumerable<LineInTripBO> GetLinesInTrips(BusStationBO station, TimeSpan now)
         {
-        }
+           List<LineInTripBO> l1= (from line in station.ListOfLines
+            where line.ArrivalTimes.ToList().Exists(time => time > now)
+            let t = line.ArrivalTimes.Where(time => time > now).FirstOrDefault()
+            orderby t
+            select new LineInTripBO{ LineNumber = line.LineNumber, Destination = line.Destination, timing = t - now }).ToList();
+            return l1;
 
-
-
-
-        public void StopSimulator()
-        {
-            throw new NotImplementedException();
         }
     }
 }

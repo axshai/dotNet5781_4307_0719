@@ -57,25 +57,9 @@
                      TextAlignment="Center" VerticalAlignment="Center" BorderThickness="0" />
         </Grid>
 
-        <!-- Separator ':' -->
-        <Grid  Grid.Column="5">
-            <TextBox IsReadOnly="True" x:Name="sep3"  TextWrapping="Wrap" VerticalAlignment="Center"  Text=":" TextAlignment="Center"  BorderThickness="0"/>
-        </Grid>
+       
 
-        <!-- Milliseconds -->
-        <Grid  Grid.Column="6" Name="miliseconds" Focusable="True" MouseWheel="OnMouseWheel">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="160*"/>
-                <RowDefinition Height="8*"/>
-                <RowDefinition Height="16*"/>
-                <RowDefinition Height="25*"/>
-                <RowDefinition Height="90*"/>
-            </Grid.RowDefinitions>
-            <TextBox x:Name="ff"  TextWrapping="Wrap" Text="{Binding Path=Milliseconds, ElementName=UserControl, Mode=Default}"
-                     PreviewKeyDown="OnKeyDown" PreviewTextInput="OnPreviewTextInput"  DataObject.Pasting="OnTextPasting" 
-                     TextAlignment="Center" VerticalAlignment="Center" BorderThickness="0" Margin="0,142,-0.8,2.327" />
-        </Grid>
-
+        
     </Grid>
 
 </UserControl>

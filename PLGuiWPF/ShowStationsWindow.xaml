@@ -73,6 +73,7 @@
             </Grid.ColumnDefinitions>
             <Label Content="select start time:" HorizontalAlignment="Left" 
                HorizontalContentAlignment="Left" VerticalContentAlignment="Top"  VerticalAlignment="Top"  Width="200" Height="45" FontSize="24" Grid.RowSpan="2" />
+            <Label  x:Name="LtimeDisplay" FontSize="24"  Grid.Column="1" HorizontalAlignment="Left" Width="170" Margin="0,0,0,100.4" Grid.RowSpan="2"/>
             <local:TimeControl  x:Name="startTime" FontSize="18"  Grid.Column="1" HorizontalAlignment="Left" Width="170" IsEnabled="{Binding ElementName=tbspeed, Path=IsEnabled, Mode=TwoWay}" Margin="0,0,0,100.4" Grid.RowSpan="2"/>
             <Label Content="select speed:" VerticalAlignment="Top" 
                HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" Width="200" Height="45" FontSize="24" Grid.Row="1" Margin="0,2,0,0" />
@@ -86,6 +87,7 @@
                             <DataTrigger Binding="{Binding ElementName=tbspeed, Path=IsEnabled}" Value="True">
                                 <Setter Property="Button.Background" Value="#FFC5E8A8"/>
                                 <Setter Property="Button.Content" Value="start"/>
+                                
                             </DataTrigger>
                             <DataTrigger  Binding="{Binding ElementName=tbspeed, Path=IsEnabled}" Value="False">
                                 <Setter Property="Button.Background" Value="#FFE26565"/>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowStationDetails" Height="450" Width="auto">
+        Title="ShowStationDetails" Height="500" Width="800" Closing="Window_Closing">
     <Window.Resources>
         <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#FF99EDF1" />
@@ -26,8 +26,9 @@
     </Window.Resources>
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -63,5 +64,9 @@
         </DataGrid>
         <Label Content="Lines passing through the station:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="15,5" VerticalAlignment="Top" FontSize="20" Background="#FFA9D9C5"/>
         <Label Content="Consecutive stations:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="15,5" VerticalAlignment="Top" FontSize="20" Background="#FFA9D9C5"/>
+        <ListBox x:Name="Lbsimulation" Grid.Row="2" Grid.Column="0" Margin="10" />
+
     </Grid>
+    
+    
 </Window>

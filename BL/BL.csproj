@@ -51,6 +51,7 @@
     <Compile Include="BusStationBO.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="IBL.cs" />
+    <Compile Include="LineInTripBO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
