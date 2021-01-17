@@ -156,5 +156,10 @@ namespace BLApi
         /// <param name="time">new time</param>
         void UpdateConsecutiveStation(int stationKey1, int stationKey2, double distance, TimeSpan time);
         #endregion
+
+        void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime);
+        void StopSimulator();
+        
+
     }
 }

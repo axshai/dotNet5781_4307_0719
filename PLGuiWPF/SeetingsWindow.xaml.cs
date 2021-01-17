@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,10 +20,11 @@ namespace PLGuiWPF
     /// </summary>
     public partial class SeetingsWindow : Window
     {
-        
-        public SeetingsWindow()
+        Button prev;
+        public SeetingsWindow(Button b)
         {
             InitializeComponent();
+            prev = b;
         }
 
         private void simulatorButton_Click(object sender, RoutedEventArgs e)
@@ -36,7 +38,13 @@ namespace PLGuiWPF
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-           
+            prev.IsEnabled = true;
+        }
+
+        private void tbspeed_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

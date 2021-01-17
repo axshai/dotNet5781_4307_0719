@@ -70,7 +70,7 @@ namespace BL
             return result;
 
         }
-       
+
         /// <summary>
         /// The function receives information about a pair of consecutive stations and adds an appropriate entity to the system
         /// </summary>
@@ -173,7 +173,7 @@ namespace BL
 
                    };
         }
-       
+
         #endregion
 
         /// <summary>
@@ -581,7 +581,7 @@ namespace BL
                     addConsecutiveStations(line.StationList.ElementAt(index - 2).StationKey, stationKey, (double)PrevDistance, (TimeSpan)PrevTime);
                 }
             }
-           
+
             foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))//
             {
                 myDal.UpdateLineStation(item.LineId, item.StationKey, station1 => station1.Serial++);
@@ -644,6 +644,17 @@ namespace BL
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
         }
 
+        public void StartSimulator(TimeSpan startTime, int Rate, Action<TimeSpan> updateTime)
+        {
+        }
+
+
+
+
+        public void StopSimulator()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

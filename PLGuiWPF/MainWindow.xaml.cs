@@ -37,7 +37,7 @@ namespace PLGuiWPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-          
+            MessageBox.Show("שיר");
         }
 
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
@@ -47,7 +47,10 @@ namespace PLGuiWPF
 
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
-            (new SeetingsWindow()).Show();
+            (sender as Button).IsEnabled = false;
+            (new SeetingsWindow(sender as Button)).Show();
+           
+
         }
     }
 }

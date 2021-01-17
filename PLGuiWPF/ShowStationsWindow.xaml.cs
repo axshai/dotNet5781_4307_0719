@@ -2,8 +2,12 @@
 using BO;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,7 +26,10 @@ namespace PLGuiWPF
     public partial class ShowStationsWindow : Window
     {
 
-        IBL blObject;
+        Stopwatch watch;
+        BackgroundWorker timeWorker;
+        bool isTimerRun;
+       IBL blObject;
         /// <summary>
         /// ctor
         /// </summary>
@@ -31,10 +38,25 @@ namespace PLGuiWPF
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
             dgStations.ItemsSource = blObject.GetAllStation();
-
+          //  watch = new Stopwatch();
+           
 
         }
-       
+
+        private void TimeWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            startTime.Value = startTime.Value.Add(TimeSpan.FromSeconds((int)e.ProgressPercentage));
+        }
+
+        private void TimeWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+           while(isTimerRun)
+            {
+                timeWorker.ReportProgress((int)e.Argument);
+                Thread.Sleep(1000);
+            }
+        }
+
         #region events
         /// <summary>
         /// Clicking on specific station/row in the datagrid-to see the stations deatails
@@ -101,5 +123,36 @@ namespace PLGuiWPF
             dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
         #endregion
+
+
+        private void simulatorButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isTimerRun)
+            {
+                int speed = int.Parse(tbspeed.Text);
+                timeWorker = new BackgroundWorker();
+                timeWorker.DoWork += TimeWorker_DoWork;
+                timeWorker.ProgressChanged += TimeWorker_ProgressChanged;
+                timeWorker.WorkerReportsProgress = true;
+                // watch.Restart();
+                isTimerRun = true;
+                tbspeed.IsEnabled = false;
+                timeWorker.RunWorkerAsync(speed);
+
+            }
+            else
+            {
+                isTimerRun = false;
+                tbspeed.IsEnabled = true;
+            }
+        }
+
+       
+
+        private void tbspeed_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
     }
 }
