@@ -46,6 +46,11 @@ namespace PLGuiWPF
                 timeWorker.ProgressChanged += TimeWorker_ProgressChanged;
                 timeWorker.WorkerSupportsCancellation = true;
             }
+            else
+            {
+                Lbsimulation.Visibility = Visibility.Hidden;
+                this.Height -= 200;
+            }
 
         }
 
@@ -83,5 +88,7 @@ namespace PLGuiWPF
             if(timeWorker!=null)
             timeWorker.CancelAsync();
         }
+
+        
     }
 }

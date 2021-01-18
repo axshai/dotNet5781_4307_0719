@@ -28,18 +28,19 @@ namespace PLGuiWPF
         BackgroundWorker timeWorker;
         public TimeSpan timeNow;
         int speed;
+        Button prev;
         bool isTimerRun;
        IBL blObject;
         /// <summary>
         /// ctor
         /// </summary>
-        public ShowStationsWindow()
+        public ShowStationsWindow(Button b)
         {
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
             dgStations.ItemsSource = blObject.GetAllStation();
-          //  watch = new Stopwatch();
-           
+            //  watch = new Stopwatch();
+            prev = b;
 
         }
 
@@ -165,6 +166,16 @@ namespace PLGuiWPF
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        /// <summary>
+        /// Window_Closing eevent-when the window closed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            prev.IsEnabled = true;//Allow clicking on the button you came from(in the previous window)
         }
     }
 }

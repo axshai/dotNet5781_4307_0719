@@ -63,4 +63,18 @@ namespace PLGuiWPF
             throw new NotImplementedException();
         }
     }
+
+    public class ShortTime : IValueConverter//convert DateTime to DateTime.shortstring For a proper presentation of the bus dates(binding bus textblocks to dates of the bus)
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            TimeSpan t = (TimeSpan)value;
+            return t.ToString().Substring(0, 8);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

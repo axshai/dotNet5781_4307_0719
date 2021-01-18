@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="ShowStationDetails" Height="500" Width="800" Closing="Window_Closing">
+        Title="ShowStationDetails" Height="500" Width="1000" Closing="Window_Closing">
     <Window.Resources>
+        <local:ShortTime
+             x:Key="ShortTime"/>
+
         <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="#FF99EDF1" />
             <Setter Property="BorderBrush" Value="Black"/>
@@ -23,6 +26,28 @@
             <Setter  Property="ColumnWidth" Value="auto"/>
 
         </Style>
+        <DataTemplate x:Key="MyDataTemplate"  DataType="BL:LineInTripBO" >
+            <Grid Background="Yellow" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition Width="55"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="LINE NUMBER:" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20" />
+                <TextBlock Grid.Column="1"  Text="{Binding LineNumber}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="18" FontWeight="Bold" />
+                <TextBlock Grid.Column="2"  Text="TO:" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20"    />
+                <TextBlock Grid.Column="3"  Text="{Binding Destination}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="18" FontWeight="Bold"  />
+                <TextBlock Grid.Column="4"  Text="WILL ARRTIVE IN:" HorizontalAlignment="center" VerticalAlignment="center" FontSize="20"/>
+                <TextBlock Grid.Column="5"  Text="{Binding timing, Converter={StaticResource ShortTime}}" HorizontalAlignment="center" VerticalAlignment="center" FontSize="18" FontWeight="Bold" Foreground="#FF205603" />
+
+            </Grid>
+        </DataTemplate>
+
+
     </Window.Resources>
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
@@ -31,29 +56,30 @@
             <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="600"/>
+           
         </Grid.ColumnDefinitions>
 
-        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}"  Grid.Column="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="30,20" FontSize="18" ItemsSource="{Binding ListOfLines}" MouseDoubleClick="dgLines_MouseDoubleClick" >
+        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}"  Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"   FontSize="18" ItemsSource="{Binding ListOfLines}" MouseDoubleClick="dgLines_MouseDoubleClick" Margin="10"  Width="350" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="line ID:" Binding="{Binding Id}" Width="auto" />
                 <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="auto" />
                 <DataGridTextColumn Header=" to" Binding="{Binding Destination}" Width="auto"/>
-                <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="auto"/>
-                </DataGrid.Columns>
+                <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="*"/>
+            </DataGrid.Columns>
         </DataGrid>
 
 
         <DataGrid x:Name="dgconStations" Style="{StaticResource dataGridStyle}"  
                   Grid.Column="1" Grid.Row="1"  VerticalAlignment="Stretch" Height="auto" 
-                  HorizontalAlignment="Center" Margin="30,20" FontSize="18" ItemsSource="{Binding ListOfConsecutiveLineStations}" >
+                    FontSize="18" ItemsSource="{Binding ListOfConsecutiveLineStations}" HorizontalAlignment="Left" Width="528"  >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Station Key" Binding="{Binding StationKey}" Width="auto" />
                 <DataGridTextColumn Header="station name" Binding="{Binding StationName}" Width="auto" />
                 <DataGridTextColumn Header=" Distance " Binding="{Binding DistanceFromPrev}" Width="auto"/>
                 <DataGridTextColumn Header=" traval Time " Binding="{Binding TimeFromPrev}"  Width="auto"/>
-                <DataGridTemplateColumn Width="auto">
+                <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button x:Name="editTimeDist" Content="edit" Margin="5" Background="#FFCCB2E4" Click="editTimeDist_Click" />
@@ -62,11 +88,11 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Label Content="Lines passing through the station:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="15,5" VerticalAlignment="Top" FontSize="20" Background="#FFA9D9C5"/>
-        <Label Content="Consecutive stations:" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="15,5" VerticalAlignment="Top" FontSize="20" Background="#FFA9D9C5"/>
-        <ListBox x:Name="Lbsimulation" Grid.Row="2" Grid.Column="0" Margin="10" />
+        <Label Content="Lines passing through the station:" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="15,5,0,0" VerticalAlignment="Top" FontSize="20" Background="#FFA9D9C5" Grid.ColumnSpan="2"/>
+        <Label Content="Consecutive stations:" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="15.4,5,0,0" VerticalAlignment="Top" FontSize="20" Background="#FFA9D9C5"/>
+        <ListBox Background="Gray" HorizontalAlignment="Left" Margin="10,9.8,0,10"  x:Name="Lbsimulation" Grid.Row="2" Grid.ColumnSpan="3"  Width="659  " ItemTemplate="{StaticResource MyDataTemplate}"  />
 
     </Grid>
-    
-    
+
+
 </Window>

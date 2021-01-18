@@ -21,15 +21,16 @@ namespace PLGuiWPF
     public partial class ShowLinesWindow : Window
     {
         IBL blObject;
-
+        Button prev;
         /// <summary>
         /// CTOR
         /// </summary>
-        public ShowLinesWindow()
+        public ShowLinesWindow(Button b)
         {
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
             dgLines.ItemsSource = blObject.GetAllLines();
+            prev = b;
         }
 
         #region events
@@ -80,6 +81,17 @@ namespace PLGuiWPF
         private void tbsearch_TextChanged(object sender, TextChangedEventArgs e)
         {
             dgLines.ItemsSource = blObject.GetAllLinesBy(line1 => line1.LineNumber.StartsWith(tbsearch.Text)).ToList();
+        }
+       
+
+        /// <summary>
+        /// Window_Closing eevent-when the window closed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            prev.IsEnabled = true;//Allow clicking on the button you came from(in the previous window)
         }
         #endregion
     }

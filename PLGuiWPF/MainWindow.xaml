@@ -12,19 +12,19 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Button  x:Name="managButton" Background="Bisque" Content="Log in as manager" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="120" FontSize="24" Width="263" Click="managButton_Click"/>
-        <Button Content="Log in as passenger"  Background="Bisque"  Width="263" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Height="120" FontSize="24" Click="Button_Click" />
-        <Label Content="Welcome" HorizontalContentAlignment="Center" Height="121" Width="794"  Background="#FF88AD87" FontSize="48" FontFamily="Rockwell Extra Bold" VerticalAlignment="Top"  Grid.ColumnSpan="2"/>
-        <Button x:Name="settingsButton" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="83" Height="58" Click="settingsButton_Click" >
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="3*"/>
-                </Grid.RowDefinitions>
-                <Image Source="settings_image.png" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"/>
-                <Label Content="settings" Grid.Row="1"/>
-            </Grid>
+        <Button  x:Name="stationsButoon" Content="STATIONS" VerticalContentAlignment="Top" FontWeight="SemiBold" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Height="120" FontSize="24" Width="263" Click="stationsButoon_Click">
+            <Button.Background>
+                <ImageBrush ImageSource="station_image.jpg" Stretch="Fill" />
+            </Button.Background>
         </Button>
+        <Button x:Name="linesButoon" VerticalContentAlignment="Top" Content="LINES"  Width="263" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Height="120" FontSize="24" Click="linesButoon_Click" FontWeight="SemiBold" >
+            <Button.Background>
+                <ImageBrush ImageSource="buses_image.jpg" Stretch="Fill" />
+            </Button.Background>
+        </Button>
+        <Label Content="Welcome" HorizontalContentAlignment="Center"   Background="#FF88AD87" FontSize="48" FontFamily="Rockwell Extra Bold" VerticalAlignment="Top"  Grid.ColumnSpan="2"/>
+        <Label HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="ⒸAll rights reserved to Shai Axelrod&amp;Itamar Zohar"/>
+
 
 
     </Grid>

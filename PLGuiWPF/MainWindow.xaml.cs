@@ -20,37 +20,24 @@ namespace PLGuiWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        BLApi.IBL mybl = BLApi.BLFactory.GetBL("BLImp");
+       
 
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void managButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            ManagMenuWindow managWindow1 = new ManagMenuWindow();
-            managWindow1.Show();
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("שיר");
-        }
-
-        private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
-        {
-            //(sender as MediaElement).Visibility = Visibility.Hidden;
-        }
-
-        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        private void linesButoon_Click(object sender, RoutedEventArgs e)
         {
             (sender as Button).IsEnabled = false;
-            (new SeetingsWindow(sender as Button)).Show();
-           
+            (new ShowLinesWindow(sender as Button)).Show();
+        }
 
+        private void stationsButoon_Click(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).IsEnabled = false;
+            ShowStationsWindow ShowStation = new ShowStationsWindow(sender as Button);
+            ShowStation.Show();
         }
     }
 }
