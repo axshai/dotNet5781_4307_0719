@@ -57,7 +57,8 @@ namespace PLGuiWPF
         private void TimeWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             now2 = now2.Add(TimeSpan.FromSeconds(1));
-            Lbsimulation.ItemsSource = bl.GetLinesInTrips(currentStation, now2);
+            Lbsimulation.ItemsSource = bl.GetLinesInWayToStation(currentStation, now2);
+            lastBusControl.DataContext = bl.GetLastLineInStation(currentStation, now2);
         }
 
         private void TimeWorker_DoWork(object sender, DoWorkEventArgs e)

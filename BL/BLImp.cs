@@ -62,11 +62,12 @@ namespace BL
         /// <returns>IEnumerable of TimeSpan-arrival times to the station</returns>
         private IEnumerable<TimeSpan> lineArrivalTimes(BusLineBO line, int stationKey)
         {
-            int sum = line.StationList.Where(state => myDal.GetLineStation(state.StationKey, line.Id).Serial <= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.Minutes).Sum();
+            int sum = (int)line.StationList.Where(state => myDal.GetLineStation(state.StationKey, line.Id).Serial <= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.TotalSeconds).Sum();
             IEnumerable<TimeSpan> result = from sched in line.ScheduleList.ToList()
-                                           let x = Enumerable.Range(0, (int)((sched.EndActivity - sched.StartActivity).TotalMinutes - 1) / sched.frequency + 1)
+                                           let x = sched.frequency > 0 ? Enumerable.Range(0, (int)((sched.EndActivity - sched.StartActivity).TotalMinutes - 1) / sched.frequency + 1) : Enumerable.Range(1,1)
                                            from mult in x
-                                           select sched.StartActivity.Add(TimeSpan.FromMinutes(sum + sched.frequency * mult));
+                                           let t= sched.StartActivity.Add(TimeSpan.FromSeconds(sum).Add(TimeSpan.FromMinutes(sched.frequency * mult)))
+                                           select t.TotalHours>24? t.Add(TimeSpan.FromHours(-24)) :t;
             return result;
 
         }
@@ -644,14 +645,27 @@ namespace BL
             myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
         }
 
-        public IEnumerable<LineInTripBO> GetLinesInTrips(BusStationBO station, TimeSpan now)
+        public IEnumerable<LineInTripBO> GetLinesInWayToStation(BusStationBO station, TimeSpan now)
         {
-           List<LineInTripBO> l1= (from line in station.ListOfLines
-            where line.ArrivalTimes.ToList().Exists(time => time > now)
-            let t = line.ArrivalTimes.Where(time => time > now).FirstOrDefault()
-            orderby t
-            select new LineInTripBO{ LineNumber = line.LineNumber, Destination = line.Destination, timing = t - now}).ToList();
+            List<LineInTripBO> l1 = (from line in station.ListOfLines
+                                     where line.ArrivalTimes.ToList().Exists(time => time > now)
+                                     let t = line.ArrivalTimes.Where(time => time > now).FirstOrDefault()
+                                     orderby t
+                                     select new LineInTripBO { LineNumber = line.LineNumber, Destination = line.Destination, timing = t - now }).ToList();
             return l1;
+
+        }
+
+        public LineInTripBO GetLastLineInStation(BusStationBO station, TimeSpan now)
+        {
+            return (from line in station.ListOfLines
+                    where line.ArrivalTimes.ToList().Exists(time => time < now)
+                    let t = line.ArrivalTimes.Where(time => time < now && now - time <= TimeSpan.FromMinutes(5)).Count()
+                    where t!=0
+                    let x= line.ArrivalTimes.Where(time => time < now && now - time <= TimeSpan.FromMinutes(5)).FirstOrDefault()
+                    orderby x descending
+                    select new LineInTripBO { LineNumber = line.LineNumber, Destination = line.Destination, timing = x - now }).FirstOrDefault();
+
 
         }
     }
