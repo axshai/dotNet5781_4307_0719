@@ -25,12 +25,15 @@ namespace PLGuiWPF
     /// </summary>
     public partial class ShowStationsWindow : Window
     {
+        #region Fields for the simulator
         BackgroundWorker timeWorker;
         public TimeSpan timeNow;
         int speed;
-        Button prev;
         bool isTimerRun;
-       IBL blObject;
+        #endregion
+       
+        Button prev;//will be used in Window_Closing
+        IBL blObject;
         /// <summary>
         /// ctor
         /// </summary>
@@ -39,27 +42,68 @@ namespace PLGuiWPF
             InitializeComponent();
             blObject = BLFactory.GetBL("1");
             dgStations.ItemsSource = blObject.GetAllStation();
-            //  watch = new Stopwatch();
             prev = b;
 
         }
-
+       
+        #region simulator function
+       
         private void TimeWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-           timeNow = timeNow.Add(TimeSpan.FromSeconds((int)e.ProgressPercentage));
+            timeNow = timeNow.Add(TimeSpan.FromSeconds((int)e.ProgressPercentage));//update the clock in the screen
             LtimeDisplay.Content = timeNow.ToString().Substring(0, 8);
         }
 
         private void TimeWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-           while(isTimerRun)
+            while (isTimerRun)
             {
                 timeWorker.ReportProgress(1);
-                Thread.Sleep(1000/ (int)e.Argument);
+                Thread.Sleep(1000 / (int)e.Argument);
+            }
+        }
+      
+        /// <summary>
+        /// click on the start/stop button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void simulatorButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isTimerRun)//If at the time of pressing the simulator is not activated(so The click should activate the simulator)
+            {
+                if (tbspeed.Text == "")//check if he enter the speed
+                {
+                    tbspeed.BorderBrush = Brushes.Red;
+                    return;
+                }
+                //Adjust the window and start the thread
+                startTime.Visibility = Visibility.Hidden;
+                LtimeDisplay.Visibility = Visibility.Visible;
+                tbspeed.BorderBrush = default;
+                speed = int.Parse(tbspeed.Text);
+                timeWorker = new BackgroundWorker();
+                timeWorker.DoWork += TimeWorker_DoWork;
+                timeWorker.ProgressChanged += TimeWorker_ProgressChanged;
+                timeWorker.WorkerReportsProgress = true;
+                timeNow = startTime.Value;
+                isTimerRun = true;
+                tbspeed.IsEnabled = false;
+                timeWorker.RunWorkerAsync(speed);
+
+            }
+            else//If at the time of pressing the simulator is activated(so The click should stop the simulator)
+            {
+                ////Adjust the window and stop the thread
+                isTimerRun = false;
+                tbspeed.IsEnabled = true;
+                startTime.Visibility = Visibility.Visible;
+                LtimeDisplay.Visibility = Visibility.Hidden;
             }
         }
 
-        #region events
+        #endregion
+        
         /// <summary>
         /// Clicking on specific station/row in the datagrid-to see the stations deatails
         /// </summary>
@@ -71,7 +115,7 @@ namespace PLGuiWPF
                 return;
             ShowStationDetails w1 = new ShowStationDetails(dgStations.SelectedItem as BusStationBO, isTimerRun, timeNow, speed);
             w1.ShowDialog();
-            dgStations.ItemsSource = blObject.GetAllStationBy(station1=>station1.StationKey.ToString().StartsWith(tbsearch.Text));
+            dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
 
         /// <summary>
@@ -85,6 +129,7 @@ namespace PLGuiWPF
             wnd.ShowDialog();
             dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
+       
         /// <summary>
         /// Clicking the edit station button-to etid stations deatails
         /// </summary>
@@ -114,7 +159,7 @@ namespace PLGuiWPF
                 MessageBox.Show(ex.Message);
             }
         }
-        
+
         /// <summary>
         /// text box TextChanged-when searching after station
         /// </summary>
@@ -124,44 +169,12 @@ namespace PLGuiWPF
         {
             dgStations.ItemsSource = blObject.GetAllStationBy(station1 => station1.StationKey.ToString().StartsWith(tbsearch.Text));
         }
-        #endregion
-
-
-        private void simulatorButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (!isTimerRun)
-            {
-               if(tbspeed.Text=="")
-                {
-                    tbspeed.BorderBrush = Brushes.Red;
-                    return;
-                }
-                startTime.Visibility = Visibility.Hidden;
-                LtimeDisplay.Visibility = Visibility.Visible;
-                tbspeed.BorderBrush =default;
-                 speed = int.Parse(tbspeed.Text);
-                timeWorker = new BackgroundWorker();
-                timeWorker.DoWork += TimeWorker_DoWork;
-                timeWorker.ProgressChanged += TimeWorker_ProgressChanged;
-                timeWorker.WorkerReportsProgress = true;
-                timeNow = startTime.Value;
-                isTimerRun = true;
-                tbspeed.IsEnabled = false;
-                timeWorker.RunWorkerAsync(speed);
-
-            }
-            else
-            {
-                isTimerRun = false;
-                tbspeed.IsEnabled = true;
-                startTime.Visibility = Visibility.Visible;
-                LtimeDisplay.Visibility = Visibility.Hidden;
-
-            }
-        }
-
        
-
+        /// <summary>
+        /// A function designed to allow you to type only digits in the Simulator Speed ​​window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tbspeed_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");

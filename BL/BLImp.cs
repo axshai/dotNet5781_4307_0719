@@ -62,12 +62,12 @@ namespace BL
         /// <returns>IEnumerable of TimeSpan-arrival times to the station</returns>
         private IEnumerable<TimeSpan> lineArrivalTimes(BusLineBO line, int stationKey)
         {
-            int sum = (int)line.StationList.Where(state => myDal.GetLineStation(state.StationKey, line.Id).Serial <= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.TotalSeconds).Sum();
-            IEnumerable<TimeSpan> result = from sched in line.ScheduleList.ToList()
-                                           let x = sched.frequency > 0 ? Enumerable.Range(0, (int)((sched.EndActivity - sched.StartActivity).TotalMinutes - 1) / sched.frequency + 1) : Enumerable.Range(1,1)
+            int sum = (int)line.StationList.Where(state => myDal.GetLineStation(state.StationKey, line.Id).Serial <= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.TotalSeconds).Sum();//find the time from the first station to the wandet station
+            IEnumerable<TimeSpan> result = from sched in line.ScheduleList.ToList()//for each start of Schedule of the line
+                                           let x = sched.frequency > 0 ? Enumerable.Range(0, (int)((sched.EndActivity - sched.StartActivity).TotalMinutes - 1) / sched.frequency + 1) : Enumerable.Range(1,1)//Return a list of numbers by the number of line ports in the schedule
                                            from mult in x
-                                           let t= sched.StartActivity.Add(TimeSpan.FromSeconds(sum).Add(TimeSpan.FromMinutes(sched.frequency * mult)))
-                                           select t.TotalHours>24? t.Add(TimeSpan.FromHours(-24)) :t;
+                                           let t= sched.StartActivity.Add(TimeSpan.FromSeconds(sum).Add(TimeSpan.FromMinutes(sched.frequency * mult)))//for each number in that list=>sched.StartActivity+time until that station+frequency*number=Arrival Time
+                                           select t.TotalHours>24? t.Add(TimeSpan.FromHours(-24)) :t;//Handling in case of surfing on days
             return result;
 
         }

@@ -25,20 +25,19 @@ namespace PLGuiWPF
     {
         IBL bl;
         BusStationBO currentStation;
-        BackgroundWorker timeWorker;
-        TimeSpan now2;
-        int simulatSpeed;
-        public ShowStationDetails(BusStationBO stationShow, bool isSimulateRun, TimeSpan now,int speed)
+        BackgroundWorker timeWorker;//to simulator thread
+        TimeSpan timeNow;//the time now
+        int simulatSpeed;//speed of the simulatoe
+        public ShowStationDetails(BusStationBO stationShow, bool isSimulateRun, TimeSpan now, int speed)
         {
             InitializeComponent();
             bl = BLFactory.GetBL("1");
             currentStation = stationShow;
             this.DataContext = currentStation;
-            if (isSimulateRun)
+            if (isSimulateRun)//if the simulator is run now
             {
                 simulatSpeed = speed;
-                now2 = now;
-                //Lbsimulation.DataContext = bl.GetLinesInTrips(stationShow, w1.timeNow);
+                timeNow = now;
                 timeWorker = new BackgroundWorker();
                 timeWorker.DoWork += TimeWorker_DoWork;
                 timeWorker.RunWorkerAsync();
@@ -46,50 +45,62 @@ namespace PLGuiWPF
                 timeWorker.ProgressChanged += TimeWorker_ProgressChanged;
                 timeWorker.WorkerSupportsCancellation = true;
             }
-            else
+            else//Adjust the screen
             {
                 Lbsimulation.Visibility = Visibility.Hidden;
                 this.Height -= 200;
             }
 
         }
-
+        #region simulator thread
         private void TimeWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            now2 = now2.Add(TimeSpan.FromSeconds(1));
-            Lbsimulation.ItemsSource = bl.GetLinesInWayToStation(currentStation, now2);
-            lastBusControl.DataContext = bl.GetLastLineInStation(currentStation, now2);
+            //Get re-information on the arrival time of the buses to the station
+            timeNow = timeNow.Add(TimeSpan.FromSeconds(1));
+            Lbsimulation.ItemsSource = bl.GetLinesInWayToStation(currentStation, timeNow);
+            lastBusControl.DataContext = bl.GetLastLineInStation(currentStation, timeNow);
         }
 
         private void TimeWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             while (true)
             {
-                Thread.Sleep(1000/ simulatSpeed);
+                Thread.Sleep(1000 / simulatSpeed);//Run the simulator at the appropriate speed
                 timeWorker.ReportProgress(1);
             }
         }
+        #endregion
 
+        /// <summary>
+        /// Function that occurs when the user clicks the Edit Time and Distance button between consecutive stations
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void editTimeDist_Click(object sender, RoutedEventArgs e)
         {
             ConsecutiveStationBO b1 = (sender as Button).DataContext as ConsecutiveStationBO;
             EditTimeAndDistWindow wnd = new EditTimeAndDistWindow(b1);
             wnd.ShowDialog();
-            this.DataContext = bl.GetBusStation((this.DataContext as BusStationBO).StationKey);
+            this.DataContext = bl.GetBusStation((this.DataContext as BusStationBO).StationKey);//Retrieve from the data layer the updated information for this station
         }
 
+        /// <summary>
+        /// When the user clicks on the list of lines that stop in this station
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dgLines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            LineArrivalTimesWindow wnd1 = new LineArrivalTimesWindow(dgLines.SelectedItem as LineInStationBO);
+            LineArrivalTimesWindow wnd1 = new LineArrivalTimesWindow(dgLines.SelectedItem as LineInStationBO);//Show the arrival times of the bus to the station
             wnd1.ShowDialog();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            if(timeWorker!=null)
-            timeWorker.CancelAsync();
+            if (timeWorker != null)
+                timeWorker.CancelAsync();
         }
 
-        
+
     }
 }

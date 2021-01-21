@@ -157,10 +157,22 @@ namespace BLApi
         void UpdateConsecutiveStation(int stationKey1, int stationKey2, double distance, TimeSpan time);
         #endregion
 
+        #region simulator functions
+        /// <summary>
+        /// The function calculates how soon bus lines will reach a particular station
+        /// </summary>
+        /// <param name="station">the wanted station</param>
+        /// <param name="now">the time now</param>
+        /// <returns>list of LineInTripBO-the lines that are supposed to reach the station</returns>
         IEnumerable<LineInTripBO> GetLinesInWayToStation(BusStationBO station, TimeSpan now);
-
+        /// <summary>
+        /// The function finds the last line passed through the station
+        /// </summary>
+        /// <param name="station">the wanted station</param>
+        /// <param name="now">the time now</param>
+        /// <returns>LineInTripBO-the last line passed through the station</returns>
         LineInTripBO GetLastLineInStation(BusStationBO station, TimeSpan now);
-
+        #endregion
 
     }
 }
