@@ -16,6 +16,8 @@
             <Setter Property="Background" Value="#FF99EDF1" />
             <Setter Property="BorderBrush" Value="Black"/>
             <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+           
 
         </Style>
         <Style x:Key="dataGridStyle"  TargetType="DataGrid">
@@ -27,6 +29,7 @@
             <Setter  Property="FontSize" Value="18"/>
             <Setter  Property="ColumnWidth" Value="auto"/>
             <Setter  Property="CanUserAddRows" Value="False"/>
+           
         </Style>
 
     </Window.Resources>
@@ -37,16 +40,16 @@
             <RowDefinition Height="9*"/>
         </Grid.RowDefinitions>
         <Button x:Name="addButton" Content="ADD NEW LINE" HorizontalAlignment="Center" Margin="10" Grid.Row="0" VerticalAlignment="Top" Width="160" Height="30" FontFamily="Sitka Text" FontSize="20" Background="#FF8ABDE7" Click="addButton_Click"  />
-        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1"  Margin="30"   MouseDoubleClick="dgLines_MouseDoubleClick"  >
+        <DataGrid x:Name="dgLines" Style="{StaticResource dataGridStyle}" Grid.Row="1"  Margin="30"   MouseDoubleClick="dgLines_MouseDoubleClick">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="line number:" Binding="{Binding LineNumber}" Width="auto" />
-                <DataGridTextColumn Header="from" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToFirst}}" Width="auto"/>
-                <DataGridTextColumn Header="to" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToLast}}" Width="auto"/>
-                <DataGridTextColumn Header="area" Binding="{Binding Area}"  Width="auto"/>
+                <DataGridTextColumn Header="LINE NUMBER"  Binding="{Binding LineNumber}" />
+                <DataGridTextColumn Header="FROM" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToFirst}}" />
+                <DataGridTextColumn Header="TO" Binding="{Binding StationList, Converter={StaticResource ListOfStationsToLast}}" />
+                <DataGridTextColumn Header="AREA" Binding="{Binding Area}" />
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button x:Name="delButton" Content="delete" Margin="5"  Click="delButton_Click"  Background="#FFCDE4B0"  />
+                            <Button x:Name="delButton" Content="delete" Margin="5" Width="60"  Click="delButton_Click"  Background="#FFCDE4B0"  />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -17,14 +17,13 @@ namespace BL
     internal class BLImp : IBL
     {
         #region singelton
-        static readonly BLImp instance;
+        static readonly BLImp instance = new BLImp();
         static BLImp() { }
         BLImp() { }
         public static BLImp Instance
         {
             get
             {
-                if (instance == null) return new BLImp();
                 return instance;
             }
         }
@@ -41,16 +40,15 @@ namespace BL
         /// <returns>IEnumerable of ConsecutiveStationBO-all its consecutive Stations</returns>
         private IEnumerable<ConsecutiveStationBO> GetConsecutiveStations(int StationKey)
         {
-            List<ConsecutiveStationBO> result = new List<ConsecutiveStationBO>();
             IEnumerable<ConsecutiveStationBO> temp = (from line in GetAllLines()
-                                                      where line.StationList.ToList().Exists(line2 => line2.StationKey == StationKey)
-                                                      let index = line.StationList.ToList().FindIndex(station2 => station2.StationKey == StationKey)
-                                                      where (index < line.StationList.Count() - 1) && (!result.Exists(station1 => line.StationList.ElementAt(index + 1).StationKey == station1.StationKey))
-                                                      select new ConsecutiveStationBO { DistanceFromPrev = line.StationList.ElementAt(index + 1).DistanceFromPrev, PrevStationKey = StationKey, StationKey = line.StationList.ElementAt(index + 1).StationKey, StationName = line.StationList.ElementAt(index + 1).StationName, TimeFromPrev = line.StationList.ElementAt(index + 1).TimeFromPrev });
-            return from station in temp.ToList()
-                   where temp.ToList().FindAll(station1 => station1.StationKey == station.StationKey).Count() < 2
-                   select station;
-
+                                                      where line.StationList.ToList().Exists(line2 => line2.StationKey == StationKey)//foreach line-check if he stop in this station
+                                                      let index = line.StationList.ToList().FindIndex(station2 => station2.StationKey == StationKey)//find the place of this station in line rout
+                                                      where (index < line.StationList.Count() - 1)//if its not the last station
+                                                      select new ConsecutiveStationBO { DistanceFromPrev = line.StationList.ElementAt(index + 1).DistanceFromPrev, PrevStationKey = StationKey, StationKey = line.StationList.ElementAt(index + 1).StationKey, StationName = line.StationList.ElementAt(index + 1).StationName, TimeFromPrev = line.StationList.ElementAt(index + 1).TimeFromPrev });//add its next station to the list
+            var colection = from station in temp.ToList()//group the station by them station key
+                            group station by station.StationKey;
+            return from col in colection//Make sure to return each subsequent station only once
+                   select col.First();
         }
 
 
@@ -64,10 +62,10 @@ namespace BL
         {
             int sum = (int)line.StationList.Where(state => myDal.GetLineStation(state.StationKey, line.Id).Serial <= myDal.GetLineStation(stationKey, line.Id).Serial).Select(stat => stat.TimeFromPrev.TotalSeconds).Sum();//find the time from the first station to the wandet station
             IEnumerable<TimeSpan> result = from sched in line.ScheduleList.ToList()//for each start of Schedule of the line
-                                           let x = sched.frequency > 0 ? Enumerable.Range(0, (int)((sched.EndActivity - sched.StartActivity).TotalMinutes - 1) / sched.frequency + 1) : Enumerable.Range(1,1)//Return a list of numbers by the number of line ports in the schedule
+                                           let x = sched.frequency > 0 ? Enumerable.Range(0, (int)((sched.EndActivity - sched.StartActivity).TotalMinutes - 1) / sched.frequency + 1) : Enumerable.Range(1, 1)//Return a list of numbers by the number of line ports in the schedule
                                            from mult in x
-                                           let t= sched.StartActivity.Add(TimeSpan.FromSeconds(sum).Add(TimeSpan.FromMinutes(sched.frequency * mult)))//for each number in that list=>sched.StartActivity+time until that station+frequency*number=Arrival Time
-                                           select t.TotalHours>24? t.Add(TimeSpan.FromHours(-24)) :t;//Handling in case of surfing on days
+                                           let t = sched.StartActivity.Add(TimeSpan.FromSeconds(sum).Add(TimeSpan.FromMinutes(sched.frequency * mult)))//for each number in that list=>sched.StartActivity+time until that station+frequency*number=Arrival Time
+                                           select t.TotalHours > 24 ? t.Add(TimeSpan.FromHours(-24)) : t;//Handling in case of surfing on days
             return result;
 
         }
@@ -94,9 +92,9 @@ namespace BL
         /// <returns>IEnumerable with all the lines that have a stop in this station</returns>
         private IEnumerable<LineInStationBO> getLinesOfStations(int stateKey)
         {
-            IEnumerable<LineInStationBO> result = from line in GetAllLines()
-                                                  where line.StationList.Any(station => station.StationKey == stateKey)
-                                                  select new LineInStationBO
+            IEnumerable<LineInStationBO> result = from line in GetAllLines()//foreach line
+                                                  where line.StationList.Any(station => station.StationKey == stateKey)//if this station exist in his stations list
+                                                  select new LineInStationBO//return also this line
                                                   {
                                                       Id = line.Id,
                                                       LineNumber = line.LineNumber,
@@ -161,7 +159,7 @@ namespace BL
         private IEnumerable<BusStationBO> getRestStations(int lineId)
         {
             BusLineDO line = myDal.GetLine(lineId);
-            return from station in myDal.GetAllStations()
+            return from station in myDal.GetAllStations()//Get all the stations in the area of ​​the line, and that the line does not pass through yet
                    where !myDal.GetAllLineStationsBy(stat => stat.LineId == lineId).Any(state1 => state1.StationKey == station.StationKey) && (line.LineArea == DO.Area.GENERAL || line.LineArea == station.StationArea)
                    select new BusStationBO
                    {
@@ -221,28 +219,34 @@ namespace BL
         public void AddLine(string number, BusStationBO first, BusStationBO last, BO.Area area, double? distance = null, TimeSpan? time = null)
         {
             IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == number);
-            if (number.Length > 3 || number.Length < 1)
+            if (number.Length > 3 || number.Length < 1)//Checking the correctness of the line number
                 throw new BadLineException("Line name must be up to three characters and not less from one!");
-            if (sameName.Count() > 1)
+            
+            if (sameName.Count() > 1)//There must be no more than 2 lines with the same number!
                 throw new BadLineException("There are already two lines with the same name!");
-            if (sameName.Any(line => (int)line.LineArea != (int)area))
+            
+            if (sameName.Any(line => (int)line.LineArea != (int)area))//"Lines with the same name must be in the same area!
                 throw new BadLineException("Lines with the same name must be in the same area!");
-            if ((first.Area != area || last.Area != area) && BO.Area.GENERAL != area)
+           
+            if ((first.Area != area || last.Area != area) && BO.Area.GENERAL != area)//Checking that the area of first and last stations match to line area
                 throw new BadLineException("The stations do not match the line area!");
-            if (first.StationKey == last.StationKey)
+           
+            if (first.StationKey == last.StationKey)//Check the first and last stations are different
                 throw new BadLineException("The stations Must be different!");
-            if (distance != null)
+          
+            if (distance != null)//If in the call to this function we received information about the distance and time between the two stations - this means that they are not yet in the system as consecutive stations
                 addConsecutiveStations(first.StationKey, last.StationKey, (double)distance, (TimeSpan)time);
 
-            try
+            try//check if the first and last station Already exist in the system as Consecutive stations
             {
                 myDal.GetConsecutiveStations(first.StationKey, last.StationKey);
             }
-            catch (DO.BadConsecutiveStationsKeysException ex)
+            catch (DO.BadConsecutiveStationsKeysException ex)//if not-throw an exception (and the next call to the function should send information for the time and distance between the stations in order to add them to the system)
             {
                 throw new BO.BadConsecutiveStationsKeysException("No details on time and distance between this 2 station", ex);
             }
 
+            //Add the line and its stations
             int id = myDal.AddLine(new BusLineDO { IsExists = true, LineArea = (DO.Area)((int)area), LineNumber = number });
             myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 1, StationKey = first.StationKey, LineId = id });
             myDal.AddLineStation(new LineStationDO { IsExist = true, Serial = 2, StationKey = last.StationKey, LineId = id });
@@ -267,7 +271,8 @@ namespace BL
                 {
                     myDal.DeleteSchedule(id, item.StartActivity);
                 }
-                myDal.DeleteLine(id);
+                
+                myDal.DeleteLine(id);//and finally-delete the line
             }
             catch (DO.BadLineStationKeyLineIDException ex)
             {
@@ -289,7 +294,7 @@ namespace BL
         {
             BusLineDO line = myDal.GetLine(id);
 
-            return new BusLineBO
+            return new BusLineBO//return the line as BusLineBO
             {
                 Id = line.Id,
                 Area = (BO.Area)((int)line.LineArea),
@@ -308,12 +313,14 @@ namespace BL
         public void updateLine(int id, string name)
         {
             IEnumerable<BusLineDO> sameName = myDal.GetAllLinesBy(line => line.LineNumber == name);
+            //Perform proper checks on the new name:---
             if (name.Length > 3)
                 throw new BadLineException("Line name must be up to three characters!", id);
             if (sameName.Count() > 1)
                 throw new BadLineException("There are already two lines with the same name!", id);
             if (sameName.Any(line => line.LineArea != myDal.GetLine(id).LineArea))
                 throw new BadLineException("Lines with the same name must be in the same area!", id);
+           //------------------
             myDal.UpdateLine(id, line => line.LineNumber = name);
 
 
@@ -335,14 +342,14 @@ namespace BL
         /// <param name="newFreq">the new frequency</param>
         public void UpdateSchedule(BusLineScheduleBO toUpdate, int newFreq)
         {
-            if ((toUpdate.EndActivity - toUpdate.StartActivity).TotalMinutes < newFreq)
+            if ((toUpdate.EndActivity - toUpdate.StartActivity).TotalMinutes < newFreq)//Check that the line does not go out more than once per minute-As a result of the new frequency
                 throw new BO.BadBusLineScheduleException(toUpdate.StartActivity, toUpdate.LineId, "The frequency is higher than the maximum possible in this time frame!");
 
             myDal.UpdateSchedule(toUpdate.LineId, toUpdate.StartActivity, sched => sched.frequency = newFreq);
         }
 
         /// <summary>
-        /// The function adds a line schedule
+        /// The function adds a line schedule-And handles schedules that are affected by the new schedule
         /// </summary>
         /// <param name="lineId">Line ID</param>
         /// <param name="begin1">Start time</param>
@@ -370,7 +377,7 @@ namespace BL
                 if (item.StartActivity >= begin1)//If the old begins within the new
                     myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.StartActivity = end1); //Made him start after the new
 
-                else if (item.EndActivity <= end1)////If the old ends within the new
+                else if (item.EndActivity <= end1)//If the old ends within the new
                     myDal.UpdateSchedule(item.LineId, item.StartActivity, sched => sched.EndActivity = begin1);////Made him end before the new
 
                 else//if the old Swallows the new
@@ -394,6 +401,7 @@ namespace BL
         /// <returns>IEnumerable of the stations</returns>
         public IEnumerable<BusStationBO> GetAllStation()
         {
+            //For each station in the system - return it as BusStationBO
             return from station in myDal.GetAllStations()
                    orderby station.StationArea
                    select new BusStationBO
@@ -428,7 +436,7 @@ namespace BL
         public BusStationBO GetBusStation(int stationKey)
         {
             BusStationDO station = myDal.GetBusStation(stationKey);
-            return new BusStationBO
+            return new BusStationBO//return the wanted station as BusStationBO
             {
                 Area = (BO.Area)((int)station.StationArea),
                 Latitude = station.Latitude,
@@ -446,7 +454,7 @@ namespace BL
         /// <param name="toDel">the station to delete</param>
         public void DeleteBusStation(BusStationBO toDel)
         {
-            if (toDel.ListOfLines.Any())
+            if (toDel.ListOfLines.Any())//If there are lines passing through the station
                 throw new BadBusStationException(toDel.StationKey, "It is not possible to delete a station that  lines stop in it!");
             else
                 myDal.DeleteBusStation(toDel.StationKey);
@@ -583,7 +591,7 @@ namespace BL
                 }
             }
 
-            foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))//
+            foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= index))//Update the location on the route of the stations after the added station
             {
                 myDal.UpdateLineStation(item.LineId, item.StationKey, station1 => station1.Serial++);
             }
@@ -623,8 +631,9 @@ namespace BL
                 }
 
             }
-
-            foreach (var item in myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= myDal.GetLineStation(stationKey, line.Id).Serial))
+            //Update the location on the route of the stations after the deleted station
+            var stationsToUpdate = myDal.GetAllLineStationsBy(station => station.LineId == line.Id && station.Serial >= myDal.GetLineStation(stationKey, line.Id).Serial).ToList();
+            foreach (var item in stationsToUpdate)
             {
                 myDal.UpdateLineStation(item.LineId, item.StationKey, station1 => station1.Serial--);
             }
@@ -641,17 +650,17 @@ namespace BL
         /// <param name="time">new time</param>
         public void UpdateConsecutiveStation(int stationKey1, int stationKey2, double distance, TimeSpan time)
         {
-            myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.Distance = distance);
-            myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);
+            myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.Distance = distance);//update the distance
+            myDal.UpdateConsecutiveStations(stationKey1, stationKey2, cState => cState.TravelTime = time);//update the time
         }
 
         public IEnumerable<LineInTripBO> GetLinesInWayToStation(BusStationBO station, TimeSpan now)
         {
             List<LineInTripBO> l1 = (from line in station.ListOfLines
-                                     where line.ArrivalTimes.ToList().Exists(time => time > now)
-                                     let t = line.ArrivalTimes.Where(time => time > now).FirstOrDefault()
+                                     where line.ArrivalTimes.ToList().Exists(time => time > now)//If the line has an expected arrival time that is later than the current time
+                                     let t = line.ArrivalTimes.Where(time => time > now).FirstOrDefault()//Select the nearest arrival time
                                      orderby t
-                                     select new LineInTripBO { LineNumber = line.LineNumber, Destination = line.Destination, timing = t - now }).ToList();
+                                     select new LineInTripBO { LineNumber = line.LineNumber, Destination = line.Destination, timing = t - now }).ToList();//Return the line as  LineInTripBO
             return l1;
 
         }
@@ -659,12 +668,12 @@ namespace BL
         public LineInTripBO GetLastLineInStation(BusStationBO station, TimeSpan now)
         {
             return (from line in station.ListOfLines
-                    where line.ArrivalTimes.ToList().Exists(time => time < now)
-                    let t = line.ArrivalTimes.Where(time => time < now && now - time <= TimeSpan.FromMinutes(5)).Count()
-                    where t!=0
-                    let x= line.ArrivalTimes.Where(time => time < now && now - time <= TimeSpan.FromMinutes(5)).FirstOrDefault()
+                    where line.ArrivalTimes.ToList().Exists(time => time < now)//For every line that passed today at the station
+                    let t = line.ArrivalTimes.Where(time => time < now && now - time <= TimeSpan.FromMinutes(5)).Count()//Check if the last five minutes have passed
+                    where t != 0
+                    let x = line.ArrivalTimes.Where(time => time < now && now - time <= TimeSpan.FromMinutes(5)).FirstOrDefault()//Arrange the list so that the last line passed at the station appears first
                     orderby x descending
-                    select new LineInTripBO { LineNumber = line.LineNumber, Destination = line.Destination, timing = x - now }).FirstOrDefault();
+                    select new LineInTripBO { LineNumber = line.LineNumber, Destination = line.Destination, timing = x - now }).FirstOrDefault();//return the last line
 
 
         }

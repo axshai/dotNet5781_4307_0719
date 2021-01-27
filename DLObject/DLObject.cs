@@ -18,10 +18,7 @@ namespace Dal
         #endregion
 
         #region Line functions
-        /// <summary>
-        /// The function returns all existing lines
-        /// </summary>
-        /// <returns>A collection(IEnumerable) of lines</returns>
+       
         public IEnumerable<BusLineDO> GetAllLines()
         {
             return from line in DataSource.BusLines
@@ -29,11 +26,7 @@ namespace Dal
                    select line.Clone();
         }
 
-        /// <summary>
-        /// The function returns all lines that Answers on condition
-        /// </summary>
-        /// <param name="predicate">the condition</param>
-        /// <returns>A collection(IEnumerable) of lines</returns>
+       
         public IEnumerable<BusLineDO> GetAllLinesBy(Predicate<BusLineDO> predicate)
         {
             return from line in DataSource.BusLines
@@ -41,11 +34,7 @@ namespace Dal
                    select line.Clone();
         }
         
-        /// <summary>
-        /// The function receives a line id and returns the appropriate BusLineDO
-        /// </summary>
-        /// <param name="id">ID of the wandet line</param>
-        /// <returns>BusLineDO-the wanted line</returns>
+       
         public BusLineDO GetLine(int id)
         {
             BusLineDO line1 = DataSource.BusLines.Find(line => line.Id == id && line.IsExists == true);
@@ -54,11 +43,7 @@ namespace Dal
             throw new BadLineIdException(id,"This line was not found!");
         }
        
-        /// <summary>
-        /// A function adds a line to the system
-        /// </summary>
-        /// <param name="line">the line to add</param>
-        /// <returns>id of the new line</returns>
+      
         public int AddLine(BusLineDO line)
         {
             BusLineDO line1_toadd = line.Clone();
@@ -67,10 +52,6 @@ namespace Dal
             return line1_toadd.Id;
         }
 
-        /// <summary>
-        /// The function updates an existing line in the system
-        /// </summary>
-        /// <param name="line">The updated line</param>
         public void UpdateLine(BusLineDO line)
         {
             int index = DataSource.BusLines.FindIndex(line1 => line1.Id == line.Id && line.IsExists == true);
@@ -79,11 +60,7 @@ namespace Dal
             DataSource.BusLines[index] = line.Clone();
         }
        
-        /// <summary>
-        /// The function updates Specific fields in existing line in the system
-        /// </summary>
-        /// <param name="id">the id of the line to update</param>
-        /// <param name="toUpdate">Update operation</param>
+       
         public void UpdateLine(int id, Action<BusLineDO> toUpdate)
         {
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);
@@ -92,10 +69,7 @@ namespace Dal
             toUpdate(line);
 
         }
-        /// <summary>
-        /// The function deletes a line from the system
-        /// </summary>
-        /// <param name="id">the id of the line to delete</param>
+     
         public void DeleteLine(int id)
         {
             BusLineDO line = DataSource.BusLines.Find(line1 => line1.Id == id && line1.IsExists == true);

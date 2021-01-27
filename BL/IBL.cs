@@ -174,5 +174,6 @@ namespace BLApi
         LineInTripBO GetLastLineInStation(BusStationBO station, TimeSpan now);
         #endregion
 
+        
     }
 }

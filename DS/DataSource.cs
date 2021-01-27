@@ -1933,6 +1933,26 @@ namespace DS
                 IsExists = true
             }
               );
+
+            BusLineSchedules.Add(new BusLineScheduleDO
+            {
+                StartActivity = TimeSpan.Parse("09:00:00"),
+                EndActivity = TimeSpan.Parse("21:00:00"),
+                frequency = 15,
+                LineId = 5,
+                IsExists = true
+            }
+             );
+
+            BusLineSchedules.Add(new BusLineScheduleDO
+            {
+                StartActivity = TimeSpan.Parse("09:00:00"),
+                EndActivity = TimeSpan.Parse("21:00:00"),
+                frequency = 15,
+                LineId = 10,
+                IsExists = true
+            }
+             );
         }
     }
 }
