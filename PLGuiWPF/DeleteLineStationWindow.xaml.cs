@@ -53,7 +53,7 @@ namespace PLGuiWPF
                 tbtime.Text = tbdist.Text = "";
                 return;
             }
-           //delete the station from the rout
+           //delete the station from the line rout
             bl.DeleteLineStation(currentLine, current.StationKey, double.Parse(tbdist.Text), TimeSpan.Parse(tbtime.Text) );
             this.Close();
         }
