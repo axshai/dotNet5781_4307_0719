@@ -29,7 +29,11 @@ namespace PLGuiWPF
             this.DataContext = showedLine;
             b1 = BLFactory.GetBL("1");
         }
-
+        /// <summary>
+        /// event when user press on delete line station button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void stationDelButton_Click(object sender, RoutedEventArgs e)
         {
             cbDelStat.Visibility = Visibility.Visible;
