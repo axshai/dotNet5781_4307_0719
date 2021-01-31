@@ -14,8 +14,7 @@ namespace DO
         public Area LineArea { get; set; }
         public bool IsExists { get; set; }
        
-
-
+       
         public override string ToString()
         {
             string result = "Id: " + Id.ToString() + "\nLineNumber: " + LineNumber + "\nLineArea: " + LineArea.ToString()  + "IsExists? " + IsExists.ToString();
