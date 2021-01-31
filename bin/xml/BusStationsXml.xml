@@ -456,4 +456,12 @@
     <IsExists>true</IsExists>
     <StationArea>WESTBANK</StationArea>
   </BusStationDO>
+  <BusStationDO>
+    <StationKey>999</StationKey>
+    <Latitude>33</Latitude>
+    <Longitude>33</Longitude>
+    <StationName>הרב סולובייציק /זצ"ל</StationName>
+    <IsExists>true</IsExists>
+    <StationArea>NORTH</StationArea>
+  </BusStationDO>
 </ArrayOfBusStationDO>
