@@ -38,9 +38,9 @@
   </BusLineDO>
   <BusLineDO>
     <Id>7</Id>
-    <LineNumber>346</LineNumber>
+    <LineNumber>666</LineNumber>
     <LineArea>GENERAL</LineArea>
-    <IsExists>true</IsExists>
+    <IsExists>True</IsExists>
   </BusLineDO>
   <BusLineDO>
     <Id>8</Id>
