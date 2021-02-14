@@ -203,9 +203,6 @@
     <Resource Include="search.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="IMAGE_START2.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="buses_image.jpg" />
   </ItemGroup>
   <ItemGroup>

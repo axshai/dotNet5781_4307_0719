@@ -600,4 +600,10 @@
     <Serial>1</Serial>
     <IsExist>true</IsExist>
   </LineStationDO>
+  <LineStationDO>
+    <LineId>8</LineId>
+    <StationKey>63427</StationKey>
+    <Serial>0</Serial>
+    <IsExist>false</IsExist>
+  </LineStationDO>
 </ArrayOfLineStationDO>
