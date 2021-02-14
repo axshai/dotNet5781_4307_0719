@@ -348,4 +348,16 @@
     <Distance>23</Distance>
     <TravelTime>00:45:00</TravelTime>
   </ConsecutiveStationsDO>
+  <ConsecutiveStationsDO>
+    <Station1Key>65844</Station1Key>
+    <Station2Key>65432</Station2Key>
+    <Distance>45</Distance>
+    <TravelTime>76.00:00:00</TravelTime>
+  </ConsecutiveStationsDO>
+  <ConsecutiveStationsDO>
+    <Station1Key>63427</Station1Key>
+    <Station2Key>22888</Station2Key>
+    <Distance>3</Distance>
+    <TravelTime>2.00:00:00</TravelTime>
+  </ConsecutiveStationsDO>
 </AllConsecutiveStationsXml.xml>

@@ -17,7 +17,7 @@
   <BusLineScheduleDO>
     <StartActivity>14:00:00</StartActivity>
     <EndActivity>20:00:00</EndActivity>
-    <frequency>10</frequency>
+    <frequency>9</frequency>
     <LineId>2</LineId>
     <IsExists>True</IsExists>
   </BusLineScheduleDO>

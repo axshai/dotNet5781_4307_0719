@@ -9,7 +9,6 @@ using DO;
 
 namespace Dal
 {
-
     sealed class DLXml : IDAL
     {
         #region singelton
