@@ -208,8 +208,5 @@
   <ItemGroup>
     <Resource Include="station_image.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="mesagge_video.mp4" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

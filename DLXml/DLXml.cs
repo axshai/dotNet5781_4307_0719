@@ -335,7 +335,7 @@ namespace Dal
         }
         #endregion
 
-
+        #region Schedule functions
         public IEnumerable<BusLineScheduleDO> GetAllSchedulesBy(Predicate<BusLineScheduleDO> predicate)
         {
             XElement schedRootElem = XMLTools.LoadListFromXMLElement(schedulesPath);
@@ -410,6 +410,6 @@ namespace Dal
             XMLTools.SaveListToXMLElement(schedRootElem, schedulesPath);
         }
 
-
+        #endregion
     }
 }
