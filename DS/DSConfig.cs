@@ -11,7 +11,7 @@ namespace DS
         static int busInTravelCounter = 0;
         public static int BusInTravelCounter => ++busInTravelCounter;
 
-        static int busLine = 0;
+        static int busLine = 10;
         public static int BusLineCounter => ++busLine;
 
         static int passengTravel = 0;

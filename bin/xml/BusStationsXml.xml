@@ -464,4 +464,12 @@
     <IsExists>true</IsExists>
     <StationArea>NORTH</StationArea>
   </BusStationDO>
+  <BusStationDO>
+    <StationKey>9999</StationKey>
+    <Latitude>32.34</Latitude>
+    <Longitude>34.533</Longitude>
+    <StationName>אליעזר/ספגטי</StationName>
+    <IsExists>true</IsExists>
+    <StationArea>NORTH</StationArea>
+  </BusStationDO>
 </ArrayOfBusStationDO>

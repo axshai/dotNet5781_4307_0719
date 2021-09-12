@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PLGuiWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Icon="bus.jpg.ico">
+        Title="MainWindow" Height="450" Width="800" Icon="bus.jpg.ico"
+        WindowStartupLocation="CenterScreen"
+       >
+
     <Grid  Background="#FFC2DFA2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
